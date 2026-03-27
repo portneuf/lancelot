@@ -6,6 +6,7 @@
  */
 
 import { useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router';
 import { useFileStore } from '@/stores';
 import { initializeRegistry } from '@/core/parsers';
 import type { WorkerRequest, WorkerResponse } from '@/core/parsers/worker/parse-worker-protocol';
@@ -17,6 +18,7 @@ export function useFileOpen() {
   const setParseErrors = useFileStore((s) => s.setParseErrors);
   const setParseWarnings = useFileStore((s) => s.setParseWarnings);
   const addRecentFile = useFileStore((s) => s.addRecentFile);
+  const navigate = useNavigate();
   const workerRef = useRef<Worker | null>(null);
 
   const openFile = useCallback(async (file: File) => {
@@ -80,6 +82,7 @@ export function useFileOpen() {
                 format: msg.result.data.source.formatId,
                 openedAt: new Date().toISOString(),
               });
+              navigate('/wafer/map');
             } else {
               setParseErrors(msg.result.errors);
             }
@@ -108,7 +111,7 @@ export function useFileOpen() {
       };
       worker.postMessage(request);
     });
-  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile]);
+  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, navigate]);
 
   const parseOnMainThread = useCallback((file: File, text: string) => {
     const registry = initializeRegistry();
@@ -136,10 +139,11 @@ export function useFileOpen() {
         format: result.data.source.formatId,
         openedAt: new Date().toISOString(),
       });
+      navigate('/wafer/map');
     } else {
       setParseErrors(result.errors);
     }
-  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile]);
+  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, navigate]);
 
   const openFilePicker = useCallback(() => {
     const input = document.createElement('input');

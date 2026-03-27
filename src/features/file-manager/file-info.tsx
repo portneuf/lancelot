@@ -1,6 +1,7 @@
-import { FileText } from 'lucide-react';
+import { FileText, AlertTriangle } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
+import { cn } from '@/lib/cn';
 
 export default function FileInfoPage() {
   const activeFileId = useFileStore((s) => s.activeFileId);
@@ -15,29 +16,104 @@ export default function FileInfoPage() {
     );
   }
 
+  const warnings = file.source.warnings;
+
   return (
-    <div className="p-6">
+    <div className="mx-auto max-w-3xl p-6">
       <h1 className="mb-6 text-2xl font-bold">File Information</h1>
-      <div className="grid max-w-2xl gap-4">
-        <InfoRow label="File Name" value={file.source.fileName} />
-        <InfoRow label="Format" value={`${file.source.formatId} v${file.source.formatVersion}`} />
-        <InfoRow label="Lot ID" value={file.identity.lotId} />
-        <InfoRow label="Wafer ID" value={file.identity.waferId} />
-        <InfoRow label="Device ID" value={file.identity.deviceId} />
-        <InfoRow label="Wafer Diameter" value={`${file.waferGeometry.waferDiameter} um`} />
-        <InfoRow label="Die Pitch" value={`${file.waferGeometry.diePitch[0]} x ${file.waferGeometry.diePitch[1]} um`} />
-        <InfoRow label="Total Defects" value={file.defects.length.toLocaleString()} />
-        <InfoRow label="Equipment" value={`${file.inspectionSetup.stationId.vendor} ${file.inspectionSetup.stationId.model}`} />
+
+      <div className="flex flex-col gap-6">
+        {/* Source */}
+        <Section title="Source">
+          <InfoRow label="File Name" value={file.source.fileName} />
+          <InfoRow label="Format" value={`${file.source.formatId.toUpperCase()} v${file.source.formatVersion}`} />
+          <InfoRow label="File Size" value={formatBytes(file.source.fileSize)} />
+          <InfoRow label="Parsed At" value={new Date(file.source.parseTimestamp).toLocaleString()} />
+        </Section>
+
+        {/* Identity */}
+        <Section title="Identification">
+          <InfoRow label="Lot ID" value={file.identity.lotId} />
+          <InfoRow label="Wafer ID" value={file.identity.waferId} />
+          <InfoRow label="Device ID" value={file.identity.deviceId} />
+          {file.identity.slot != null && <InfoRow label="Slot" value={String(file.identity.slot)} />}
+          {file.identity.stepId && <InfoRow label="Step ID" value={file.identity.stepId} />}
+          {file.identity.fileTimestamp && <InfoRow label="File Timestamp" value={file.identity.fileTimestamp} />}
+          {file.identity.resultTimestamp && <InfoRow label="Result Timestamp" value={file.identity.resultTimestamp} />}
+        </Section>
+
+        {/* Geometry */}
+        <Section title="Wafer Geometry">
+          <InfoRow label="Wafer Diameter" value={`${(file.waferGeometry.waferDiameter / 1000).toFixed(1)} mm`} />
+          <InfoRow label="Die Pitch" value={`${file.waferGeometry.diePitch[0]} x ${file.waferGeometry.diePitch[1]} um`} />
+          <InfoRow label="Die Origin" value={`${file.waferGeometry.dieOrigin[0]}, ${file.waferGeometry.dieOrigin[1]} um`} />
+          <InfoRow label="Center" value={`${file.waferGeometry.sampleCenterLocation[0]}, ${file.waferGeometry.sampleCenterLocation[1]} um`} />
+          {file.waferGeometry.orientationMarkType && (
+            <InfoRow label="Orientation Mark" value={`${file.waferGeometry.orientationMarkType} ${file.waferGeometry.orientationMarkLocation ?? ''}`} />
+          )}
+        </Section>
+
+        {/* Equipment */}
+        <Section title="Equipment">
+          <InfoRow label="Vendor" value={file.inspectionSetup.stationId.vendor} />
+          <InfoRow label="Model" value={file.inspectionSetup.stationId.model} />
+          <InfoRow label="Equipment ID" value={file.inspectionSetup.stationId.equipmentId} />
+          {file.inspectionSetup.setupId && <InfoRow label="Setup / Recipe" value={file.inspectionSetup.setupId} />}
+        </Section>
+
+        {/* Statistics */}
+        <Section title="Statistics">
+          <InfoRow label="Total Defects" value={file.defects.length.toLocaleString()} highlight />
+          <InfoRow label="Defect Classes" value={String(file.classLookup.length)} />
+          <InfoRow label="Dies in Map" value={String(file.dieMap.length)} />
+          <InfoRow label="Test Plan Dies" value={String(file.testPlan.length)} />
+          <InfoRow label="Defect Columns" value={file.defectSchema.map((c) => c.name).join(', ')} />
+        </Section>
+
+        {/* Warnings */}
+        {warnings.length > 0 && (
+          <Section title="Parse Warnings">
+            <div className="flex flex-col gap-2">
+              {warnings.map((w, i) => (
+                <div key={i} className="flex items-start gap-2 rounded-md bg-destructive/10 p-3 text-sm">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                  <div>
+                    <span className="font-mono text-xs text-muted-foreground">[{w.code}]</span>{' '}
+                    {w.message}
+                    {w.line != null && <span className="text-muted-foreground"> (line {w.line})</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+        )}
       </div>
     </div>
   );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-baseline gap-4 border-b border-border pb-2">
-      <span className="w-40 shrink-0 text-sm font-medium text-muted-foreground">{label}</span>
-      <span className="text-sm">{value}</span>
+    <section>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{title}</h2>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">{children}</div>
+      </div>
+    </section>
+  );
+}
+
+function InfoRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+  return (
+    <div className="flex items-baseline gap-4">
+      <span className="w-40 shrink-0 text-sm text-muted-foreground">{label}</span>
+      <span className={cn('text-sm', highlight && 'font-semibold text-primary')}>{value}</span>
     </div>
   );
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
