@@ -2,12 +2,13 @@
  * KLARF file format adapter.
  *
  * Implements the FileFormatAdapter interface for KLA Results Files.
- * Supports v1.2 (flat keyword/value format). v1.8 support is planned.
+ * Supports both v1.2 (flat keyword/value) and v1.8 (hierarchical Record/Field/List).
  */
 
 import type { FileFormatAdapter, FileFormatDescriptor, ParseResult, ParseProgress } from '../parser.interface';
 import { detectKlarfVersion } from './klarf-tokenizer';
 import { parseKlarfV12 } from './klarf-v12-parser';
+import { parseKlarfV18 } from './klarf-v18-parser';
 import { normalizeKlarfData } from './klarf-normalizer';
 
 export class KlarfAdapter implements FileFormatAdapter {
@@ -56,21 +57,10 @@ export class KlarfAdapter implements FileFormatAdapter {
     try {
       const version = detectKlarfVersion(text);
 
-      if (version === '1.8') {
-        // v1.8 not yet implemented - return error
-        return {
-          success: false,
-          errors: [{
-            code: 'KLARF_V18_NOT_SUPPORTED',
-            message: 'KLARF v1.8 hierarchical format is not yet supported. Please use v1.2 files.',
-            severity: 'error',
-          }],
-          warnings: [],
-        };
-      }
-
-      // Parse v1.2
-      const { data: raw, warnings } = parseKlarfV12(text, onProgress);
+      // Parse according to detected version
+      const { data: raw, warnings } = version === '1.8'
+        ? parseKlarfV18(text, onProgress)
+        : parseKlarfV12(text, onProgress);
 
       // Validate minimum required fields
       if (!raw.lotId && !raw.waferId) {

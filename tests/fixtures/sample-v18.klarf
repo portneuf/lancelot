@@ -1,0 +1,41 @@
+Record FileRecord {
+  Field FileVersion 1 8;
+  Field FileTimestamp "03-27-2026 14:30:00";
+  Record InspectionStationRecord {
+    Field InspectionStationID "KLA" "2830" "EQ002";
+  }
+  Record LotRecord {
+    Field LotID "V18-LOT-01";
+    Field SampleType WAFER;
+    Field DeviceID "ADV-5NM";
+    Field SetupID "DARKFIELD_02";
+    Field StepID "CMP1";
+    Field SampleSize 1 300000;
+    Record WaferRecord {
+      Field WaferID "W05";
+      Field Slot 5;
+      Field SampleOrientationMarkType NOTCH;
+      Field OrientationMarkLocation DOWN;
+      Field DiePitch 8000 10000;
+      Field DieOrigin 400 500;
+      Field SampleCenterLocation 150000 150000;
+      Field AreaPerTest 72.3;
+      List DefectList {
+        Columns { DEFECTID XREL YREL XINDEX YINDEX DSIZE CLASSNUMBER }
+        Data {
+          1 2000 3000 0 0 50 1
+          2 5000 7000 1 0 80 2
+          3 1500 4500 0 1 30 1
+          4 6000 2000 1 1 120 3
+          5 3500 8000 0 0 45 2
+        }
+      }
+      List SummaryList {
+        Columns { TESTNO NDEFECT DEFDENSITY }
+        Data {
+          1 5 0.069
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { NavRail } from './NavRail';
 import { ContentArea } from './ContentArea';
 import { StatusBar } from './StatusBar';
+import { TitleBar } from './TitleBar';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useFileOpen } from '@/features/file-manager/hooks/useFileOpen';
@@ -13,6 +14,7 @@ export function AppShell() {
 
   return (
     <div className="flex h-screen flex-col bg-background text-foreground">
+      {__IS_TAURI__ && <TitleBar />}
       {/* Skip to content link for keyboard/screen-reader users */}
       <a
         href="#main-content"

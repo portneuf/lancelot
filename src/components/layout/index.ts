@@ -4,3 +4,4 @@ export { NavRailGroup } from './NavRailGroup';
 export { NavRailItem } from './NavRailItem';
 export { ContentArea } from './ContentArea';
 export { StatusBar } from './StatusBar';
+export { TitleBar } from './TitleBar';

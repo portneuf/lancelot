@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router';
 import { AppShell } from '@/components/layout';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
+import { RequireFile } from './guards';
 
 function lazyPage(importFn: () => Promise<{ default: React.ComponentType }>) {
   return () => importFn().then((m) => ({ Component: m.default }));
@@ -32,33 +33,39 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // Inspection
+      // Guarded routes: require an active file
       {
-        path: 'inspection',
-        errorElement: <RouteErrorFallback context="Inspection" />,
+        element: <RequireFile />,
         children: [
-          { path: 'defects', lazy: lazyPage(() => import('@/features/inspection/defects')) },
-          { path: 'classes', lazy: lazyPage(() => import('@/features/inspection/classes')) },
-        ],
-      },
+          // Inspection
+          {
+            path: 'inspection',
+            errorElement: <RouteErrorFallback context="Inspection" />,
+            children: [
+              { path: 'defects', lazy: lazyPage(() => import('@/features/inspection/defects')) },
+              { path: 'classes', lazy: lazyPage(() => import('@/features/inspection/classes')) },
+            ],
+          },
 
-      // Wafer Map
-      {
-        path: 'wafer',
-        errorElement: <RouteErrorFallback context="Wafer Map" />,
-        children: [
-          { path: 'map', lazy: lazyPage(() => import('@/features/wafer-map')) },
-        ],
-      },
+          // Wafer Map
+          {
+            path: 'wafer',
+            errorElement: <RouteErrorFallback context="Wafer Map" />,
+            children: [
+              { path: 'map', lazy: lazyPage(() => import('@/features/wafer-map')) },
+            ],
+          },
 
-      // Analysis
-      {
-        path: 'analysis',
-        errorElement: <RouteErrorFallback context="Analysis" />,
-        children: [
-          { path: 'pareto', lazy: lazyPage(() => import('@/features/analysis/pareto')) },
-          { path: 'spatial', lazy: lazyPage(() => import('@/features/analysis/spatial')) },
-          { path: 'yield', lazy: lazyPage(() => import('@/features/analysis/yield')) },
+          // Analysis
+          {
+            path: 'analysis',
+            errorElement: <RouteErrorFallback context="Analysis" />,
+            children: [
+              { path: 'pareto', lazy: lazyPage(() => import('@/features/analysis/pareto')) },
+              { path: 'spatial', lazy: lazyPage(() => import('@/features/analysis/spatial')) },
+              { path: 'yield', lazy: lazyPage(() => import('@/features/analysis/yield')) },
+            ],
+          },
         ],
       },
 

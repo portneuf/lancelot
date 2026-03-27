@@ -145,11 +145,51 @@ describe('KlarfAdapter', () => {
       expect(result.errors[0].code).toBe('KLARF_MISSING_IDENTITY');
     });
 
-    it('should return error for v1.8 files', () => {
+    it('should handle minimal v1.8 with missing identity', () => {
       const result = adapter.parse('Record FileRecord {\n}');
       expect(result.success).toBe(false);
       if (result.success) return;
-      expect(result.errors[0].code).toBe('KLARF_V18_NOT_SUPPORTED');
+      expect(result.errors[0].code).toBe('KLARF_MISSING_IDENTITY');
+    });
+  });
+
+  describe('parse - v1.8 full sample', () => {
+    it('should parse a v1.8 KLARF file', () => {
+      const text = readFixture('sample-v18.klarf');
+      const result = adapter.withMeta({ fileName: 'sample-v18.klarf', fileSize: text.length }).parse(text);
+
+      expect(result.success).toBe(true);
+      if (!result.success) return;
+
+      const file = result.data;
+
+      // Identity
+      expect(file.identity.lotId).toBe('V18-LOT-01');
+      expect(file.identity.waferId).toBe('W05');
+      expect(file.identity.deviceId).toBe('ADV-5NM');
+      expect(file.identity.slot).toBe(5);
+
+      // Geometry
+      expect(file.waferGeometry.waferDiameter).toBe(300000);
+      expect(file.waferGeometry.diePitch).toEqual([8000, 10000]);
+      expect(file.waferGeometry.dieOrigin).toEqual([400, 500]);
+
+      // Defects
+      expect(file.defects).toHaveLength(5);
+      expect(file.defectSchema.map(s => s.name)).toEqual(
+        ['DEFECTID', 'XREL', 'YREL', 'XINDEX', 'YINDEX', 'DSIZE', 'CLASSNUMBER']
+      );
+
+      // First defect absolute coords
+      const d1 = file.defects[0];
+      expect(d1.defectId).toBe(1);
+      expect(d1.xRel).toBe(2000);
+      expect(d1.yRel).toBe(3000);
+      expect(d1.xAbs).toBe(400 + 0 * 8000 + 2000); // 2400
+      expect(d1.yAbs).toBe(500 + 0 * 10000 + 3000); // 3500
+
+      // Format version
+      expect(file.source.formatVersion).toBe('1.8');
     });
   });
 });
