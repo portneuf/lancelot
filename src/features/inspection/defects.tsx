@@ -5,6 +5,7 @@ import { useFileStore, useInspectionStore } from '@/stores';
 import { DefectTable } from './components/DefectTable';
 import { DefectFilterBar } from './components/DefectFilterBar';
 import { DynamicFilterPanel } from './components/DynamicFilterPanel';
+import { DefectDetailPanel } from './components/DefectDetailPanel';
 import { readField } from './utils/read-field';
 import type { DefectRecord } from '@/core/models/defect';
 
@@ -80,42 +81,56 @@ export default function DefectsPage() {
     );
   }
 
+  const highlightedDefectId = useInspectionStore((s) => s.highlightedDefectId);
+
   return (
-    <div className="flex h-full flex-col">
-      {/* Header bar */}
-      <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-2">
-        <h1 className="text-sm font-semibold">Defect Table</h1>
-        <span className="text-xs text-muted-foreground">
-          {numberFormatter.format(filteredCount)} defect{filteredCount !== 1 ? 's' : ''}
-          {filteredCount !== totalCount && ` (of ${numberFormatter.format(totalCount)})`}
-        </span>
+    <div className="flex h-full">
+      {/* Main content */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        {/* Header bar */}
+        <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-2">
+          <h1 className="text-sm font-semibold">Defect Table</h1>
+          <span className="text-xs text-muted-foreground">
+            {numberFormatter.format(filteredCount)} defect{filteredCount !== 1 ? 's' : ''}
+            {filteredCount !== totalCount && ` (of ${numberFormatter.format(totalCount)})`}
+          </span>
+        </div>
+
+        {/* Compact filter bar */}
+        <DefectFilterBar
+          classLookup={file.classLookup}
+          totalDefects={totalCount}
+          filteredCount={filteredCount}
+          showAdvanced={showAdvanced}
+          onToggleAdvanced={() => setShowAdvanced((prev) => !prev)}
+        />
+
+        {/* Dynamic slider panel (collapsible) */}
+        {showAdvanced && (
+          <DynamicFilterPanel
+            defects={file.defects}
+            defectSchema={file.defectSchema}
+          />
+        )}
+
+        {/* Table area */}
+        <div className="min-h-0 flex-1">
+          <DefectTable
+            defects={filteredDefects}
+            defectSchema={file.defectSchema}
+            classLookup={file.classLookup}
+          />
+        </div>
       </div>
 
-      {/* Compact filter bar */}
-      <DefectFilterBar
-        classLookup={file.classLookup}
-        totalDefects={totalCount}
-        filteredCount={filteredCount}
-        showAdvanced={showAdvanced}
-        onToggleAdvanced={() => setShowAdvanced((prev) => !prev)}
-      />
-
-      {/* Dynamic slider panel (collapsible) */}
-      {showAdvanced && (
-        <DynamicFilterPanel
-          defects={file.defects}
-          defectSchema={file.defectSchema}
-        />
-      )}
-
-      {/* Table area */}
-      <div className="min-h-0 flex-1">
-        <DefectTable
+      {/* Defect detail panel (right side) */}
+      {highlightedDefectId !== null && (
+        <DefectDetailPanel
           defects={filteredDefects}
           defectSchema={file.defectSchema}
           classLookup={file.classLookup}
         />
-      </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useFileStore, useUIStore } from '@/stores';
+import { ExportMenu } from '@/features/export/components/ExportMenu';
 
 export function StatusBar() {
   const activeFileId = useFileStore((s) => s.activeFileId);
@@ -26,6 +27,8 @@ export function StatusBar() {
       </div>
       <div className="flex items-center gap-3">
         {statusMessage && <span>{statusMessage}</span>}
+        <ExportMenu />
+        <span className="text-border">|</span>
         <span>v0.1.0</span>
       </div>
     </footer>

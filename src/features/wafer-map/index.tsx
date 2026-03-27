@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { CircleDot, Maximize, ZoomIn, ZoomOut } from 'lucide-react';
+import { CircleDot, Maximize, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
@@ -54,6 +54,7 @@ export default function WaferMapPage() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [colorMode, setColorMode] = useState<WaferMapColorMode>('uniform');
+  const [rotation, setRotation] = useState(0);
 
   // Derive active file data
   const activeFile = activeFileId ? files.get(activeFileId) ?? null : null;
@@ -271,6 +272,25 @@ export default function WaferMapPage() {
         <div className="mx-0.5 h-5 w-px bg-border" />
 
         <ColorModeSelector value={colorMode} onChange={setColorMode} />
+
+        <div className="mx-0.5 h-5 w-px bg-border" />
+
+        <button
+          type="button"
+          onClick={() => setRotation((prev) => (prev + 90) % 360)}
+          className={cn(
+            'flex h-8 w-8 items-center justify-center rounded-md',
+            'text-muted-foreground transition-colors',
+            'hover:bg-accent hover:text-accent-foreground',
+          )}
+          title={`Rotate (${rotation}°)`}
+          aria-label="Rotate wafer"
+        >
+          <RotateCw className="h-4 w-4" />
+        </button>
+        <span className="min-w-[2rem] select-none text-center text-xs text-muted-foreground">
+          {rotation === 0 ? 'Down' : rotation === 90 ? 'Left' : rotation === 180 ? 'Up' : 'Right'}
+        </span>
       </div>
 
       {/* Floating legend - bottom left */}
