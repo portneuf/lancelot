@@ -24,6 +24,7 @@ export function NavRailItem({ to, icon: Icon, label, collapsed }: NavRailItemPro
         )
       }
       title={collapsed ? label : undefined}
+      aria-label={collapsed ? label : undefined}
     >
       <Icon className="h-5 w-5 shrink-0" />
       {!collapsed && <span className="truncate">{label}</span>}

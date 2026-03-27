@@ -29,6 +29,8 @@ export function NavRail() {
 
   return (
     <aside
+      role="navigation"
+      aria-label="Main navigation"
       className={cn(
         'flex h-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-200',
         collapsed ? 'w-14' : 'w-56',
@@ -73,6 +75,8 @@ export function NavRail() {
             collapsed && 'justify-center px-2',
           )}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-expanded={!collapsed}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? (
             <PanelLeftOpen className="h-5 w-5" />
