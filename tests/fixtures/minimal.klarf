@@ -1,0 +1,12 @@
+FileVersion 1 2;
+FileTimestamp 03-27-2026 12:00:00;
+LotID "LOT001";
+DeviceID "CHIP_A";
+WaferID "W01";
+SampleSize 1 300000;
+DiePitch 5000 5000;
+DieOrigin 0 0;
+SampleCenterLocation 150000 150000;
+DefectRecordSpec 5 DEFECTID XREL YREL XINDEX YINDEX;
+DefectList;
+EndOfFile;
