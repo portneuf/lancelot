@@ -15,7 +15,7 @@
  * - Hover die to update inspection store
  */
 
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { CircleDot, Maximize, ZoomIn, ZoomOut } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/shared/EmptyState';
@@ -28,7 +28,8 @@ import {
   readColorScheme,
 } from './hooks/useWaferMapRenderer';
 import { useWaferZoomPan } from './hooks/useWaferZoomPan';
-import type { WaferMapSelection } from './hooks/useWaferMapRenderer';
+import { ColorModeSelector } from './components/ColorModeSelector';
+import type { WaferMapSelection, WaferMapColorMode } from './hooks/useWaferMapRenderer';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -52,6 +53,7 @@ export default function WaferMapPage() {
   const setHoveredDie = useInspectionStore((s) => s.setHoveredDie);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [colorMode, setColorMode] = useState<WaferMapColorMode>('uniform');
 
   // Derive active file data
   const activeFile = activeFileId ? files.get(activeFileId) ?? null : null;
@@ -74,7 +76,7 @@ export default function WaferMapPage() {
   );
 
   // Render
-  useWaferMapRenderer(canvasRef, viewport, geometry, dies, defects, selection, filteredDefectIds);
+  useWaferMapRenderer(canvasRef, viewport, geometry, dies, defects, selection, filteredDefectIds, colorMode);
 
   // -------------------------------------------------------------------------
   // Interaction handlers
@@ -265,6 +267,10 @@ export default function WaferMapPage() {
         >
           <Maximize className="h-4 w-4" />
         </button>
+
+        <div className="mx-0.5 h-5 w-px bg-border" />
+
+        <ColorModeSelector value={colorMode} onChange={setColorMode} />
       </div>
 
       {/* Floating legend - bottom left */}

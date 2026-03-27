@@ -14,6 +14,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import type { WaferGeometry, DieMapEntry, OrientationMarkLocation } from '@/core/models/wafer';
 import type { DefectRecord } from '@/core/models/defect';
+import { buildClassColorMap, buildSequentialLUT } from '@/core/utils/color-scales';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -47,6 +48,8 @@ export interface WaferMapSelection {
   highlightedDefectId: number | null;
   hoveredDie: { xIndex: number; yIndex: number } | null;
 }
+
+export type WaferMapColorMode = 'uniform' | 'byClass' | 'bySize' | 'byCluster';
 
 // ---------------------------------------------------------------------------
 // Color helpers
@@ -254,6 +257,7 @@ export function renderWaferMap(
   colorScheme: WaferMapColorScheme,
   selection: WaferMapSelection,
   filteredDefectIds?: ReadonlySet<number> | null,
+  colorMode: WaferMapColorMode = 'uniform',
 ): void {
   const { canvasWidth, canvasHeight } = viewport;
   const dpr = window.devicePixelRatio || 1;
@@ -363,31 +367,69 @@ export function renderWaferMap(
     ctx.globalAlpha = 1;
   }
 
-  // Pass 2 (or only pass): matching defects at full opacity
-  ctx.beginPath();
-  ctx.fillStyle = colorScheme.defectParticle;
-  for (let i = 0; i < defects.length; i++) {
-    const d = defects[i];
-    if (hasFilter && !filteredDefectIds!.has(d.defectId)) continue;
-    if (selection.selectedDefectIds.has(d.defectId)) continue;
-    if (selection.highlightedDefectId === d.defectId) continue;
-
-    const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
-
-    // Frustum cull individual defects
-    if (
-      px + defectRadius < 0 ||
-      px - defectRadius > canvasWidth ||
-      py + defectRadius < 0 ||
-      py - defectRadius > canvasHeight
-    ) {
-      continue;
+  // Pass 2 (or only pass): matching defects at full opacity, colored by mode
+  if (colorMode === 'uniform') {
+    // Single color for all defects
+    ctx.beginPath();
+    ctx.fillStyle = colorScheme.defectParticle;
+    for (let i = 0; i < defects.length; i++) {
+      const d = defects[i];
+      if (hasFilter && !filteredDefectIds!.has(d.defectId)) continue;
+      if (selection.selectedDefectIds.has(d.defectId)) continue;
+      if (selection.highlightedDefectId === d.defectId) continue;
+      const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
+      if (px + defectRadius < 0 || px - defectRadius > canvasWidth || py + defectRadius < 0 || py - defectRadius > canvasHeight) continue;
+      ctx.moveTo(px + defectRadius, py);
+      ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
     }
+    ctx.fill();
+  } else if (colorMode === 'byClass' || colorMode === 'byCluster') {
+    // Group defects by class/cluster, render one batch per color
+    const classNums = defects.map((d) => (colorMode === 'byClass' ? d.classNumber : d.clusterNumber) ?? 0);
+    const classColorMap = buildClassColorMap([...new Set(classNums)]);
 
-    ctx.moveTo(px + defectRadius, py);
-    ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
+    for (const [classNum, color] of classColorMap) {
+      ctx.beginPath();
+      ctx.fillStyle = color;
+      for (let i = 0; i < defects.length; i++) {
+        const d = defects[i];
+        const key = (colorMode === 'byClass' ? d.classNumber : d.clusterNumber) ?? 0;
+        if (key !== classNum) continue;
+        if (hasFilter && !filteredDefectIds!.has(d.defectId)) continue;
+        if (selection.selectedDefectIds.has(d.defectId)) continue;
+        if (selection.highlightedDefectId === d.defectId) continue;
+        const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
+        if (px + defectRadius < 0 || px - defectRadius > canvasWidth || py + defectRadius < 0 || py - defectRadius > canvasHeight) continue;
+        ctx.moveTo(px + defectRadius, py);
+        ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
+      }
+      ctx.fill();
+    }
+  } else if (colorMode === 'bySize') {
+    // Sequential color scale based on defect size
+    const sizes = defects.map((d) => d.size ?? 0);
+    let sizeMin = Infinity, sizeMax = -Infinity;
+    for (const s of sizes) { if (s < sizeMin) sizeMin = s; if (s > sizeMax) sizeMax = s; }
+    const sizeRange = sizeMax - sizeMin || 1;
+    const lut = buildSequentialLUT(64);
+
+    // Render each defect individually with its color
+    for (let i = 0; i < defects.length; i++) {
+      const d = defects[i];
+      if (hasFilter && filteredDefectIds && !filteredDefectIds.has(d.defectId)) continue;
+      if (selection.selectedDefectIds.has(d.defectId)) continue;
+      if (selection.highlightedDefectId === d.defectId) continue;
+      const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
+      if (px + defectRadius < 0 || px - defectRadius > canvasWidth || py + defectRadius < 0 || py - defectRadius > canvasHeight) continue;
+
+      const t = ((d.size ?? 0) - sizeMin) / sizeRange;
+      const lutIdx = Math.min(lut.length - 1, Math.max(0, Math.floor(t * (lut.length - 1))));
+      ctx.fillStyle = lut[lutIdx];
+      ctx.beginPath();
+      ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
-  ctx.fill();
 
   // 6. Draw selected defects on top (slightly larger, with outline)
   if (selection.selectedDefectIds.size > 0) {
@@ -514,6 +556,7 @@ export function useWaferMapRenderer(
   defects: readonly DefectRecord[],
   selection: WaferMapSelection,
   filteredDefectIds?: ReadonlySet<number> | null,
+  colorMode: WaferMapColorMode = 'uniform',
 ): void {
   const rafRef = useRef<number>(0);
   const colorSchemeRef = useRef<WaferMapColorScheme>(readColorScheme());
@@ -549,8 +592,9 @@ export function useWaferMapRenderer(
       colorSchemeRef.current,
       selection,
       filteredDefectIds,
+      colorMode,
     );
-  }, [canvasRef, viewport, geometry, dies, defects, selection, filteredDefectIds]);
+  }, [canvasRef, viewport, geometry, dies, defects, selection, filteredDefectIds, colorMode]);
 
   useEffect(() => {
     cancelAnimationFrame(rafRef.current);
