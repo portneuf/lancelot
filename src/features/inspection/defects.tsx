@@ -1,9 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Bug } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore, useInspectionStore } from '@/stores';
 import { DefectTable } from './components/DefectTable';
 import { DefectFilterBar } from './components/DefectFilterBar';
+import { DynamicFilterPanel } from './components/DynamicFilterPanel';
+import { readField } from './utils/read-field';
 import type { DefectRecord } from '@/core/models/defect';
 
 const numberFormatter = new Intl.NumberFormat();
@@ -11,20 +13,15 @@ const numberFormatter = new Intl.NumberFormat();
 export default function DefectsPage() {
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
-
   const file = activeFileId ? files.get(activeFileId) : undefined;
 
-  if (!file) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <EmptyState icon={Bug} title="No Data" description="Open a file to view defects" />
-      </div>
-    );
-  }
-
   const filters = useInspectionStore((s) => s.filters);
+  const setFilteredDefectIds = useInspectionStore((s) => s.setFilteredDefectIds);
+
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const filteredDefects = useMemo(() => {
+    if (!file) return [];
     let defects: DefectRecord[] = file.defects;
 
     // Class filter
@@ -32,14 +29,17 @@ export default function DefectsPage() {
       defects = defects.filter((d) => d.classNumber != null && filters.classNumbers.has(d.classNumber));
     }
 
-    // Size range filter
-    if (filters.sizeRange[0] != null) {
-      const min = filters.sizeRange[0];
-      defects = defects.filter((d) => (d.size ?? 0) >= min);
-    }
-    if (filters.sizeRange[1] != null) {
-      const max = filters.sizeRange[1];
-      defects = defects.filter((d) => (d.size ?? 0) <= max);
+    // Numeric range filters (generic for all columns)
+    for (const [key, range] of Object.entries(filters.numericRanges)) {
+      const [min, max] = range;
+      if (min == null && max == null) continue;
+      defects = defects.filter((d) => {
+        const val = readField(d, key);
+        if (typeof val !== 'number') return true;
+        if (min != null && val < min) return false;
+        if (max != null && val > max) return false;
+        return true;
+      });
     }
 
     // Text search
@@ -53,10 +53,32 @@ export default function DefectsPage() {
     }
 
     return defects;
-  }, [file.defects, filters]);
+  }, [file?.defects, filters]);
 
-  const totalCount = file.defects.length;
+  const totalCount = file?.defects.length ?? 0;
   const filteredCount = filteredDefects.length;
+
+  // Sync filteredDefectIds to store for WaferMap dimming
+  useEffect(() => {
+    if (filteredCount < totalCount && filteredCount > 0) {
+      setFilteredDefectIds(new Set(filteredDefects.map((d) => d.defectId)));
+    } else {
+      setFilteredDefectIds(null);
+    }
+  }, [filteredDefects, filteredCount, totalCount, setFilteredDefectIds]);
+
+  // Clear filter sync on unmount
+  useEffect(() => {
+    return () => setFilteredDefectIds(null);
+  }, [setFilteredDefectIds]);
+
+  if (!file) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <EmptyState icon={Bug} title="No Data" description="Open a file to view defects" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -69,12 +91,22 @@ export default function DefectsPage() {
         </span>
       </div>
 
-      {/* Filter bar */}
+      {/* Compact filter bar */}
       <DefectFilterBar
         classLookup={file.classLookup}
         totalDefects={totalCount}
         filteredCount={filteredCount}
+        showAdvanced={showAdvanced}
+        onToggleAdvanced={() => setShowAdvanced((prev) => !prev)}
       />
+
+      {/* Dynamic slider panel (collapsible) */}
+      {showAdvanced && (
+        <DynamicFilterPanel
+          defects={file.defects}
+          defectSchema={file.defectSchema}
+        />
+      )}
 
       {/* Table area */}
       <div className="min-h-0 flex-1">

@@ -253,6 +253,7 @@ export function renderWaferMap(
   defects: readonly DefectRecord[],
   colorScheme: WaferMapColorScheme,
   selection: WaferMapSelection,
+  filteredDefectIds?: ReadonlySet<number> | null,
 ): void {
   const { canvasWidth, canvasHeight } = viewport;
   const dpr = window.devicePixelRatio || 1;
@@ -340,10 +341,34 @@ export function renderWaferMap(
   const defectRadius = Math.max(2, Math.min(5, viewport.scale * pitchX * 0.02));
 
   // Batch: normal (non-selected, non-highlighted) defects
+  // If filters are active, draw in two passes: dimmed (non-matching) + full (matching)
+  const hasFilter = filteredDefectIds != null && filteredDefectIds.size > 0;
+
+  if (hasFilter) {
+    // Pass 1: dimmed defects (not matching filter)
+    ctx.beginPath();
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = colorScheme.defectParticle;
+    for (let i = 0; i < defects.length; i++) {
+      const d = defects[i];
+      if (filteredDefectIds.has(d.defectId)) continue;
+      if (selection.selectedDefectIds.has(d.defectId)) continue;
+      if (selection.highlightedDefectId === d.defectId) continue;
+      const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
+      if (px + defectRadius < 0 || px - defectRadius > canvasWidth || py + defectRadius < 0 || py - defectRadius > canvasHeight) continue;
+      ctx.moveTo(px + defectRadius, py);
+      ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
+    }
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // Pass 2 (or only pass): matching defects at full opacity
   ctx.beginPath();
   ctx.fillStyle = colorScheme.defectParticle;
   for (let i = 0; i < defects.length; i++) {
     const d = defects[i];
+    if (hasFilter && !filteredDefectIds!.has(d.defectId)) continue;
     if (selection.selectedDefectIds.has(d.defectId)) continue;
     if (selection.highlightedDefectId === d.defectId) continue;
 
@@ -488,6 +513,7 @@ export function useWaferMapRenderer(
   dies: readonly DieMapEntry[],
   defects: readonly DefectRecord[],
   selection: WaferMapSelection,
+  filteredDefectIds?: ReadonlySet<number> | null,
 ): void {
   const rafRef = useRef<number>(0);
   const colorSchemeRef = useRef<WaferMapColorScheme>(readColorScheme());
@@ -522,8 +548,9 @@ export function useWaferMapRenderer(
       defects,
       colorSchemeRef.current,
       selection,
+      filteredDefectIds,
     );
-  }, [canvasRef, viewport, geometry, dies, defects, selection]);
+  }, [canvasRef, viewport, geometry, dies, defects, selection, filteredDefectIds]);
 
   useEffect(() => {
     cancelAnimationFrame(rafRef.current);

@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react';
-import { Filter, X } from 'lucide-react';
+import { Filter, SlidersHorizontal, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useInspectionStore } from '@/stores';
 import type { ClassLookupEntry } from '@/core/models/inspection-file';
@@ -8,17 +8,24 @@ interface DefectFilterBarProps {
   classLookup: ClassLookupEntry[];
   totalDefects: number;
   filteredCount: number;
+  showAdvanced: boolean;
+  onToggleAdvanced: () => void;
 }
 
-export function DefectFilterBar({ classLookup, totalDefects, filteredCount }: DefectFilterBarProps) {
+export function DefectFilterBar({
+  classLookup,
+  totalDefects,
+  filteredCount,
+  showAdvanced,
+  onToggleAdvanced,
+}: DefectFilterBarProps) {
   const filters = useInspectionStore((s) => s.filters);
   const updateFilters = useInspectionStore((s) => s.updateFilters);
   const clearFilters = useInspectionStore((s) => s.clearFilters);
 
   const hasActiveFilters = useMemo(() => {
     return filters.classNumbers.size > 0 ||
-      filters.sizeRange[0] !== null ||
-      filters.sizeRange[1] !== null ||
+      Object.keys(filters.numericRanges).length > 0 ||
       filters.searchText !== '';
   }, [filters]);
 
@@ -31,16 +38,6 @@ export function DefectFilterBar({ classLookup, totalDefects, filteredCount }: De
     }
     updateFilters({ classNumbers: next });
   }, [filters.classNumbers, updateFilters]);
-
-  const handleMinSizeChange = useCallback((value: string) => {
-    const num = value === '' ? null : parseFloat(value);
-    updateFilters({ sizeRange: [num, filters.sizeRange[1]] });
-  }, [filters.sizeRange, updateFilters]);
-
-  const handleMaxSizeChange = useCallback((value: string) => {
-    const num = value === '' ? null : parseFloat(value);
-    updateFilters({ sizeRange: [filters.sizeRange[0], num] });
-  }, [filters.sizeRange, updateFilters]);
 
   const handleSearchChange = useCallback((value: string) => {
     updateFilters({ searchText: value });
@@ -73,26 +70,6 @@ export function DefectFilterBar({ classLookup, totalDefects, filteredCount }: De
         </div>
       )}
 
-      {/* Size range */}
-      <div className="flex items-center gap-1 text-xs">
-        <span className="text-muted-foreground">Size:</span>
-        <input
-          type="number"
-          placeholder="min"
-          value={filters.sizeRange[0] ?? ''}
-          onChange={(e) => handleMinSizeChange(e.target.value)}
-          className="w-16 rounded border border-border bg-background px-1.5 py-0.5 text-xs tabular-nums"
-        />
-        <span className="text-muted-foreground">-</span>
-        <input
-          type="number"
-          placeholder="max"
-          value={filters.sizeRange[1] ?? ''}
-          onChange={(e) => handleMaxSizeChange(e.target.value)}
-          className="w-16 rounded border border-border bg-background px-1.5 py-0.5 text-xs tabular-nums"
-        />
-      </div>
-
       {/* Search */}
       <input
         type="text"
@@ -101,6 +78,21 @@ export function DefectFilterBar({ classLookup, totalDefects, filteredCount }: De
         onChange={(e) => handleSearchChange(e.target.value)}
         className="w-32 rounded border border-border bg-background px-2 py-0.5 text-xs"
       />
+
+      {/* Advanced filters toggle */}
+      <button
+        onClick={onToggleAdvanced}
+        className={cn(
+          'flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors',
+          showAdvanced
+            ? 'border-primary bg-primary/10 text-primary'
+            : 'border-border text-muted-foreground hover:border-primary/50',
+        )}
+        title="Toggle range sliders"
+      >
+        <SlidersHorizontal className="h-3.5 w-3.5" />
+        Sliders
+      </button>
 
       {/* Filter status + clear */}
       <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">

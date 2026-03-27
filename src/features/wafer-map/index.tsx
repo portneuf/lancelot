@@ -45,6 +45,7 @@ export default function WaferMapPage() {
   const files = useFileStore((s) => s.files);
 
   const selectedDefectIds = useInspectionStore((s) => s.selectedDefectIds);
+  const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
   const highlightedDefectId = useInspectionStore((s) => s.highlightedDefectId);
   const hoveredDie = useInspectionStore((s) => s.hoveredDie);
   const highlightDefect = useInspectionStore((s) => s.highlightDefect);
@@ -73,7 +74,7 @@ export default function WaferMapPage() {
   );
 
   // Render
-  useWaferMapRenderer(canvasRef, viewport, geometry, dies, defects, selection);
+  useWaferMapRenderer(canvasRef, viewport, geometry, dies, defects, selection, filteredDefectIds);
 
   // -------------------------------------------------------------------------
   // Interaction handlers

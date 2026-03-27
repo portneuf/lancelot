@@ -3,6 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { cn } from '@/lib/cn';
 import { useInspectionStore } from '@/stores';
 import type { DefectRecord, DefectColumnSchema, ClassLookupEntry } from '@/core/models';
+import { readField } from '../utils/read-field';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -71,13 +72,6 @@ function formatValue(
   if (typeof value === 'string') return value;
   if (type === 'int32' || type === 'float') return numberFormatter.format(value);
   return String(value);
-}
-
-function readField(defect: DefectRecord, key: string): number | string | undefined {
-  if (key in defect) {
-    return (defect as unknown as Record<string, number | string | undefined>)[key];
-  }
-  return defect.extra[key];
 }
 
 function buildClassMap(classLookup: ClassLookupEntry[]): Map<number, string> {

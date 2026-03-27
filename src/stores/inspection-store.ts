@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export interface DefectFilterCriteria {
   classNumbers: Set<number>;
   sizeRange: [number | null, number | null];
+  numericRanges: Record<string, [number | null, number | null]>;
   selectedDies: Set<string>;
   searchText: string;
   testNumbers: Set<number>;
@@ -14,6 +15,7 @@ export interface InspectionState {
   highlightedDefectId: number | null;
   hoveredDie: { xIndex: number; yIndex: number } | null;
   filters: DefectFilterCriteria;
+  filteredDefectIds: Set<number> | null;
 
   setActiveWafer: (index: number) => void;
   selectDefects: (ids: number[]) => void;
@@ -22,11 +24,13 @@ export interface InspectionState {
   updateFilters: (filters: Partial<DefectFilterCriteria>) => void;
   clearFilters: () => void;
   resetSelection: () => void;
+  setFilteredDefectIds: (ids: Set<number> | null) => void;
 }
 
 const initialFilters: DefectFilterCriteria = {
   classNumbers: new Set(),
   sizeRange: [null, null],
+  numericRanges: {},
   selectedDies: new Set(),
   searchText: '',
   testNumbers: new Set(),
@@ -38,6 +42,7 @@ export const useInspectionStore = create<InspectionState>()((set) => ({
   highlightedDefectId: null,
   hoveredDie: null,
   filters: { ...initialFilters },
+  filteredDefectIds: null,
 
   setActiveWafer: (index) => set({ activeWaferIndex: index }),
 
@@ -60,4 +65,6 @@ export const useInspectionStore = create<InspectionState>()((set) => ({
       highlightedDefectId: null,
       hoveredDie: null,
     }),
+
+  setFilteredDefectIds: (ids) => set({ filteredDefectIds: ids }),
 }));
