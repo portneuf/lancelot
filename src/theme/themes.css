@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Map Lancelot tokens to Tailwind */
+  --color-background: var(--lancelot-bg);
+  --color-foreground: var(--lancelot-fg);
+  --color-primary: var(--lancelot-primary);
+  --color-primary-foreground: var(--lancelot-primary-fg);
+  --color-secondary: var(--lancelot-secondary);
+  --color-secondary-foreground: var(--lancelot-secondary-fg);
+  --color-muted: var(--lancelot-muted);
+  --color-muted-foreground: var(--lancelot-muted-fg);
+  --color-accent: var(--lancelot-accent);
+  --color-accent-foreground: var(--lancelot-accent-fg);
+  --color-destructive: var(--lancelot-destructive);
+  --color-border: var(--lancelot-border);
+  --color-ring: var(--lancelot-ring);
+  --color-card: var(--lancelot-card);
+  --color-card-foreground: var(--lancelot-card-fg);
+  --color-popover: var(--lancelot-popover);
+  --color-popover-foreground: var(--lancelot-popover-fg);
+
+  /* Wafer map semantic tokens */
+  --color-defect-particle: var(--lancelot-defect-particle);
+  --color-defect-scratch: var(--lancelot-defect-scratch);
+  --color-defect-pit: var(--lancelot-defect-pit);
+  --color-defect-stain: var(--lancelot-defect-stain);
+  --color-defect-pattern: var(--lancelot-defect-pattern);
+  --color-defect-unknown: var(--lancelot-defect-unknown);
+  --color-die-pass: var(--lancelot-die-pass);
+  --color-die-fail: var(--lancelot-die-fail);
+  --color-die-untested: var(--lancelot-die-untested);
+  --color-wafer-bg: var(--lancelot-wafer-bg);
+  --color-wafer-edge: var(--lancelot-wafer-edge);
+  --color-wafer-notch: var(--lancelot-wafer-notch);
+
+  /* Sidebar / NavRail */
+  --color-sidebar: var(--lancelot-sidebar);
+  --color-sidebar-foreground: var(--lancelot-sidebar-fg);
+  --color-sidebar-accent: var(--lancelot-sidebar-accent);
+  --color-sidebar-border: var(--lancelot-sidebar-border);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+}
+
+/* ==========================================================================
+   Light Theme (default)
+   Clean white/blue UI with clear hierarchy.
+   ========================================================================== */
+
+@layer base {
+  :root,
+  .light {
+    /* Core UI */
+    --lancelot-bg: oklch(0.99 0.002 240);
+    --lancelot-fg: oklch(0.15 0.01 250);
+    --lancelot-primary: oklch(0.55 0.19 260);
+    --lancelot-primary-fg: oklch(0.99 0.002 240);
+    --lancelot-secondary: oklch(0.95 0.01 250);
+    --lancelot-secondary-fg: oklch(0.25 0.015 250);
+    --lancelot-muted: oklch(0.94 0.008 250);
+    --lancelot-muted-fg: oklch(0.50 0.02 250);
+    --lancelot-accent: oklch(0.93 0.015 260);
+    --lancelot-accent-fg: oklch(0.25 0.015 250);
+    --lancelot-destructive: oklch(0.55 0.2 25);
+    --lancelot-border: oklch(0.88 0.01 250);
+    --lancelot-ring: oklch(0.55 0.19 260);
+    --lancelot-card: oklch(1.0 0 0);
+    --lancelot-card-fg: oklch(0.15 0.01 250);
+    --lancelot-popover: oklch(1.0 0 0);
+    --lancelot-popover-fg: oklch(0.15 0.01 250);
+
+    /* Wafer map: defect types — perceptually distinct via hue separation */
+    --lancelot-defect-particle: oklch(0.60 0.22 30);
+    --lancelot-defect-scratch: oklch(0.55 0.20 300);
+    --lancelot-defect-pit: oklch(0.62 0.18 145);
+    --lancelot-defect-stain: oklch(0.70 0.16 85);
+    --lancelot-defect-pattern: oklch(0.55 0.18 200);
+    --lancelot-defect-unknown: oklch(0.55 0.06 250);
+
+    /* Wafer map: die status */
+    --lancelot-die-pass: oklch(0.68 0.18 145);
+    --lancelot-die-fail: oklch(0.55 0.22 25);
+    --lancelot-die-untested: oklch(0.82 0.04 250);
+
+    /* Wafer map: wafer chrome */
+    --lancelot-wafer-bg: oklch(0.96 0.005 250);
+    --lancelot-wafer-edge: oklch(0.70 0.02 250);
+    --lancelot-wafer-notch: oklch(0.45 0.03 250);
+
+    /* Sidebar / NavRail */
+    --lancelot-sidebar: oklch(0.97 0.005 250);
+    --lancelot-sidebar-fg: oklch(0.25 0.015 250);
+    --lancelot-sidebar-accent: oklch(0.93 0.015 260);
+    --lancelot-sidebar-border: oklch(0.88 0.01 250);
+  }
+
+  /* ========================================================================
+     Dark Theme
+     Slate dark backgrounds, brighter blue primary, light text on dark.
+     ====================================================================== */
+
+  .dark {
+    /* Core UI */
+    --lancelot-bg: oklch(0.17 0.015 260);
+    --lancelot-fg: oklch(0.93 0.008 250);
+    --lancelot-primary: oklch(0.62 0.20 260);
+    --lancelot-primary-fg: oklch(0.99 0.002 240);
+    --lancelot-secondary: oklch(0.24 0.015 260);
+    --lancelot-secondary-fg: oklch(0.88 0.01 250);
+    --lancelot-muted: oklch(0.25 0.012 260);
+    --lancelot-muted-fg: oklch(0.65 0.02 250);
+    --lancelot-accent: oklch(0.28 0.02 260);
+    --lancelot-accent-fg: oklch(0.88 0.01 250);
+    --lancelot-destructive: oklch(0.60 0.22 25);
+    --lancelot-border: oklch(0.30 0.015 260);
+    --lancelot-ring: oklch(0.62 0.20 260);
+    --lancelot-card: oklch(0.20 0.015 260);
+    --lancelot-card-fg: oklch(0.93 0.008 250);
+    --lancelot-popover: oklch(0.22 0.015 260);
+    --lancelot-popover-fg: oklch(0.93 0.008 250);
+
+    /* Wafer map: defect types — boosted lightness for dark bg */
+    --lancelot-defect-particle: oklch(0.72 0.20 30);
+    --lancelot-defect-scratch: oklch(0.70 0.18 300);
+    --lancelot-defect-pit: oklch(0.72 0.18 145);
+    --lancelot-defect-stain: oklch(0.78 0.16 85);
+    --lancelot-defect-pattern: oklch(0.68 0.16 200);
+    --lancelot-defect-unknown: oklch(0.62 0.04 250);
+
+    /* Wafer map: die status */
+    --lancelot-die-pass: oklch(0.72 0.18 145);
+    --lancelot-die-fail: oklch(0.62 0.22 25);
+    --lancelot-die-untested: oklch(0.40 0.02 260);
+
+    /* Wafer map: wafer chrome */
+    --lancelot-wafer-bg: oklch(0.22 0.01 260);
+    --lancelot-wafer-edge: oklch(0.45 0.02 260);
+    --lancelot-wafer-notch: oklch(0.60 0.02 260);
+
+    /* Sidebar / NavRail */
+    --lancelot-sidebar: oklch(0.15 0.015 260);
+    --lancelot-sidebar-fg: oklch(0.88 0.01 250);
+    --lancelot-sidebar-accent: oklch(0.28 0.02 260);
+    --lancelot-sidebar-border: oklch(0.30 0.015 260);
+  }
+
+  /* ========================================================================
+     High-Contrast Theme
+     Pure white bg, pure black text, maximum chroma accents, thick borders.
+     Designed for accessibility and bright cleanroom monitors.
+     ====================================================================== */
+
+  .high-contrast {
+    /* Core UI */
+    --lancelot-bg: oklch(1.0 0 0);
+    --lancelot-fg: oklch(0.0 0 0);
+    --lancelot-primary: oklch(0.45 0.26 260);
+    --lancelot-primary-fg: oklch(1.0 0 0);
+    --lancelot-secondary: oklch(0.92 0.005 0);
+    --lancelot-secondary-fg: oklch(0.0 0 0);
+    --lancelot-muted: oklch(0.90 0 0);
+    --lancelot-muted-fg: oklch(0.20 0 0);
+    --lancelot-accent: oklch(0.88 0.01 260);
+    --lancelot-accent-fg: oklch(0.0 0 0);
+    --lancelot-destructive: oklch(0.50 0.27 25);
+    --lancelot-border: oklch(0.0 0 0);
+    --lancelot-ring: oklch(0.45 0.26 260);
+    --lancelot-card: oklch(1.0 0 0);
+    --lancelot-card-fg: oklch(0.0 0 0);
+    --lancelot-popover: oklch(1.0 0 0);
+    --lancelot-popover-fg: oklch(0.0 0 0);
+
+    /* Wafer map: defect types — maximum chroma for visibility */
+    --lancelot-defect-particle: oklch(0.55 0.27 30);
+    --lancelot-defect-scratch: oklch(0.50 0.26 310);
+    --lancelot-defect-pit: oklch(0.55 0.24 145);
+    --lancelot-defect-stain: oklch(0.65 0.22 85);
+    --lancelot-defect-pattern: oklch(0.50 0.22 210);
+    --lancelot-defect-unknown: oklch(0.40 0.0 0);
+
+    /* Wafer map: die status — bold, unambiguous */
+    --lancelot-die-pass: oklch(0.55 0.24 145);
+    --lancelot-die-fail: oklch(0.50 0.27 25);
+    --lancelot-die-untested: oklch(0.75 0.0 0);
+
+    /* Wafer map: wafer chrome */
+    --lancelot-wafer-bg: oklch(0.97 0 0);
+    --lancelot-wafer-edge: oklch(0.0 0 0);
+    --lancelot-wafer-notch: oklch(0.0 0 0);
+
+    /* Sidebar / NavRail */
+    --lancelot-sidebar: oklch(0.95 0 0);
+    --lancelot-sidebar-fg: oklch(0.0 0 0);
+    --lancelot-sidebar-accent: oklch(0.88 0.01 260);
+    --lancelot-sidebar-border: oklch(0.0 0 0);
+  }
+
+  /* ========================================================================
+     Cleanroom Theme
+     Warm white background (#fffef5-ish), dark navy primary,
+     high-visibility colors suited for cleanroom / fab environments.
+     ====================================================================== */
+
+  .cleanroom {
+    /* Core UI */
+    --lancelot-bg: oklch(0.99 0.015 95);
+    --lancelot-fg: oklch(0.18 0.04 260);
+    --lancelot-primary: oklch(0.35 0.12 260);
+    --lancelot-primary-fg: oklch(0.99 0.01 95);
+    --lancelot-secondary: oklch(0.94 0.02 95);
+    --lancelot-secondary-fg: oklch(0.25 0.04 260);
+    --lancelot-muted: oklch(0.93 0.015 95);
+    --lancelot-muted-fg: oklch(0.48 0.03 260);
+    --lancelot-accent: oklch(0.92 0.025 95);
+    --lancelot-accent-fg: oklch(0.25 0.04 260);
+    --lancelot-destructive: oklch(0.52 0.22 25);
+    --lancelot-border: oklch(0.85 0.02 95);
+    --lancelot-ring: oklch(0.35 0.12 260);
+    --lancelot-card: oklch(0.995 0.012 95);
+    --lancelot-card-fg: oklch(0.18 0.04 260);
+    --lancelot-popover: oklch(0.995 0.012 95);
+    --lancelot-popover-fg: oklch(0.18 0.04 260);
+
+    /* Wafer map: defect types — high visibility on warm bg */
+    --lancelot-defect-particle: oklch(0.58 0.24 30);
+    --lancelot-defect-scratch: oklch(0.52 0.22 305);
+    --lancelot-defect-pit: oklch(0.58 0.20 150);
+    --lancelot-defect-stain: oklch(0.68 0.18 80);
+    --lancelot-defect-pattern: oklch(0.52 0.20 205);
+    --lancelot-defect-unknown: oklch(0.52 0.05 260);
+
+    /* Wafer map: die status — clear pass/fail on warm bg */
+    --lancelot-die-pass: oklch(0.62 0.20 150);
+    --lancelot-die-fail: oklch(0.52 0.24 25);
+    --lancelot-die-untested: oklch(0.80 0.03 95);
+
+    /* Wafer map: wafer chrome */
+    --lancelot-wafer-bg: oklch(0.96 0.012 95);
+    --lancelot-wafer-edge: oklch(0.65 0.03 260);
+    --lancelot-wafer-notch: oklch(0.40 0.04 260);
+
+    /* Sidebar / NavRail */
+    --lancelot-sidebar: oklch(0.96 0.015 95);
+    --lancelot-sidebar-fg: oklch(0.22 0.04 260);
+    --lancelot-sidebar-accent: oklch(0.92 0.025 95);
+    --lancelot-sidebar-border: oklch(0.85 0.02 95);
+  }
+}
