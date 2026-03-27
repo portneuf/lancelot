@@ -3,9 +3,12 @@ import { Upload, FileWarning, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useFileStore } from '@/stores';
 import { useFileOpen } from './hooks/useFileOpen';
+import { GeneratorDialog } from './components/GeneratorDialog';
+import { useNavigate } from 'react-router';
 
 export default function FileManagerPage() {
   const { openFile, openFilePicker } = useFileOpen();
+  const navigate = useNavigate();
   const loadingState = useFileStore((s) => s.loadingState);
   const loadingProgress = useFileStore((s) => s.loadingProgress);
   const parseErrors = useFileStore((s) => s.parseErrors);
@@ -35,7 +38,7 @@ export default function FileManagerPage() {
   const isLoading = loadingState === 'reading' || loadingState === 'parsing';
 
   return (
-    <div className="flex h-full items-center justify-center p-8">
+    <div className="flex h-full flex-col items-center justify-center gap-6 p-8">
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -94,6 +97,12 @@ export default function FileManagerPage() {
             </p>
           </>
         )}
+      </div>
+
+      {/* Generator */}
+      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+        <span>or</span>
+        <GeneratorDialog onGenerated={() => navigate('/wafer/map')} />
       </div>
     </div>
   );
