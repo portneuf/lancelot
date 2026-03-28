@@ -5,3 +5,4 @@ export { NavRailItem } from './NavRailItem';
 export { ContentArea } from './ContentArea';
 export { StatusBar } from './StatusBar';
 export { TitleBar } from './TitleBar';
+export { FilterSidebar } from './FilterSidebar';

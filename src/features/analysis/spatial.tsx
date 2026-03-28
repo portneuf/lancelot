@@ -14,7 +14,7 @@ import {
 import type { DefectRecord } from '@/core/models/defect';
 import type { ClassLookupEntry } from '@/core/models/inspection-file';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { useFileStore } from '@/stores';
+import { useFileStore, useInspectionStore } from '@/stores';
 import { cn } from '@/lib/cn';
 
 const CHART_COLORS = [
@@ -197,24 +197,32 @@ export default function SpatialPage() {
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : undefined;
+  const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
 
   const classMap = useMemo(() => {
     if (!file) return new Map<number, string>();
     return buildClassMap(file.classLookup);
   }, [file]);
 
+  const activeDefects = useMemo(() => {
+    if (!file) return [];
+    return filteredDefectIds
+      ? file.defects.filter((d) => filteredDefectIds.has(d.defectId))
+      : file.defects;
+  }, [file, filteredDefectIds]);
+
   const isDownsampled = useMemo(() => {
-    return (file?.defects.length ?? 0) > DOWNSAMPLE_THRESHOLD;
-  }, [file]);
+    return activeDefects.length > DOWNSAMPLE_THRESHOLD;
+  }, [activeDefects]);
 
   const seriesData = useMemo(() => {
     if (!file) return new Map<string, (ScatterPoint | BucketPoint)[]>();
     if (isDownsampled) {
-      return downsampleDefects(file.defects, classMap);
+      return downsampleDefects(activeDefects, classMap);
     }
 
     if (file.classLookup.length === 0) {
-      const allPoints: ScatterPoint[] = file.defects.map((d) => ({
+      const allPoints: ScatterPoint[] = activeDefects.map((d) => ({
         x: d.xAbs,
         y: d.yAbs,
         defectId: d.defectId,
@@ -226,9 +234,10 @@ export default function SpatialPage() {
       return map;
     }
 
-    return groupDefectsByClass(file.defects, classMap);
-  }, [file, classMap, isDownsampled]);
+    return groupDefectsByClass(activeDefects, classMap);
+  }, [file, activeDefects, classMap, isDownsampled]);
 
+  const defectCount = activeDefects.length;
   const seriesNames = useMemo(() => Array.from(seriesData.keys()), [seriesData]);
 
   if (!activeFileId || !file) {
@@ -242,8 +251,6 @@ export default function SpatialPage() {
       </div>
     );
   }
-
-  const defectCount = file.defects.length;
 
   return (
     <div className="flex h-full flex-col p-6">

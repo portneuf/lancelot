@@ -12,7 +12,7 @@ import {
 import type { InspectionFile } from '@/core/models/inspection-file';
 import type { DefectRecord } from '@/core/models/defect';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { useFileStore } from '@/stores';
+import { useFileStore, useInspectionStore } from '@/stores';
 import { cn } from '@/lib/cn';
 
 const CHART_COLORS = [
@@ -202,6 +202,7 @@ export default function YieldPage() {
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : undefined;
+  const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
 
   const kpis = useMemo(() => {
     if (!file) {
@@ -220,8 +221,12 @@ export default function YieldPage() {
     const { yieldPct, cleanDies, testedDies } = computeDieYield(file);
     const classCount = computeClassCount(file);
 
+    const activeDefects = filteredDefectIds
+      ? file.defects.filter((d) => filteredDefectIds.has(d.defectId))
+      : file.defects;
+
     return {
-      totalDefects: file.defects.length,
+      totalDefects: activeDefects.length,
       density,
       densityUnit,
       yieldPct,
@@ -229,12 +234,15 @@ export default function YieldPage() {
       testedDies,
       classCount,
     };
-  }, [file]);
+  }, [file, filteredDefectIds]);
 
   const sizeHistogram = useMemo(() => {
     if (!file) return [];
-    return buildSizeHistogram(file.defects, 10);
-  }, [file]);
+    const defects = filteredDefectIds
+      ? file.defects.filter((d) => filteredDefectIds.has(d.defectId))
+      : file.defects;
+    return buildSizeHistogram(defects, 10);
+  }, [file, filteredDefectIds]);
 
   const defectsPerDie = useMemo(() => {
     if (!file) return [];

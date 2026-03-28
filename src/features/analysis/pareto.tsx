@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useInspectionStore } from '@/stores';
 import {
   Bar,
   Line,
@@ -70,11 +71,15 @@ export default function ParetoPage() {
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : undefined;
+  const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
 
   const paretoData = useMemo(() => {
     if (!file) return [];
-    return buildParetoData(file.defects, file.classLookup);
-  }, [file]);
+    const defects = filteredDefectIds
+      ? file.defects.filter((d) => filteredDefectIds.has(d.defectId))
+      : file.defects;
+    return buildParetoData(defects, file.classLookup);
+  }, [file, filteredDefectIds]);
 
   if (!file) {
     return (
