@@ -30,3 +30,4 @@ src-tauri/gen/
 *.njsproj
 *.sln
 *.sw?
+assets/
