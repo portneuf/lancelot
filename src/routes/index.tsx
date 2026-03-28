@@ -2,14 +2,23 @@ import { createBrowserRouter, Navigate } from 'react-router';
 import { AppShell } from '@/components/layout';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { RequireFile } from './guards';
+import { useTranslation } from '@/i18n/useTranslation';
 
 function lazyPage(importFn: () => Promise<{ default: React.ComponentType }>) {
   return () => importFn().then((m) => ({ Component: m.default }));
 }
 
 function RouteErrorFallback({ context }: { context: string }) {
+  const { t } = useTranslation();
   return (
-    <ErrorBoundary context={context}>
+    <ErrorBoundary
+      context={context}
+      labels={{
+        title: t('common.error'),
+        tryAgain: t('common.tryAgain'),
+        home: t('common.home'),
+      }}
+    >
       <div />
     </ErrorBoundary>
   );

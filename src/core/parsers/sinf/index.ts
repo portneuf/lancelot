@@ -17,6 +17,13 @@ export class SinfAdapter implements FileFormatAdapter {
     mimeTypes: ['text/plain'],
   };
 
+  private _meta: { fileName: string; fileSize: number } = { fileName: 'unknown.sinf', fileSize: 0 };
+
+  withMeta(meta: { fileName: string; fileSize: number }): this {
+    this._meta = meta;
+    return this;
+  }
+
   probe(header: string): number {
     const upper = header.toUpperCase();
     // SINF files typically start with DEVICE: or LOT:
@@ -51,8 +58,8 @@ export class SinfAdapter implements FileFormatAdapter {
 
       const file = normalizeSinfData({
         raw,
-        fileName: 'unknown.sinf',
-        fileSize: text.length,
+        fileName: this._meta.fileName,
+        fileSize: this._meta.fileSize || text.length,
         warnings,
       });
 

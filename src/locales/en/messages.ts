@@ -31,6 +31,8 @@ export const messages: Record<string, string> = {
   'common.error': 'Error',
   'common.noData': 'No data loaded',
   'common.noFileLoaded': 'No file loaded',
+  'common.tryAgain': 'Try again',
+  'common.home': 'Home',
   'common.openFileHint': 'Open a KLARF file to get started',
   'common.defects': 'Defects',
   'common.or': 'or',

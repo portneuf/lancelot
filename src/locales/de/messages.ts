@@ -31,6 +31,8 @@ export const messages: Record<string, string> = {
   'common.error': 'Fehler',
   'common.noData': 'Keine Daten geladen',
   'common.noFileLoaded': 'Keine Datei geladen',
+  'common.tryAgain': 'Erneut versuchen',
+  'common.home': 'Startseite',
   'common.openFileHint': 'Öffnen Sie eine KLARF-Datei, um zu beginnen',
   'common.defects': 'Defekte',
   'common.or': 'oder',

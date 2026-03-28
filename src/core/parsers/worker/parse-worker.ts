@@ -7,14 +7,16 @@
 
 import { ParserRegistry } from '../parser-registry';
 import { KlarfAdapter } from '../klarf';
+import { SinfAdapter } from '../sinf';
 import type { WorkerRequest, WorkerResponse } from './parse-worker-protocol';
 
-// Initialize registry inside the worker
+// Initialize registry inside the worker with ALL format adapters
 const registry = ParserRegistry.getInstance();
 try {
   registry.register(new KlarfAdapter());
+  registry.register(new SinfAdapter());
 } catch {
-  // Already registered
+  // Already registered (e.g., HMR)
 }
 
 self.onmessage = (event: MessageEvent<WorkerRequest>) => {

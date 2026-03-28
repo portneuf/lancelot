@@ -409,27 +409,41 @@ export function renderWaferMap(
       ctx.fill();
     }
   } else if (colorMode === 'bySize') {
-    // Sequential color scale based on defect size
-    const sizes = defects.map((d) => d.size ?? 0);
+    // Sequential color scale: bucket defects by size for batch rendering
+    const BUCKET_COUNT = 32;
+    const lut = buildSequentialLUT(BUCKET_COUNT);
     let sizeMin = Infinity, sizeMax = -Infinity;
-    for (const s of sizes) { if (s < sizeMin) sizeMin = s; if (s > sizeMax) sizeMax = s; }
+    for (let i = 0; i < defects.length; i++) {
+      const s = defects[i].size ?? 0;
+      if (s < sizeMin) sizeMin = s;
+      if (s > sizeMax) sizeMax = s;
+    }
     const sizeRange = sizeMax - sizeMin || 1;
-    const lut = buildSequentialLUT(64);
 
-    // Render each defect individually with its color
+    // Assign each defect to a color bucket
+    const buckets: number[][] = Array.from({ length: BUCKET_COUNT }, () => []);
     for (let i = 0; i < defects.length; i++) {
       const d = defects[i];
       if (hasFilter && filteredDefectIds && !filteredDefectIds.has(d.defectId)) continue;
       if (selection.selectedDefectIds.has(d.defectId)) continue;
       if (selection.highlightedDefectId === d.defectId) continue;
-      const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
-      if (px + defectRadius < 0 || px - defectRadius > canvasWidth || py + defectRadius < 0 || py - defectRadius > canvasHeight) continue;
-
       const t = ((d.size ?? 0) - sizeMin) / sizeRange;
-      const lutIdx = Math.min(lut.length - 1, Math.max(0, Math.floor(t * (lut.length - 1))));
-      ctx.fillStyle = lut[lutIdx];
+      const idx = Math.min(BUCKET_COUNT - 1, Math.max(0, Math.floor(t * (BUCKET_COUNT - 1))));
+      buckets[idx].push(i);
+    }
+
+    // Batch-render each bucket (one beginPath/fill per color)
+    for (let b = 0; b < BUCKET_COUNT; b++) {
+      if (buckets[b].length === 0) continue;
       ctx.beginPath();
-      ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
+      ctx.fillStyle = lut[b];
+      for (const di of buckets[b]) {
+        const d = defects[di];
+        const [px, py] = waferToCanvas(d.xAbs, d.yAbs, viewport);
+        if (px + defectRadius < 0 || px - defectRadius > canvasWidth || py + defectRadius < 0 || py - defectRadius > canvasHeight) continue;
+        ctx.moveTo(px + defectRadius, py);
+        ctx.arc(px, py, defectRadius, 0, Math.PI * 2);
+      }
       ctx.fill();
     }
   }
