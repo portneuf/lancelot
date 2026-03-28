@@ -140,7 +140,7 @@ def generate_klarf(wafer_map: np.ndarray, lot_id: str, wafer_id: str,
     lines.append(f'SampleOrientationMarkType NOTCH;')
     lines.append(f'OrientationMarkLocation DOWN;')
     lines.append(f'DiePitch {DIE_PITCH_UM} {DIE_PITCH_UM};')
-    lines.append(f'DieOrigin 0 0;')
+    lines.append(f'DieOrigin {wafer_radius} {wafer_radius};')
     lines.append(f'SampleCenterLocation {wafer_radius} {wafer_radius};')
     lines.append(f'AreaPerTest 64.0;')
 
