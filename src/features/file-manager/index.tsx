@@ -1,10 +1,12 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, lazy, Suspense } from 'react';
 import { Upload, FileWarning, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useFileStore } from '@/stores';
 import { useFileOpen } from './hooks/useFileOpen';
 import { GeneratorDialog } from './components/GeneratorDialog';
 import { useNavigate } from 'react-router';
+
+const InspectionHistory = lazy(() => import('./components/InspectionHistory'));
 
 export default function FileManagerPage() {
   const { openFile, openFilePicker } = useFileOpen();
@@ -104,6 +106,11 @@ export default function FileManagerPage() {
         <span>or</span>
         <GeneratorDialog onGenerated={() => navigate('/wafer/map')} />
       </div>
+
+      {/* Inspection History */}
+      <Suspense fallback={null}>
+        <InspectionHistory />
+      </Suspense>
     </div>
   );
 }

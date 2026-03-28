@@ -9,7 +9,27 @@ import { useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useFileStore } from '@/stores';
 import { initializeRegistry } from '@/core/parsers';
+import { saveInspection } from '@/core/services/inspection-db';
 import type { WorkerRequest, WorkerResponse } from '@/core/parsers/worker/parse-worker-protocol';
+import type { InspectionFile } from '@/core/models/inspection-file';
+
+/** Persist parsed inspection metadata to IndexedDB (fire-and-forget). */
+function persistToHistory(fileId: string, file: File, data: InspectionFile): void {
+  saveInspection({
+    id: fileId,
+    fileName: file.name,
+    lotId: data.identity.lotId ?? '',
+    waferId: data.identity.waferId ?? '',
+    deviceId: data.identity.deviceId ?? '',
+    defectCount: data.defects.length,
+    openedAt: new Date().toISOString(),
+    fileSize: file.size,
+    format: data.source.formatId,
+  }).catch((err) => {
+    // History persistence is non-critical; log and continue.
+    console.warn('Failed to save inspection to history', err);
+  });
+}
 
 export function useFileOpen() {
   const setActiveFile = useFileStore((s) => s.setActiveFile);
@@ -82,6 +102,7 @@ export function useFileOpen() {
                 format: msg.result.data.source.formatId,
                 openedAt: new Date().toISOString(),
               });
+              persistToHistory(fileId, file, msg.result.data);
               navigate('/wafer/map');
             } else {
               setParseErrors(msg.result.errors);
@@ -139,6 +160,7 @@ export function useFileOpen() {
         format: result.data.source.formatId,
         openedAt: new Date().toISOString(),
       });
+      persistToHistory(fileId, file, result.data);
       navigate('/wafer/map');
     } else {
       setParseErrors(result.errors);
@@ -148,7 +170,7 @@ export function useFileOpen() {
   const openFilePicker = useCallback(() => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.klarf,.kla,.000,.001,.002,.003';
+    input.accept = '.klarf,.kla,.000,.001,.002,.003,.sinf,.inf';
     input.onchange = () => {
       const file = input.files?.[0];
       if (file) openFile(file);

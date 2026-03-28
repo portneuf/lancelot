@@ -12,6 +12,7 @@ import {
   Activity,
   Link2,
   ChartLine,
+  Brain,
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
@@ -72,6 +73,7 @@ export function NavRail() {
           <NavRailItem to="/analysis/cluster" icon={GitBranch} label="Cluster" collapsed={collapsed} />
           <NavRailItem to="/analysis/scratch" icon={Slash} label="Scratch" collapsed={collapsed} />
           <NavRailItem to="/analysis/spc" icon={Activity} label="SPC" collapsed={collapsed} />
+          <NavRailItem to="/analysis/classifier" icon={Brain} label="Classifier" collapsed={collapsed} />
         </NavRailGroup>
       </div>
 

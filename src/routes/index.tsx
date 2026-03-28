@@ -69,6 +69,7 @@ export const router = createBrowserRouter([
               { path: 'cluster', lazy: lazyPage(() => import('@/features/analysis/cluster')) },
               { path: 'scratch', lazy: lazyPage(() => import('@/features/analysis/scratch')) },
               { path: 'spc', lazy: lazyPage(() => import('@/features/analysis/spc')) },
+              { path: 'classifier', lazy: lazyPage(() => import('@/features/analysis/classifier')) },
             ],
           },
         ],
