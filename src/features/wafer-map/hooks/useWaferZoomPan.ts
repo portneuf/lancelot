@@ -211,6 +211,8 @@ export function useWaferZoomPan(
   const onMouseDown = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       if (e.button !== 0) return; // left button only
+      // Skip panning when Shift is held (reserved for rectangle selection)
+      if (e.shiftKey) return;
       isPanningRef.current = true;
       setIsPanning(true);
       lastMouseRef.current = { x: e.clientX, y: e.clientY };

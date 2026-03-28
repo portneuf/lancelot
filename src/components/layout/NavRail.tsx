@@ -7,6 +7,11 @@ import {
   BarChart3,
   ScatterChart,
   TrendingUp,
+  GitBranch,
+  Slash,
+  Activity,
+  Link2,
+  ChartLine,
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
@@ -62,6 +67,11 @@ export function NavRail() {
           <NavRailItem to="/analysis/pareto" icon={BarChart3} label="Pareto" collapsed={collapsed} />
           <NavRailItem to="/analysis/spatial" icon={ScatterChart} label="Spatial" collapsed={collapsed} />
           <NavRailItem to="/analysis/yield" icon={TrendingUp} label="Yield" collapsed={collapsed} />
+          <NavRailItem to="/analysis/correlation" icon={Link2} label="Correlation" collapsed={collapsed} />
+          <NavRailItem to="/analysis/trend" icon={ChartLine} label="Trend" collapsed={collapsed} />
+          <NavRailItem to="/analysis/cluster" icon={GitBranch} label="Cluster" collapsed={collapsed} />
+          <NavRailItem to="/analysis/scratch" icon={Slash} label="Scratch" collapsed={collapsed} />
+          <NavRailItem to="/analysis/spc" icon={Activity} label="SPC" collapsed={collapsed} />
         </NavRailGroup>
       </div>
 

@@ -15,14 +15,15 @@
  * - Hover die to update inspection store
  */
 
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { CircleDot, Maximize, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { CircleDot, Maximize, ZoomIn, ZoomOut, RotateCw, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
 import { useInspectionStore } from '@/stores';
 import {
   useWaferMapRenderer,
+  canvasToWafer,
   hitTestDefect,
   hitTestDie,
   readColorScheme,
@@ -30,6 +31,17 @@ import {
 import { useWaferZoomPan } from './hooks/useWaferZoomPan';
 import { ColorModeSelector } from './components/ColorModeSelector';
 import type { WaferMapSelection, WaferMapColorMode } from './hooks/useWaferMapRenderer';
+
+// ---------------------------------------------------------------------------
+// Selection rectangle types
+// ---------------------------------------------------------------------------
+
+interface SelectionRect {
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+}
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -51,10 +63,17 @@ export default function WaferMapPage() {
   const hoveredDie = useInspectionStore((s) => s.hoveredDie);
   const highlightDefect = useInspectionStore((s) => s.highlightDefect);
   const setHoveredDie = useInspectionStore((s) => s.setHoveredDie);
+  const selectDefects = useInspectionStore((s) => s.selectDefects);
+  const resetSelection = useInspectionStore((s) => s.resetSelection);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayCanvasRef = useRef<HTMLCanvasElement>(null);
   const [colorMode, setColorMode] = useState<WaferMapColorMode>('uniform');
   const [rotation, setRotation] = useState(0);
+
+  // Rectangle brush selection state
+  const [selectionRect, setSelectionRect] = useState<SelectionRect | null>(null);
+  const isSelectingRef = useRef(false);
 
   // Derive active file data
   const activeFile = activeFileId ? files.get(activeFileId) ?? null : null;
@@ -86,6 +105,8 @@ export default function WaferMapPage() {
   const handleCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       if (!geometry) return;
+      // Don't process click if we just finished a selection drag
+      if (e.shiftKey) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -110,6 +131,7 @@ export default function WaferMapPage() {
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       if (!geometry) return;
       if (isPanning) return; // don't hit-test while panning
+      if (isSelectingRef.current) return; // don't hit-test while selecting
 
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -130,7 +152,146 @@ export default function WaferMapPage() {
 
   const handleCanvasMouseLeave = useCallback(() => {
     setHoveredDie(null);
+    // Cancel any active selection on mouse leave
+    if (isSelectingRef.current) {
+      isSelectingRef.current = false;
+      setSelectionRect(null);
+    }
   }, [setHoveredDie]);
+
+  // -------------------------------------------------------------------------
+  // Rectangle brush selection handlers (Shift+drag)
+  // -------------------------------------------------------------------------
+
+  const handleSelectionMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      if (!e.shiftKey || e.button !== 0) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+
+      isSelectingRef.current = true;
+      setSelectionRect({ startX: cx, startY: cy, endX: cx, endY: cy });
+    },
+    [],
+  );
+
+  const handleSelectionMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      if (!isSelectingRef.current) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+
+      setSelectionRect((prev) =>
+        prev ? { ...prev, endX: cx, endY: cy } : null,
+      );
+    },
+    [],
+  );
+
+  const handleSelectionMouseUp = useCallback(
+    (_e: React.MouseEvent<HTMLCanvasElement>) => {
+      if (!isSelectingRef.current || !selectionRect) {
+        isSelectingRef.current = false;
+        return;
+      }
+
+      isSelectingRef.current = false;
+
+      // Compute wafer-space bounds from the selection rectangle
+      const minCx = Math.min(selectionRect.startX, selectionRect.endX);
+      const maxCx = Math.max(selectionRect.startX, selectionRect.endX);
+      const minCy = Math.min(selectionRect.startY, selectionRect.endY);
+      const maxCy = Math.max(selectionRect.startY, selectionRect.endY);
+
+      // Ignore tiny drags (less than 4px)
+      if (maxCx - minCx < 4 && maxCy - minCy < 4) {
+        setSelectionRect(null);
+        return;
+      }
+
+      const [wMinX, wMinY] = canvasToWafer(minCx, minCy, viewport);
+      const [wMaxX, wMaxY] = canvasToWafer(maxCx, maxCy, viewport);
+
+      const left = Math.min(wMinX, wMaxX);
+      const right = Math.max(wMinX, wMaxX);
+      const top = Math.min(wMinY, wMaxY);
+      const bottom = Math.max(wMinY, wMaxY);
+
+      // Find all defects within the rectangle bounds
+      const matchingIds: number[] = [];
+      for (const d of defects) {
+        if (d.xAbs >= left && d.xAbs <= right && d.yAbs >= top && d.yAbs <= bottom) {
+          matchingIds.push(d.defectId);
+        }
+      }
+
+      if (matchingIds.length > 0) {
+        selectDefects(matchingIds);
+      }
+
+      setSelectionRect(null);
+    },
+    [selectionRect, viewport, defects, selectDefects],
+  );
+
+  // Draw the selection rectangle overlay
+  useEffect(() => {
+    const overlay = overlayCanvasRef.current;
+    if (!overlay) return;
+
+    const ctx = overlay.getContext('2d');
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
+
+    if (!selectionRect) return;
+
+    const x = Math.min(selectionRect.startX, selectionRect.endX);
+    const y = Math.min(selectionRect.startY, selectionRect.endY);
+    const w = Math.abs(selectionRect.endX - selectionRect.startX);
+    const h = Math.abs(selectionRect.endY - selectionRect.startY);
+
+    // Semi-transparent blue fill
+    ctx.fillStyle = 'rgba(59, 130, 246, 0.2)';
+    ctx.fillRect(x, y, w, h);
+
+    // Blue border
+    ctx.strokeStyle = 'rgba(59, 130, 246, 0.8)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, w, h);
+  }, [selectionRect]);
+
+  // Keep overlay canvas sized to match main canvas
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const overlay = overlayCanvasRef.current;
+    if (!canvas || !overlay) return;
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
+      if (width === 0 || height === 0) return;
+      const dpr = window.devicePixelRatio || 1;
+      overlay.width = width * dpr;
+      overlay.height = height * dpr;
+      overlay.style.width = `${width}px`;
+      overlay.style.height = `${height}px`;
+    });
+
+    observer.observe(canvas);
+    return () => observer.disconnect();
+  }, []);
 
   // Zoom toolbar actions
   const handleZoomIn = useCallback(() => {
@@ -186,11 +347,12 @@ export default function WaferMapPage() {
         ref={canvasRef}
         className={cn(
           'h-full w-full',
-          isPanning ? 'cursor-grabbing' : 'cursor-crosshair',
+          isPanning ? 'cursor-grabbing' : isSelectingRef.current ? 'cursor-crosshair' : 'cursor-crosshair',
         )}
         style={{ touchAction: 'none' }}
         onClick={handleCanvasClick}
         onMouseMove={(e) => {
+          handleSelectionMouseMove(e);
           eventHandlers.onMouseMove(e);
           handleCanvasMouseMove(e);
         }}
@@ -199,11 +361,24 @@ export default function WaferMapPage() {
           handleCanvasMouseLeave();
         }}
         onWheel={eventHandlers.onWheel}
-        onMouseDown={eventHandlers.onMouseDown}
-        onMouseUp={eventHandlers.onMouseUp}
+        onMouseDown={(e) => {
+          handleSelectionMouseDown(e);
+          eventHandlers.onMouseDown(e);
+        }}
+        onMouseUp={(e) => {
+          handleSelectionMouseUp(e);
+          eventHandlers.onMouseUp(e);
+        }}
         onTouchStart={eventHandlers.onTouchStart}
         onTouchMove={eventHandlers.onTouchMove}
         onTouchEnd={eventHandlers.onTouchEnd}
+      />
+
+      {/* Selection rectangle overlay canvas */}
+      <canvas
+        ref={overlayCanvasRef}
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        style={{ touchAction: 'none' }}
       />
 
       {/* Floating toolbar - top right */}
@@ -291,6 +466,41 @@ export default function WaferMapPage() {
         <span className="min-w-[2rem] select-none text-center text-xs text-muted-foreground">
           {rotation === 0 ? 'Down' : rotation === 90 ? 'Left' : rotation === 180 ? 'Up' : 'Right'}
         </span>
+
+        {/* Selection indicator */}
+        {selectedDefectIds.size > 0 && (
+          <>
+            <div className="mx-0.5 h-5 w-px bg-border" />
+            <span className="select-none text-xs font-medium text-blue-500">
+              {selectedDefectIds.size} selected
+            </span>
+            <button
+              type="button"
+              onClick={() => resetSelection()}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-md',
+                'text-muted-foreground transition-colors',
+                'hover:bg-destructive/10 hover:text-destructive',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              )}
+              title="Clear selection"
+              aria-label="Clear selection"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Shift-drag hint - shown briefly when no selection exists */}
+      <div
+        className={cn(
+          'absolute left-1/2 top-3 -translate-x-1/2',
+          'pointer-events-none select-none rounded-md bg-card/80 px-3 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur-sm',
+          'border border-border/50',
+        )}
+      >
+        Shift + drag to select defects
       </div>
 
       {/* Floating legend - bottom left */}
