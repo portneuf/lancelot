@@ -86,9 +86,11 @@ export function useWaferZoomPan(
     const scaleY = (ch * FIT_PADDING) / diameter;
     const scale = Math.min(scaleX, scaleY);
 
+    // Center viewport on the wafer center (sampleCenterLocation)
+    const [scx, scy] = geometry.sampleCenterLocation;
     setViewport({
-      centerX: 0,
-      centerY: 0,
+      centerX: scx,
+      centerY: scy,
       scale,
       canvasWidth: cw,
       canvasHeight: ch,
@@ -142,9 +144,10 @@ export function useWaferZoomPan(
         const scaleX = (width * FIT_PADDING) / diameter;
         const scaleY = (height * FIT_PADDING) / diameter;
         const scale = Math.min(scaleX, scaleY);
+        const [scx, scy] = geometry.sampleCenterLocation;
         setViewport({
-          centerX: 0,
-          centerY: 0,
+          centerX: scx,
+          centerY: scy,
           scale,
           canvasWidth: width,
           canvasHeight: height,

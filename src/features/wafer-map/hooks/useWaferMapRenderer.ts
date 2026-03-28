@@ -173,29 +173,31 @@ function drawNotch(
   const notchDepth = radius * 0.04;
   const notchWidth = radius * 0.06;
 
+  // Notch is relative to the wafer center (sampleCenterLocation)
+  const [scx, scy] = geometry.sampleCenterLocation;
   let nx: number;
   let ny: number;
   let angle: number;
 
   switch (location) {
     case 'DOWN':
-      nx = 0;
-      ny = radius;
+      nx = scx;
+      ny = scy + radius;
       angle = Math.PI / 2;
       break;
     case 'UP':
-      nx = 0;
-      ny = -radius;
+      nx = scx;
+      ny = scy - radius;
       angle = -Math.PI / 2;
       break;
     case 'LEFT':
-      nx = -radius;
-      ny = 0;
+      nx = scx - radius;
+      ny = scy;
       angle = Math.PI;
       break;
     case 'RIGHT':
-      nx = radius;
-      ny = 0;
+      nx = scx + radius;
+      ny = scy;
       angle = 0;
       break;
   }
@@ -267,8 +269,10 @@ export function renderWaferMap(
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   // 2. Draw wafer outline (circle from geometry.waferDiameter)
+  // Wafer center is at sampleCenterLocation in the same coordinate system as defect xAbs/yAbs
   const waferRadius = geometry.waferDiameter / 2;
-  const [waferCx, waferCy] = waferToCanvas(0, 0, viewport);
+  const [sampleCx, sampleCy] = geometry.sampleCenterLocation;
+  const [waferCx, waferCy] = waferToCanvas(sampleCx, sampleCy, viewport);
   const radiusPx = waferRadius * viewport.scale;
 
   // Wafer fill
@@ -299,16 +303,15 @@ export function renderWaferMap(
   const maxDefects = computeMaxDefects(dies);
   const [pitchX, pitchY] = geometry.diePitch;
   const [originX, originY] = geometry.dieOrigin;
-  const [sampleCx, sampleCy] = geometry.sampleCenterLocation;
   const dieWidthPx = pitchX * viewport.scale;
   const dieHeightPx = pitchY * viewport.scale;
 
   for (let i = 0; i < dies.length; i++) {
     const die = dies[i];
 
-    // Compute die center in wafer-space
-    const dieWx = sampleCx + originX + die.xIndex * pitchX + pitchX / 2;
-    const dieWy = sampleCy + originY + die.yIndex * pitchY + pitchY / 2;
+    // Compute die center in wafer-space (same coordinate system as defect xAbs/yAbs)
+    const dieWx = originX + die.xIndex * pitchX + pitchX / 2;
+    const dieWy = originY + die.yIndex * pitchY + pitchY / 2;
     const [dx, dy] = waferToCanvas(dieWx, dieWy, viewport);
     const rx = dx - dieWidthPx / 2;
     const ry = dy - dieHeightPx / 2;
