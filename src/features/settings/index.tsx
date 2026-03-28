@@ -1,6 +1,7 @@
 import { useTheme } from '@/theme/theme-provider';
 import { useSettingsStore } from '@/stores';
 import { dynamicActivate, supportedLocales } from '@/i18n/i18n';
+import { useTranslation } from '@/i18n/useTranslation';
 import type { Theme } from '@/theme/theme-provider';
 import type { SupportedLocale } from '@/i18n/i18n';
 
@@ -18,6 +19,7 @@ const languages = Object.entries(supportedLocales).map(([value, label]) => ({
 }));
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
   // Theme: use ThemeProvider's hook (actually applies the class to <html>)
   const { theme, setTheme } = useTheme();
 
@@ -33,24 +35,24 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl p-6">
-      <h1 className="mb-8 text-2xl font-bold">Settings</h1>
+      <h1 className="mb-8 text-2xl font-bold">{t('settings.title')}</h1>
 
       <div className="flex flex-col gap-8">
         {/* Theme */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Theme</h2>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('settings.theme')}</h2>
           <div className="flex flex-wrap gap-2">
-            {themes.map((t) => (
+            {themes.map((th) => (
               <button
-                key={t.value}
-                onClick={() => setTheme(t.value)}
+                key={th.value}
+                onClick={() => setTheme(th.value)}
                 className={`rounded-md border px-4 py-2 text-sm transition-colors ${
-                  theme === t.value
+                  theme === th.value
                     ? 'border-primary bg-primary text-primary-foreground'
                     : 'border-border bg-card text-card-foreground hover:bg-accent'
                 }`}
               >
-                {t.label}
+                {th.label}
               </button>
             ))}
           </div>
@@ -58,7 +60,7 @@ export default function SettingsPage() {
 
         {/* Language */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Language</h2>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('settings.language')}</h2>
           <div className="flex flex-wrap gap-2">
             {languages.map((l) => (
               <button
@@ -78,7 +80,7 @@ export default function SettingsPage() {
 
         {/* About */}
         <section>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">About</h2>
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('settings.about')}</h2>
           <div className="rounded-lg border border-border bg-card p-4">
             <p className="text-sm font-semibold">Lancelot v0.4.0</p>
             <p className="mt-1 text-sm text-muted-foreground">

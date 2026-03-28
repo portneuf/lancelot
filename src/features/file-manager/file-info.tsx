@@ -2,16 +2,18 @@ import { FileText, AlertTriangle } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
 import { cn } from '@/lib/cn';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export default function FileInfoPage() {
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : null;
+  const { t } = useTranslation();
 
   if (!file) {
     return (
       <div className="flex h-full items-center justify-center">
-        <EmptyState icon={FileText} title="No File Loaded" description="Open a file to see its details" />
+        <EmptyState icon={FileText} title={t('fileInfo.noFileLoaded')} description={t('fileInfo.openFileToSeeDetails')} />
       </div>
     );
   }
@@ -20,59 +22,59 @@ export default function FileInfoPage() {
 
   return (
     <div className="mx-auto max-w-3xl p-6">
-      <h1 className="mb-6 text-2xl font-bold">File Information</h1>
+      <h1 className="mb-6 text-2xl font-bold">{t('fileInfo.title')}</h1>
 
       <div className="flex flex-col gap-6">
         {/* Source */}
-        <Section title="Source">
-          <InfoRow label="File Name" value={file.source.fileName} />
-          <InfoRow label="Format" value={`${file.source.formatId.toUpperCase()} v${file.source.formatVersion}`} />
-          <InfoRow label="File Size" value={formatBytes(file.source.fileSize)} />
-          <InfoRow label="Parsed At" value={new Date(file.source.parseTimestamp).toLocaleString()} />
+        <Section title={t('fileInfo.source')}>
+          <InfoRow label={t('fileInfo.fileName')} value={file.source.fileName} />
+          <InfoRow label={t('fileInfo.format')} value={`${file.source.formatId.toUpperCase()} v${file.source.formatVersion}`} />
+          <InfoRow label={t('fileInfo.fileSize')} value={formatBytes(file.source.fileSize)} />
+          <InfoRow label={t('fileInfo.parsedAt')} value={new Date(file.source.parseTimestamp).toLocaleString()} />
         </Section>
 
         {/* Identity */}
-        <Section title="Identification">
-          <InfoRow label="Lot ID" value={file.identity.lotId} />
-          <InfoRow label="Wafer ID" value={file.identity.waferId} />
-          <InfoRow label="Device ID" value={file.identity.deviceId} />
-          {file.identity.slot != null && <InfoRow label="Slot" value={String(file.identity.slot)} />}
-          {file.identity.stepId && <InfoRow label="Step ID" value={file.identity.stepId} />}
-          {file.identity.fileTimestamp && <InfoRow label="File Timestamp" value={file.identity.fileTimestamp} />}
-          {file.identity.resultTimestamp && <InfoRow label="Result Timestamp" value={file.identity.resultTimestamp} />}
+        <Section title={t('fileInfo.identification')}>
+          <InfoRow label={t('fileInfo.lotId')} value={file.identity.lotId} />
+          <InfoRow label={t('fileInfo.waferId')} value={file.identity.waferId} />
+          <InfoRow label={t('fileInfo.deviceId')} value={file.identity.deviceId} />
+          {file.identity.slot != null && <InfoRow label={t('fileInfo.slot')} value={String(file.identity.slot)} />}
+          {file.identity.stepId && <InfoRow label={t('fileInfo.stepId')} value={file.identity.stepId} />}
+          {file.identity.fileTimestamp && <InfoRow label={t('fileInfo.fileTimestamp')} value={file.identity.fileTimestamp} />}
+          {file.identity.resultTimestamp && <InfoRow label={t('fileInfo.resultTimestamp')} value={file.identity.resultTimestamp} />}
         </Section>
 
         {/* Geometry */}
-        <Section title="Wafer Geometry">
-          <InfoRow label="Wafer Diameter" value={`${(file.waferGeometry.waferDiameter / 1000).toFixed(1)} mm`} />
-          <InfoRow label="Die Pitch" value={`${file.waferGeometry.diePitch[0]} x ${file.waferGeometry.diePitch[1]} um`} />
-          <InfoRow label="Die Origin" value={`${file.waferGeometry.dieOrigin[0]}, ${file.waferGeometry.dieOrigin[1]} um`} />
-          <InfoRow label="Center" value={`${file.waferGeometry.sampleCenterLocation[0]}, ${file.waferGeometry.sampleCenterLocation[1]} um`} />
+        <Section title={t('fileInfo.waferGeometry')}>
+          <InfoRow label={t('fileInfo.waferDiameter')} value={`${(file.waferGeometry.waferDiameter / 1000).toFixed(1)} mm`} />
+          <InfoRow label={t('fileInfo.diePitch')} value={`${file.waferGeometry.diePitch[0]} x ${file.waferGeometry.diePitch[1]} um`} />
+          <InfoRow label={t('fileInfo.dieOrigin')} value={`${file.waferGeometry.dieOrigin[0]}, ${file.waferGeometry.dieOrigin[1]} um`} />
+          <InfoRow label={t('fileInfo.center')} value={`${file.waferGeometry.sampleCenterLocation[0]}, ${file.waferGeometry.sampleCenterLocation[1]} um`} />
           {file.waferGeometry.orientationMarkType && (
-            <InfoRow label="Orientation Mark" value={`${file.waferGeometry.orientationMarkType} ${file.waferGeometry.orientationMarkLocation ?? ''}`} />
+            <InfoRow label={t('fileInfo.orientationMark')} value={`${file.waferGeometry.orientationMarkType} ${file.waferGeometry.orientationMarkLocation ?? ''}`} />
           )}
         </Section>
 
         {/* Equipment */}
-        <Section title="Equipment">
-          <InfoRow label="Vendor" value={file.inspectionSetup.stationId.vendor} />
-          <InfoRow label="Model" value={file.inspectionSetup.stationId.model} />
-          <InfoRow label="Equipment ID" value={file.inspectionSetup.stationId.equipmentId} />
-          {file.inspectionSetup.setupId && <InfoRow label="Setup / Recipe" value={file.inspectionSetup.setupId} />}
+        <Section title={t('fileInfo.equipment')}>
+          <InfoRow label={t('fileInfo.vendor')} value={file.inspectionSetup.stationId.vendor} />
+          <InfoRow label={t('fileInfo.model')} value={file.inspectionSetup.stationId.model} />
+          <InfoRow label={t('fileInfo.equipmentId')} value={file.inspectionSetup.stationId.equipmentId} />
+          {file.inspectionSetup.setupId && <InfoRow label={t('fileInfo.setupRecipe')} value={file.inspectionSetup.setupId} />}
         </Section>
 
         {/* Statistics */}
-        <Section title="Statistics">
-          <InfoRow label="Total Defects" value={file.defects.length.toLocaleString()} highlight />
-          <InfoRow label="Defect Classes" value={String(file.classLookup.length)} />
-          <InfoRow label="Dies in Map" value={String(file.dieMap.length)} />
-          <InfoRow label="Test Plan Dies" value={String(file.testPlan.length)} />
-          <InfoRow label="Defect Columns" value={file.defectSchema.map((c) => c.name).join(', ')} />
+        <Section title={t('fileInfo.statistics')}>
+          <InfoRow label={t('fileInfo.totalDefects')} value={file.defects.length.toLocaleString()} highlight />
+          <InfoRow label={t('fileInfo.defectClasses')} value={String(file.classLookup.length)} />
+          <InfoRow label={t('fileInfo.diesInMap')} value={String(file.dieMap.length)} />
+          <InfoRow label={t('fileInfo.testPlanDies')} value={String(file.testPlan.length)} />
+          <InfoRow label={t('fileInfo.defectColumns')} value={file.defectSchema.map((c) => c.name).join(', ')} />
         </Section>
 
         {/* Warnings */}
         {warnings.length > 0 && (
-          <Section title="Parse Warnings">
+          <Section title={t('fileInfo.parseWarnings')}>
             <div className="flex flex-col gap-2">
               {warnings.map((w, i) => (
                 <div key={i} className="flex items-start gap-2 rounded-md bg-destructive/10 p-3 text-sm">

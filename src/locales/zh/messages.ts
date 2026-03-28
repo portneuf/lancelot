@@ -1,6 +1,3 @@
-// Simplified Chinese (简体中文) message catalog for Lancelot.
-// This is a manually created starter catalog. Once lingui extract/compile is run,
-// this will be auto-generated from .po files. For now, provide basic messages.
 export const messages: Record<string, string> = {
   // Navigation
   'nav.file': '文件',
@@ -16,6 +13,14 @@ export const messages: Record<string, string> = {
   'nav.spatial': '空间分布',
   'nav.yield': '良率',
   'nav.settings': '设置',
+  'nav.correlation': '相关性',
+  'nav.trend': '趋势',
+  'nav.cluster': '聚类',
+  'nav.scratch': '划痕',
+  'nav.spc': 'SPC',
+  'nav.classifier': '分类器',
+  'nav.collapse': '折叠',
+  'nav.expand': '展开',
 
   // Common
   'common.open': '打开',
@@ -25,13 +30,180 @@ export const messages: Record<string, string> = {
   'common.loading': '加载中...',
   'common.error': '错误',
   'common.noData': '未加载数据',
+  'common.noFileLoaded': '未加载文件',
+  'common.openFileHint': '打开KLARF文件以开始使用',
+  'common.defects': '缺陷',
+  'common.or': '或',
+  'common.selected': '已选择',
+  'common.clearSelection': '清除选择',
 
-  // File
-  'file.dropzone': '将文件拖放到此处或点击打开',
+  // File Manager
+  'file.openInspection': '打开检测',
+  'file.dropOrBrowse': '拖放文件到此处或浏览打开',
+  'file.browseFiles': '浏览文件',
   'file.supported': '支持的格式: KLARF',
+  'file.parseError': '文件解析失败',
+  'file.tryAnother': '尝试其他文件',
+  'file.readingFile': '正在读取文件...',
+  'file.parsing': '正在解析...',
+  'file.generateTestData': '生成测试数据',
+
+  // File Info
+  'fileInfo.title': '文件信息',
+  'fileInfo.source': '来源',
+  'fileInfo.identification': '标识信息',
+  'fileInfo.waferGeometry': '晶圆几何',
+  'fileInfo.equipment': '设备',
+  'fileInfo.statistics': '统计',
+  'fileInfo.parseWarnings': '解析警告',
+  'fileInfo.fileName': '文件名',
+  'fileInfo.format': '格式',
+  'fileInfo.fileSize': '文件大小',
+  'fileInfo.parsedAt': '解析时间',
+  'fileInfo.lotId': '批次ID',
+  'fileInfo.waferId': '晶圆ID',
+  'fileInfo.deviceId': '器件ID',
+  'fileInfo.slot': '槽位',
+  'fileInfo.stepId': '步骤ID',
+  'fileInfo.waferDiameter': '晶圆直径',
+  'fileInfo.diePitch': '芯片间距',
+  'fileInfo.dieOrigin': '芯片原点',
+  'fileInfo.center': '中心',
+  'fileInfo.orientationMark': '定位标记',
+  'fileInfo.vendor': '供应商',
+  'fileInfo.model': '型号',
+  'fileInfo.equipmentId': '设备ID',
+  'fileInfo.setupRecipe': '设置 / 配方',
+  'fileInfo.totalDefects': '缺陷总数',
+  'fileInfo.defectClasses': '缺陷分类',
+  'fileInfo.diesInMap': '图中芯片数',
+  'fileInfo.testPlanDies': '测试计划芯片数',
+  'fileInfo.defectColumns': '缺陷列',
+
+  // Defect Table
+  'defects.title': '缺陷',
+  'defects.defectTable': '缺陷表',
+
+  // Classes
+  'classes.title': '缺陷分类',
+  'classes.classLookup': '分类查询',
+  'classes.classNumber': '分类编号',
+  'classes.className': '分类名称',
+  'classes.classCode': '分类代码',
+  'classes.defectCount': '缺陷数量',
+  'classes.noClasses': '未定义分类',
+
+  // Wafer Map
+  'waferMap.zoomIn': '放大',
+  'waferMap.zoomOut': '缩小',
+  'waferMap.fitToWindow': '适应窗口',
+  'waferMap.rotate': '旋转',
+  'waferMap.legend': '图例',
+  'waferMap.pass': '通过',
+  'waferMap.fail': '失败',
+  'waferMap.untested': '未测试',
+  'waferMap.defect': '缺陷',
+  'waferMap.selectHint': '点击芯片进行选择',
+
+  // Analysis - Pareto
+  'pareto.title': '帕累托分析',
+  'pareto.defectCount': '缺陷数量',
+  'pareto.cumulative': '累积 %',
+
+  // Analysis - Spatial
+  'spatial.title': '空间分析',
+  'spatial.downsampled': '已降采样以提高性能',
+
+  // Analysis - Yield
+  'yield.title': '良率分析',
+  'yield.totalDefects': '缺陷总数',
+  'yield.defectDensity': '缺陷密度',
+  'yield.dieYield': '芯片良率',
+  'yield.classCount': '分类数量',
+  'yield.sizeDistribution': '尺寸分布',
+  'yield.defectsPerDie': '每芯片缺陷数',
+
+  // Analysis - Correlation
+  'correlation.title': '相关性分析',
+  'correlation.xAxis': 'X轴',
+  'correlation.yAxis': 'Y轴',
+  'correlation.regressionLine': '回归线',
+  'correlation.pearsonR': '皮尔逊R',
+
+  // Analysis - Trend
+  'trend.title': '趋势分析',
+  'trend.metric': '指标',
+  'trend.defectCount': '缺陷数量',
+  'trend.defectDensity': '缺陷密度',
+  'trend.dieYield': '芯片良率',
+
+  // Analysis - Cluster
+  'cluster.title': '聚类分析',
+  'cluster.epsilon': 'Epsilon',
+  'cluster.minPoints': '最小点数',
+  'cluster.clusters': '聚类',
+  'cluster.noise': '噪声',
+
+  // Analysis - Scratch
+  'scratch.title': '划痕检测',
+  'scratch.threshold': '阈值',
+  'scratch.minInliers': '最小内点数',
+  'scratch.detected': '检测到的划痕',
+
+  // Analysis - SPC
+  'spc.title': 'SPC图表',
+  'spc.metric': '指标',
+  'spc.mean': '均值',
+  'spc.sigma': 'Sigma',
+  'spc.ooc': '失控',
+
+  // Analysis - Classifier
+  'classifier.title': '缺陷分类器',
+  'classifier.suggestedClass': '建议分类',
+  'classifier.confidence': '置信度',
+  'classifier.rule': '规则',
+
+  // Filters
+  'filters.title': '筛选',
+  'filters.defectClass': '缺陷分类',
+  'filters.search': '搜索',
+  'filters.searchPlaceholder': '搜索缺陷...',
+  'filters.clearAll': '全部清除',
+  'filters.sliders': '范围滑块',
+
+  // Export
+  'export.title': '导出',
+  'export.csv': '导出CSV',
+  'export.png': '导出PNG',
+  'export.pdf': '导出PDF',
 
   // Settings
+  'settings.title': '设置',
   'settings.theme': '主题',
   'settings.language': '语言',
   'settings.about': '关于',
+  'settings.system': '系统',
+  'settings.light': '浅色',
+  'settings.dark': '深色',
+  'settings.highContrast': '高对比度',
+  'settings.cleanroom': '洁净室',
+  'settings.aboutDescription': 'Lancelot是一款KLARF晶圆检测数据查看器和分析工具。',
+
+  // Generator
+  'generator.title': 'KLARF生成器',
+  'generator.description': '生成用于开发和测试的合成KLARF测试数据。',
+  'generator.defectCount': '缺陷数量',
+  'generator.distribution': '分布',
+  'generator.waferDiameter': '晶圆直径',
+  'generator.generate': '生成',
+  'generator.generating': '生成中...',
+  'generator.cancel': '取消',
+  'generator.random': '随机',
+  'generator.edgeHeavy': '边缘集中',
+  'generator.clustered': '聚集型',
+  'generator.mixed': '混合',
+
+  // Status Bar
+  'statusBar.noFileLoaded': '未加载文件',
+  'statusBar.filters': '筛选',
 };

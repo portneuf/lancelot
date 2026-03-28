@@ -14,6 +14,7 @@ import {
 import { BarChart3 } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
+import { useTranslation } from '@/i18n/useTranslation';
 import type { DefectRecord } from '@/core/models/defect';
 import type { ClassLookupEntry } from '@/core/models/inspection-file';
 
@@ -72,6 +73,7 @@ export default function ParetoPage() {
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : undefined;
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
+  const { t } = useTranslation();
 
   const paretoData = useMemo(() => {
     if (!file) return [];
@@ -84,7 +86,7 @@ export default function ParetoPage() {
   if (!file) {
     return (
       <div className="flex h-full items-center justify-center">
-        <EmptyState icon={BarChart3} title="No Data" description="Open a file to view Pareto analysis" />
+        <EmptyState icon={BarChart3} title={t('common.noData')} description={t('pareto.openFileToView')} />
       </div>
     );
   }
@@ -93,7 +95,7 @@ export default function ParetoPage() {
     <div className="flex h-full flex-col">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-2">
-        <h1 className="text-sm font-semibold">Pareto Chart</h1>
+        <h1 className="text-sm font-semibold">{t('pareto.title')}</h1>
         <span className="text-xs text-muted-foreground">
           {numberFormatter.format(file.defects.length)} defects across {paretoData.length} classes
         </span>
@@ -103,7 +105,7 @@ export default function ParetoPage() {
       <div className="flex-1 p-4">
         {paretoData.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <EmptyState icon={BarChart3} title="No Classification Data" description="No defect classes found in this file" />
+            <EmptyState icon={BarChart3} title={t('pareto.noClassificationData')} description={t('pareto.noClassesFound')} />
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">

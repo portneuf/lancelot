@@ -12,6 +12,7 @@ import {
 import { TrendingUp } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
+import { useTranslation } from '@/i18n/useTranslation';
 import type { InspectionFile } from '@/core/models/inspection-file';
 
 type Metric = 'defects' | 'density' | 'yield';
@@ -65,6 +66,7 @@ export default function TrendPage() {
   const files = useFileStore((s) => s.files);
   const activeFileId = useFileStore((s) => s.activeFileId);
   const [metric, setMetric] = useState<Metric>('defects');
+  const { t } = useTranslation();
 
   const allFiles = useMemo(() => Array.from(files.values()), [files]);
 
@@ -100,7 +102,7 @@ export default function TrendPage() {
   if (!activeFileId) {
     return (
       <div className="flex h-full items-center justify-center">
-        <EmptyState icon={TrendingUp} title="No Data" description="Open files to view trends" />
+        <EmptyState icon={TrendingUp} title={t('common.noData')} description={t('trend.openFileToView')} />
       </div>
     );
   }
@@ -112,10 +114,10 @@ export default function TrendPage() {
       {/* Controls */}
       <div className="flex items-center gap-4 border-b border-border bg-muted/50 px-4 py-2">
         <h1 className="text-sm font-semibold">
-          {isSingleFile ? 'Per-Die Trend' : 'Lot Trend'}
+          {isSingleFile ? t('trend.perDieTrend') : t('trend.lotTrend')}
         </h1>
         <div className="flex items-center gap-2 text-xs">
-          <label className="font-medium text-muted-foreground">Metric:</label>
+          <label className="font-medium text-muted-foreground">{t('trend.metric')}:</label>
           <select
             value={metric}
             onChange={(e) => setMetric(e.target.value as Metric)}
@@ -133,7 +135,7 @@ export default function TrendPage() {
 
       {trendData.length === 0 ? (
         <div className="flex flex-1 items-center justify-center">
-          <EmptyState icon={TrendingUp} title="No trend data" description="Load multiple wafers for lot-level trends" />
+          <EmptyState icon={TrendingUp} title={t('trend.noTrendData')} description={t('trend.loadMultipleWafers')} />
         </div>
       ) : (
         <div className="flex-1 p-4">

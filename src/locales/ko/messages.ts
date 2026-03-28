@@ -1,6 +1,3 @@
-// Korean (한국어) message catalog for Lancelot.
-// This is a manually created starter catalog. Once lingui extract/compile is run,
-// this will be auto-generated from .po files. For now, provide basic messages.
 export const messages: Record<string, string> = {
   // Navigation
   'nav.file': '파일',
@@ -16,6 +13,14 @@ export const messages: Record<string, string> = {
   'nav.spatial': '공간 분포',
   'nav.yield': '수율',
   'nav.settings': '설정',
+  'nav.correlation': '상관관계',
+  'nav.trend': '추세',
+  'nav.cluster': '클러스터',
+  'nav.scratch': '스크래치',
+  'nav.spc': 'SPC',
+  'nav.classifier': '분류기',
+  'nav.collapse': '접기',
+  'nav.expand': '펼치기',
 
   // Common
   'common.open': '열기',
@@ -25,13 +30,180 @@ export const messages: Record<string, string> = {
   'common.loading': '로딩 중...',
   'common.error': '오류',
   'common.noData': '로드된 데이터가 없습니다',
+  'common.noFileLoaded': '로드된 파일이 없습니다',
+  'common.openFileHint': 'KLARF 파일을 열어 시작하세요',
+  'common.defects': '결함',
+  'common.or': '또는',
+  'common.selected': '선택됨',
+  'common.clearSelection': '선택 해제',
 
-  // File
-  'file.dropzone': '여기에 파일을 드롭하거나 클릭하여 열기',
+  // File Manager
+  'file.openInspection': '검사 열기',
+  'file.dropOrBrowse': '여기에 파일을 드롭하거나 찾아보기',
+  'file.browseFiles': '파일 찾아보기',
   'file.supported': '지원 형식: KLARF',
+  'file.parseError': '파일 파싱 실패',
+  'file.tryAnother': '다른 파일 시도',
+  'file.readingFile': '파일 읽는 중...',
+  'file.parsing': '파싱 중...',
+  'file.generateTestData': '테스트 데이터 생성',
+
+  // File Info
+  'fileInfo.title': '파일 정보',
+  'fileInfo.source': '소스',
+  'fileInfo.identification': '식별 정보',
+  'fileInfo.waferGeometry': '웨이퍼 형상',
+  'fileInfo.equipment': '장비',
+  'fileInfo.statistics': '통계',
+  'fileInfo.parseWarnings': '파싱 경고',
+  'fileInfo.fileName': '파일 이름',
+  'fileInfo.format': '형식',
+  'fileInfo.fileSize': '파일 크기',
+  'fileInfo.parsedAt': '파싱 일시',
+  'fileInfo.lotId': '로트 ID',
+  'fileInfo.waferId': '웨이퍼 ID',
+  'fileInfo.deviceId': '디바이스 ID',
+  'fileInfo.slot': '슬롯',
+  'fileInfo.stepId': '스텝 ID',
+  'fileInfo.waferDiameter': '웨이퍼 직경',
+  'fileInfo.diePitch': '다이 피치',
+  'fileInfo.dieOrigin': '다이 원점',
+  'fileInfo.center': '중심',
+  'fileInfo.orientationMark': '오리엔테이션 마크',
+  'fileInfo.vendor': '제조사',
+  'fileInfo.model': '모델',
+  'fileInfo.equipmentId': '장비 ID',
+  'fileInfo.setupRecipe': '설정 / 레시피',
+  'fileInfo.totalDefects': '총 결함 수',
+  'fileInfo.defectClasses': '결함 클래스',
+  'fileInfo.diesInMap': '맵 내 다이 수',
+  'fileInfo.testPlanDies': '테스트 플랜 다이 수',
+  'fileInfo.defectColumns': '결함 컬럼',
+
+  // Defect Table
+  'defects.title': '결함',
+  'defects.defectTable': '결함 테이블',
+
+  // Classes
+  'classes.title': '결함 클래스',
+  'classes.classLookup': '클래스 조회',
+  'classes.classNumber': '클래스 번호',
+  'classes.className': '클래스 이름',
+  'classes.classCode': '클래스 코드',
+  'classes.defectCount': '결함 수',
+  'classes.noClasses': '정의된 클래스 없음',
+
+  // Wafer Map
+  'waferMap.zoomIn': '확대',
+  'waferMap.zoomOut': '축소',
+  'waferMap.fitToWindow': '창에 맞추기',
+  'waferMap.rotate': '회전',
+  'waferMap.legend': '범례',
+  'waferMap.pass': '합격',
+  'waferMap.fail': '불합격',
+  'waferMap.untested': '미검사',
+  'waferMap.defect': '결함',
+  'waferMap.selectHint': '다이를 클릭하여 선택',
+
+  // Analysis - Pareto
+  'pareto.title': '파레토 분석',
+  'pareto.defectCount': '결함 수',
+  'pareto.cumulative': '누적 %',
+
+  // Analysis - Spatial
+  'spatial.title': '공간 분석',
+  'spatial.downsampled': '성능을 위해 다운샘플링됨',
+
+  // Analysis - Yield
+  'yield.title': '수율 분석',
+  'yield.totalDefects': '총 결함 수',
+  'yield.defectDensity': '결함 밀도',
+  'yield.dieYield': '다이 수율',
+  'yield.classCount': '클래스 수',
+  'yield.sizeDistribution': '크기 분포',
+  'yield.defectsPerDie': '다이당 결함 수',
+
+  // Analysis - Correlation
+  'correlation.title': '상관관계 분석',
+  'correlation.xAxis': 'X축',
+  'correlation.yAxis': 'Y축',
+  'correlation.regressionLine': '회귀선',
+  'correlation.pearsonR': '피어슨 R',
+
+  // Analysis - Trend
+  'trend.title': '추세 분석',
+  'trend.metric': '지표',
+  'trend.defectCount': '결함 수',
+  'trend.defectDensity': '결함 밀도',
+  'trend.dieYield': '다이 수율',
+
+  // Analysis - Cluster
+  'cluster.title': '클러스터 분석',
+  'cluster.epsilon': '엡실론',
+  'cluster.minPoints': '최소 포인트',
+  'cluster.clusters': '클러스터',
+  'cluster.noise': '노이즈',
+
+  // Analysis - Scratch
+  'scratch.title': '스크래치 감지',
+  'scratch.threshold': '임계값',
+  'scratch.minInliers': '최소 인라이어',
+  'scratch.detected': '감지된 스크래치',
+
+  // Analysis - SPC
+  'spc.title': 'SPC 차트',
+  'spc.metric': '지표',
+  'spc.mean': '평균',
+  'spc.sigma': '시그마',
+  'spc.ooc': '관리 이탈',
+
+  // Analysis - Classifier
+  'classifier.title': '결함 분류기',
+  'classifier.suggestedClass': '추천 클래스',
+  'classifier.confidence': '신뢰도',
+  'classifier.rule': '규칙',
+
+  // Filters
+  'filters.title': '필터',
+  'filters.defectClass': '결함 클래스',
+  'filters.search': '검색',
+  'filters.searchPlaceholder': '결함 검색...',
+  'filters.clearAll': '전체 해제',
+  'filters.sliders': '범위 슬라이더',
+
+  // Export
+  'export.title': '내보내기',
+  'export.csv': 'CSV 내보내기',
+  'export.png': 'PNG 내보내기',
+  'export.pdf': 'PDF 내보내기',
 
   // Settings
+  'settings.title': '설정',
   'settings.theme': '테마',
   'settings.language': '언어',
   'settings.about': '정보',
+  'settings.system': '시스템',
+  'settings.light': '라이트',
+  'settings.dark': '다크',
+  'settings.highContrast': '고대비',
+  'settings.cleanroom': '클린룸',
+  'settings.aboutDescription': 'Lancelot은 KLARF 웨이퍼 검사 데이터 뷰어 및 분석 도구입니다.',
+
+  // Generator
+  'generator.title': 'KLARF 생성기',
+  'generator.description': '개발 및 테스트용 합성 KLARF 테스트 데이터를 생성합니다.',
+  'generator.defectCount': '결함 수',
+  'generator.distribution': '분포',
+  'generator.waferDiameter': '웨이퍼 직경',
+  'generator.generate': '생성',
+  'generator.generating': '생성 중...',
+  'generator.cancel': '취소',
+  'generator.random': '랜덤',
+  'generator.edgeHeavy': '엣지 집중',
+  'generator.clustered': '클러스터형',
+  'generator.mixed': '혼합',
+
+  // Status Bar
+  'statusBar.noFileLoaded': '로드된 파일 없음',
+  'statusBar.filters': '필터',
 };

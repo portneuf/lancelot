@@ -6,11 +6,13 @@ import { useFileStore } from '@/stores';
 import { exportDefectsAsCsv } from '../export-csv';
 import { exportWaferMapAsPng } from '../export-png';
 import { exportReportAsPdf } from '../export-pdf';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export function ExportMenu() {
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : null;
+  const { t } = useTranslation();
 
   const handleExportCsv = useCallback(() => {
     if (!file) return;
@@ -41,10 +43,10 @@ export function ExportMenu() {
               : 'cursor-not-allowed text-muted-foreground/40',
           )}
           disabled={!file}
-          title="Export"
+          title={t('export.title')}
         >
           <Download className="h-3.5 w-3.5" />
-          Export
+          {t('export.title')}
         </button>
       </DropdownMenu.Trigger>
 
@@ -59,7 +61,7 @@ export function ExportMenu() {
             onSelect={handleExportCsv}
           >
             <FileSpreadsheet className="h-4 w-4" />
-            Export Defects as CSV
+            {t('export.defectsAsCsv')}
           </DropdownMenu.Item>
 
           <DropdownMenu.Item
@@ -67,7 +69,7 @@ export function ExportMenu() {
             onSelect={handleExportPng}
           >
             <Image className="h-4 w-4" />
-            Export Wafer Map as PNG
+            {t('export.waferMapAsPng')}
           </DropdownMenu.Item>
 
           <DropdownMenu.Separator className="my-1 h-px bg-border" />
@@ -77,7 +79,7 @@ export function ExportMenu() {
             onSelect={handleExportPdf}
           >
             <FileText className="h-4 w-4" />
-            Export Report as PDF
+            {t('export.reportAsPdf')}
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

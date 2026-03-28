@@ -5,12 +5,14 @@ import { useFileStore } from '@/stores';
 import { useFileOpen } from './hooks/useFileOpen';
 import { GeneratorDialog } from './components/GeneratorDialog';
 import { useNavigate } from 'react-router';
+import { useTranslation } from '@/i18n/useTranslation';
 
 const InspectionHistory = lazy(() => import('./components/InspectionHistory'));
 
 export default function FileManagerPage() {
   const { openFile, openFilePicker } = useFileOpen();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const loadingState = useFileStore((s) => s.loadingState);
   const loadingProgress = useFileStore((s) => s.loadingProgress);
   const parseErrors = useFileStore((s) => s.parseErrors);
@@ -59,7 +61,7 @@ export default function FileManagerPage() {
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
             <div className="flex flex-col gap-1">
               <h3 className="text-lg font-semibold">
-                {loadingState === 'reading' ? 'Reading file...' : 'Parsing...'}
+                {loadingState === 'reading' ? t('statusBar.readingFile') : t('statusBar.parsing')}
               </h3>
               {loadingState === 'parsing' && (
                 <div className="mx-auto mt-2 h-2 w-48 overflow-hidden rounded-full bg-muted">
@@ -75,7 +77,7 @@ export default function FileManagerPage() {
           <>
             <FileWarning className="h-12 w-12 text-destructive" />
             <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold text-destructive">Parse Error</h3>
+              <h3 className="text-lg font-semibold text-destructive">{t('file.parseError')}</h3>
               {parseErrors.map((err, i) => (
                 <p key={i} className="text-sm text-muted-foreground">{err.message}</p>
               ))}
@@ -86,13 +88,13 @@ export default function FileManagerPage() {
           <>
             <Upload className="h-12 w-12 text-muted-foreground/50" />
             <div className="flex flex-col gap-1">
-              <h3 className="text-lg font-semibold">Open Inspection File</h3>
+              <h3 className="text-lg font-semibold">{t('file.openInspection')}</h3>
               <p className="text-sm text-muted-foreground">
-                Drop a KLARF file here or click to browse
+                {t('file.dropOrBrowse')}
               </p>
             </div>
             <span className="mt-2 rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-              Browse Files
+              {t('file.browseFiles')}
             </span>
             <p className="text-xs text-muted-foreground">
               Supported: .klarf, .kla, .000, .001
@@ -103,7 +105,7 @@ export default function FileManagerPage() {
 
       {/* Generator */}
       <div className="flex items-center gap-3 text-sm text-muted-foreground">
-        <span>or</span>
+        <span>{t('common.or')}</span>
         <GeneratorDialog onGenerated={() => navigate('/wafer/map')} />
       </div>
 

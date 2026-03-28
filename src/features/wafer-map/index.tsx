@@ -20,6 +20,7 @@ import { CircleDot, Maximize, ZoomIn, ZoomOut, RotateCw, X } from 'lucide-react'
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useInspectionStore } from '@/stores';
 import {
   useWaferMapRenderer,
@@ -54,6 +55,7 @@ const ZOOM_STEP = 1.3;
 // ---------------------------------------------------------------------------
 
 export default function WaferMapPage() {
+  const { t } = useTranslation();
   const activeFileId = useFileStore((s) => s.activeFileId);
   const files = useFileStore((s) => s.files);
 
@@ -323,8 +325,8 @@ export default function WaferMapPage() {
       <div className="flex h-full items-center justify-center">
         <EmptyState
           icon={CircleDot}
-          title="No Data"
-          description="Open a file to view the wafer map"
+          title={t('common.noData')}
+          description={t('waferMap.openFileToView')}
         />
       </div>
     );
@@ -397,8 +399,8 @@ export default function WaferMapPage() {
             'hover:bg-accent hover:text-accent-foreground',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           )}
-          title="Zoom in"
-          aria-label="Zoom in"
+          title={t('waferMap.zoomIn')}
+          aria-label={t('waferMap.zoomIn')}
         >
           <ZoomIn className="h-4 w-4" />
         </button>
@@ -421,8 +423,8 @@ export default function WaferMapPage() {
             'hover:bg-accent hover:text-accent-foreground',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           )}
-          title="Zoom out"
-          aria-label="Zoom out"
+          title={t('waferMap.zoomOut')}
+          aria-label={t('waferMap.zoomOut')}
         >
           <ZoomOut className="h-4 w-4" />
         </button>
@@ -438,8 +440,8 @@ export default function WaferMapPage() {
             'hover:bg-accent hover:text-accent-foreground',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           )}
-          title="Fit to window"
-          aria-label="Fit to window"
+          title={t('waferMap.fitToWindow')}
+          aria-label={t('waferMap.fitToWindow')}
         >
           <Maximize className="h-4 w-4" />
         </button>
@@ -459,7 +461,7 @@ export default function WaferMapPage() {
             'hover:bg-accent hover:text-accent-foreground',
           )}
           title={`Rotate (${rotation}°)`}
-          aria-label="Rotate wafer"
+          aria-label={t('waferMap.rotateWafer')}
         >
           <RotateCw className="h-4 w-4" />
         </button>
@@ -472,7 +474,7 @@ export default function WaferMapPage() {
           <>
             <div className="mx-0.5 h-5 w-px bg-border" />
             <span className="select-none text-xs font-medium text-blue-500">
-              {selectedDefectIds.size} selected
+              {selectedDefectIds.size} {t('waferMap.selected')}
             </span>
             <button
               type="button"
@@ -483,8 +485,8 @@ export default function WaferMapPage() {
                 'hover:bg-destructive/10 hover:text-destructive',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               )}
-              title="Clear selection"
-              aria-label="Clear selection"
+              title={t('waferMap.clearSelection')}
+              aria-label={t('waferMap.clearSelection')}
             >
               <X className="h-4 w-4" />
             </button>
@@ -500,7 +502,7 @@ export default function WaferMapPage() {
           'border border-border/50',
         )}
       >
-        Shift + drag to select defects
+        {t('waferMap.shiftDragHint')}
       </div>
 
       {/* Floating legend - bottom left */}
@@ -511,13 +513,13 @@ export default function WaferMapPage() {
         )}
       >
         <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-          Legend
+          {t('waferMap.legend')}
         </p>
         <div className="flex flex-col gap-1">
-          <LegendItem color={colors.diePass} label="Pass (0 defects)" />
-          <LegendItem color={colors.dieFail} label="Fail (high defects)" />
-          <LegendItem color={colors.dieUntested} label="Untested / Skipped" />
-          <LegendItem color={colors.defectParticle} label="Defect" dot />
+          <LegendItem color={colors.diePass} label={t('waferMap.legendPass')} />
+          <LegendItem color={colors.dieFail} label={t('waferMap.legendFail')} />
+          <LegendItem color={colors.dieUntested} label={t('waferMap.legendUntested')} />
+          <LegendItem color={colors.defectParticle} label={t('waferMap.legendDefect')} dot />
         </div>
       </div>
 

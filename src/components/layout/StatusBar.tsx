@@ -2,6 +2,7 @@ import { SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useFileStore, useUIStore, useInspectionStore } from '@/stores';
 import { ExportMenu } from '@/features/export/components/ExportMenu';
+import { useTranslation } from '@/i18n/useTranslation';
 
 interface StatusBarProps {
   onToggleFilters?: () => void;
@@ -14,6 +15,7 @@ export function StatusBar({ onToggleFilters, filterSidebarOpen }: StatusBarProps
   const loadingState = useFileStore((s) => s.loadingState);
   const statusMessage = useUIStore((s) => s.statusMessage);
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
+  const { t } = useTranslation();
 
   const activeFile = activeFileId ? files.get(activeFileId) : null;
   const isFiltered = filteredDefectIds != null;
@@ -34,9 +36,9 @@ export function StatusBar({ onToggleFilters, filterSidebarOpen }: StatusBarProps
             </span>
           </>
         )}
-        {!activeFile && loadingState === 'idle' && <span>No file loaded</span>}
-        {loadingState === 'parsing' && <span>Parsing...</span>}
-        {loadingState === 'reading' && <span>Reading file...</span>}
+        {!activeFile && loadingState === 'idle' && <span>{t('statusBar.noFileLoaded')}</span>}
+        {loadingState === 'parsing' && <span>{t('statusBar.parsing')}</span>}
+        {loadingState === 'reading' && <span>{t('statusBar.readingFile')}</span>}
       </div>
       <div className="flex items-center gap-2">
         {statusMessage && <span>{statusMessage}</span>}
@@ -54,7 +56,7 @@ export function StatusBar({ onToggleFilters, filterSidebarOpen }: StatusBarProps
             title="Toggle filter panel"
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
-            Filters
+            {t('statusBar.filters')}
             {isFiltered && (
               <span className="rounded-full bg-primary px-1 text-[10px] text-primary-foreground">
                 {filteredDefectIds.size}

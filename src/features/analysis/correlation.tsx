@@ -13,6 +13,7 @@ import { ScatterChart as ScatterIcon } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFilteredDefects } from '@/hooks/useFilteredDefects';
 import { readField } from '@/features/inspection/utils/read-field';
+import { useTranslation } from '@/i18n/useTranslation';
 
 /** Available numeric columns for axis selection. */
 const AXIS_OPTIONS = [
@@ -63,6 +64,7 @@ export default function CorrelationPage() {
   const [xKey, setXKey] = useState('size');
   const [yKey, setYKey] = useState('xAbs');
   const [showRegression, setShowRegression] = useState(true);
+  const { t } = useTranslation();
 
   // Build extra axis options from defectSchema
   const axisOptions = useMemo(() => {
@@ -92,7 +94,7 @@ export default function CorrelationPage() {
   if (!file) {
     return (
       <div className="flex h-full items-center justify-center">
-        <EmptyState icon={ScatterIcon} title="No Data" description="Open a file to view correlation analysis" />
+        <EmptyState icon={ScatterIcon} title={t('common.noData')} description={t('correlation.openFileToView')} />
       </div>
     );
   }
@@ -105,7 +107,7 @@ export default function CorrelationPage() {
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-4 border-b border-border bg-muted/50 px-4 py-2">
         <div className="flex items-center gap-2 text-xs">
-          <label className="font-medium text-muted-foreground">X Axis:</label>
+          <label className="font-medium text-muted-foreground">{t('correlation.xAxis')}:</label>
           <select
             value={xKey}
             onChange={(e) => setXKey(e.target.value)}
@@ -115,7 +117,7 @@ export default function CorrelationPage() {
           </select>
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <label className="font-medium text-muted-foreground">Y Axis:</label>
+          <label className="font-medium text-muted-foreground">{t('correlation.yAxis')}:</label>
           <select
             value={yKey}
             onChange={(e) => setYKey(e.target.value)}
@@ -131,7 +133,7 @@ export default function CorrelationPage() {
             onChange={(e) => setShowRegression(e.target.checked)}
             className="rounded"
           />
-          Regression Line
+          {t('correlation.regressionLine')}
         </label>
         <div className="ml-auto flex items-center gap-3 text-xs text-muted-foreground">
           <span>Pearson r = <span className="font-semibold tabular-nums text-foreground">{r.toFixed(4)}</span></span>

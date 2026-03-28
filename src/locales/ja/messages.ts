@@ -1,6 +1,3 @@
-// Japanese (日本語) message catalog for Lancelot.
-// This is a manually created starter catalog. Once lingui extract/compile is run,
-// this will be auto-generated from .po files. For now, provide basic messages.
 export const messages: Record<string, string> = {
   // Navigation
   'nav.file': 'ファイル',
@@ -16,6 +13,14 @@ export const messages: Record<string, string> = {
   'nav.spatial': '空間分布',
   'nav.yield': '歩留まり',
   'nav.settings': '設定',
+  'nav.correlation': '相関',
+  'nav.trend': 'トレンド',
+  'nav.cluster': 'クラスタ',
+  'nav.scratch': 'スクラッチ',
+  'nav.spc': 'SPC',
+  'nav.classifier': '分類器',
+  'nav.collapse': '折りたたむ',
+  'nav.expand': '展開する',
 
   // Common
   'common.open': '開く',
@@ -25,13 +30,180 @@ export const messages: Record<string, string> = {
   'common.loading': '読み込み中...',
   'common.error': 'エラー',
   'common.noData': 'データが読み込まれていません',
+  'common.noFileLoaded': 'ファイルが読み込まれていません',
+  'common.openFileHint': 'KLARFファイルを開いて開始してください',
+  'common.defects': '欠陥',
+  'common.or': 'または',
+  'common.selected': '選択済み',
+  'common.clearSelection': '選択をクリア',
 
-  // File
-  'file.dropzone': 'ここにファイルをドロップするか、クリックして開く',
+  // File Manager
+  'file.openInspection': '検査を開く',
+  'file.dropOrBrowse': 'ここにファイルをドロップするか、参照して開く',
+  'file.browseFiles': 'ファイルを参照',
   'file.supported': '対応フォーマット: KLARF',
+  'file.parseError': 'ファイルの解析に失敗しました',
+  'file.tryAnother': '別のファイルを試す',
+  'file.readingFile': 'ファイルを読み込み中...',
+  'file.parsing': '解析中...',
+  'file.generateTestData': 'テストデータを生成',
+
+  // File Info
+  'fileInfo.title': 'ファイル情報',
+  'fileInfo.source': 'ソース',
+  'fileInfo.identification': '識別情報',
+  'fileInfo.waferGeometry': 'ウェーハジオメトリ',
+  'fileInfo.equipment': '装置',
+  'fileInfo.statistics': '統計',
+  'fileInfo.parseWarnings': '解析警告',
+  'fileInfo.fileName': 'ファイル名',
+  'fileInfo.format': 'フォーマット',
+  'fileInfo.fileSize': 'ファイルサイズ',
+  'fileInfo.parsedAt': '解析日時',
+  'fileInfo.lotId': 'ロットID',
+  'fileInfo.waferId': 'ウェーハID',
+  'fileInfo.deviceId': 'デバイスID',
+  'fileInfo.slot': 'スロット',
+  'fileInfo.stepId': 'ステップID',
+  'fileInfo.waferDiameter': 'ウェーハ径',
+  'fileInfo.diePitch': 'ダイピッチ',
+  'fileInfo.dieOrigin': 'ダイ原点',
+  'fileInfo.center': '中心',
+  'fileInfo.orientationMark': 'オリエンテーションマーク',
+  'fileInfo.vendor': 'ベンダー',
+  'fileInfo.model': 'モデル',
+  'fileInfo.equipmentId': '装置ID',
+  'fileInfo.setupRecipe': 'セットアップ / レシピ',
+  'fileInfo.totalDefects': '欠陥総数',
+  'fileInfo.defectClasses': '欠陥クラス',
+  'fileInfo.diesInMap': 'マップ内のダイ数',
+  'fileInfo.testPlanDies': 'テストプランダイ数',
+  'fileInfo.defectColumns': '欠陥カラム',
+
+  // Defect Table
+  'defects.title': '欠陥',
+  'defects.defectTable': '欠陥テーブル',
+
+  // Classes
+  'classes.title': '欠陥クラス',
+  'classes.classLookup': 'クラス検索',
+  'classes.classNumber': 'クラス番号',
+  'classes.className': 'クラス名',
+  'classes.classCode': 'クラスコード',
+  'classes.defectCount': '欠陥数',
+  'classes.noClasses': 'クラスが定義されていません',
+
+  // Wafer Map
+  'waferMap.zoomIn': '拡大',
+  'waferMap.zoomOut': '縮小',
+  'waferMap.fitToWindow': 'ウィンドウに合わせる',
+  'waferMap.rotate': '回転',
+  'waferMap.legend': '凡例',
+  'waferMap.pass': '合格',
+  'waferMap.fail': '不合格',
+  'waferMap.untested': '未検査',
+  'waferMap.defect': '欠陥',
+  'waferMap.selectHint': 'ダイをクリックして選択',
+
+  // Analysis - Pareto
+  'pareto.title': 'パレート分析',
+  'pareto.defectCount': '欠陥数',
+  'pareto.cumulative': '累積 %',
+
+  // Analysis - Spatial
+  'spatial.title': '空間分析',
+  'spatial.downsampled': 'パフォーマンスのためダウンサンプル済み',
+
+  // Analysis - Yield
+  'yield.title': '歩留まり分析',
+  'yield.totalDefects': '欠陥総数',
+  'yield.defectDensity': '欠陥密度',
+  'yield.dieYield': 'ダイ歩留まり',
+  'yield.classCount': 'クラス数',
+  'yield.sizeDistribution': 'サイズ分布',
+  'yield.defectsPerDie': 'ダイあたりの欠陥数',
+
+  // Analysis - Correlation
+  'correlation.title': '相関分析',
+  'correlation.xAxis': 'X軸',
+  'correlation.yAxis': 'Y軸',
+  'correlation.regressionLine': '回帰直線',
+  'correlation.pearsonR': 'ピアソンR',
+
+  // Analysis - Trend
+  'trend.title': 'トレンド分析',
+  'trend.metric': '指標',
+  'trend.defectCount': '欠陥数',
+  'trend.defectDensity': '欠陥密度',
+  'trend.dieYield': 'ダイ歩留まり',
+
+  // Analysis - Cluster
+  'cluster.title': 'クラスタ分析',
+  'cluster.epsilon': 'イプシロン',
+  'cluster.minPoints': '最小ポイント数',
+  'cluster.clusters': 'クラスタ',
+  'cluster.noise': 'ノイズ',
+
+  // Analysis - Scratch
+  'scratch.title': 'スクラッチ検出',
+  'scratch.threshold': '閾値',
+  'scratch.minInliers': '最小インライア数',
+  'scratch.detected': '検出されたスクラッチ',
+
+  // Analysis - SPC
+  'spc.title': 'SPCチャート',
+  'spc.metric': '指標',
+  'spc.mean': '平均',
+  'spc.sigma': 'シグマ',
+  'spc.ooc': '管理限界外',
+
+  // Analysis - Classifier
+  'classifier.title': '欠陥分類器',
+  'classifier.suggestedClass': '推奨クラス',
+  'classifier.confidence': '信頼度',
+  'classifier.rule': 'ルール',
+
+  // Filters
+  'filters.title': 'フィルタ',
+  'filters.defectClass': '欠陥クラス',
+  'filters.search': '検索',
+  'filters.searchPlaceholder': '欠陥を検索...',
+  'filters.clearAll': 'すべてクリア',
+  'filters.sliders': 'レンジスライダー',
+
+  // Export
+  'export.title': 'エクスポート',
+  'export.csv': 'CSV出力',
+  'export.png': 'PNG出力',
+  'export.pdf': 'PDF出力',
 
   // Settings
+  'settings.title': '設定',
   'settings.theme': 'テーマ',
   'settings.language': '言語',
   'settings.about': 'このアプリについて',
+  'settings.system': 'システム',
+  'settings.light': 'ライト',
+  'settings.dark': 'ダーク',
+  'settings.highContrast': 'ハイコントラスト',
+  'settings.cleanroom': 'クリーンルーム',
+  'settings.aboutDescription': 'Lancelotは、KLARFウェーハ検査データのビューアおよび分析ツールです。',
+
+  // Generator
+  'generator.title': 'KLARFジェネレーター',
+  'generator.description': '開発およびテスト用の合成KLARFテストデータを生成します。',
+  'generator.defectCount': '欠陥数',
+  'generator.distribution': '分布',
+  'generator.waferDiameter': 'ウェーハ径',
+  'generator.generate': '生成',
+  'generator.generating': '生成中...',
+  'generator.cancel': 'キャンセル',
+  'generator.random': 'ランダム',
+  'generator.edgeHeavy': 'エッジ集中',
+  'generator.clustered': 'クラスタ状',
+  'generator.mixed': 'ミックス',
+
+  // Status Bar
+  'statusBar.noFileLoaded': 'ファイルが読み込まれていません',
+  'statusBar.filters': 'フィルタ',
 };

@@ -16,6 +16,7 @@ import type { ClassLookupEntry } from '@/core/models/inspection-file';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore, useInspectionStore } from '@/stores';
 import { cn } from '@/lib/cn';
+import { useTranslation } from '@/i18n/useTranslation';
 
 const CHART_COLORS = [
   '#2563eb',
@@ -198,6 +199,7 @@ export default function SpatialPage() {
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : undefined;
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
+  const { t } = useTranslation();
 
   const classMap = useMemo(() => {
     if (!file) return new Map<number, string>();
@@ -245,8 +247,8 @@ export default function SpatialPage() {
       <div className="flex h-full items-center justify-center">
         <EmptyState
           icon={ScatterChartIcon}
-          title="No Data"
-          description="Open a file to view spatial distribution"
+          title={t('common.noData')}
+          description={t('spatial.openFileToView')}
         />
       </div>
     );
@@ -257,7 +259,7 @@ export default function SpatialPage() {
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <ScatterChartIcon className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Spatial Distribution</h1>
+          <h1 className="text-2xl font-bold">{t('spatial.title')}</h1>
         </div>
         <div className="flex items-center gap-2">
           {isDownsampled && (

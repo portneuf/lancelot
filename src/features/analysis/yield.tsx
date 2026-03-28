@@ -14,6 +14,7 @@ import type { DefectRecord } from '@/core/models/defect';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore, useInspectionStore } from '@/stores';
 import { cn } from '@/lib/cn';
+import { useTranslation } from '@/i18n/useTranslation';
 
 const CHART_COLORS = [
   '#2563eb',
@@ -203,6 +204,7 @@ export default function YieldPage() {
   const files = useFileStore((s) => s.files);
   const file = activeFileId ? files.get(activeFileId) : undefined;
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
+  const { t } = useTranslation();
 
   const kpis = useMemo(() => {
     if (!file) {
@@ -254,8 +256,8 @@ export default function YieldPage() {
       <div className="flex h-full items-center justify-center">
         <EmptyState
           icon={TrendingUp}
-          title="No Data"
-          description="Open a file to view yield summary"
+          title={t('common.noData')}
+          description={t('yield.openFileToView')}
         />
       </div>
     );
@@ -266,33 +268,33 @@ export default function YieldPage() {
       {/* Header */}
       <div className="flex items-center gap-3">
         <TrendingUp className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-bold">Yield Summary</h1>
+        <h1 className="text-2xl font-bold">{t('yield.title')}</h1>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
-          title="Total Defects"
+          title={t('yield.totalDefects')}
           value={kpis.totalDefects.toLocaleString()}
           icon={<Hash className="h-5 w-5 text-white" />}
           color="bg-blue-600"
         />
         <KpiCard
-          title="Defect Density"
+          title={t('yield.defectDensity')}
           value={kpis.density.toFixed(1)}
           subtitle={kpis.densityUnit}
           icon={<Gauge className="h-5 w-5 text-white" />}
           color="bg-red-600"
         />
         <KpiCard
-          title="Die Yield"
+          title={t('yield.dieYield')}
           value={`${kpis.yieldPct.toFixed(1)}%`}
-          subtitle={`${kpis.cleanDies} clean / ${kpis.testedDies} tested`}
+          subtitle={`${kpis.cleanDies} ${t('yield.clean')} / ${kpis.testedDies} ${t('yield.tested')}`}
           icon={<Target className="h-5 w-5 text-white" />}
           color="bg-green-600"
         />
         <KpiCard
-          title="Defect Classes"
+          title={t('yield.defectClasses')}
           value={kpis.classCount}
           icon={<Layers className="h-5 w-5 text-white" />}
           color="bg-purple-600"
@@ -303,7 +305,7 @@ export default function YieldPage() {
       <div className="grid min-h-0 grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Size Distribution Histogram */}
         <div className="flex flex-col rounded-lg border bg-card p-4 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold">Defect Size Distribution</h2>
+          <h2 className="mb-4 text-lg font-semibold">{t('yield.defectSizeDistribution')}</h2>
           {sizeHistogram.length > 0 ? (
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
@@ -348,7 +350,7 @@ export default function YieldPage() {
 
         {/* Defects per Die */}
         <div className="flex flex-col rounded-lg border bg-card p-4 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold">Defects per Die (Top 20)</h2>
+          <h2 className="mb-4 text-lg font-semibold">{t('yield.defectsPerDie')}</h2>
           {defectsPerDie.length > 0 ? (
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
