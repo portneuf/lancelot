@@ -111,7 +111,14 @@ def generate_klarf(wafer_map: np.ndarray, lot_id: str, wafer_id: str,
     center_row = rows // 2
     center_col = cols // 2
 
-    defects = wafer_map_to_defects(wafer_map)
+    # Compute die pitch so that the entire grid fits within the wafer radius
+    # with ~10% margin. Max index extent determines the pitch.
+    wafer_radius = WAFER_DIAMETER_UM // 2
+    max_extent = max(center_row, rows - center_row, center_col, cols - center_col)
+    # Die pitch = 90% of wafer radius / max_extent (so dies stay inside circle)
+    die_pitch = int(wafer_radius * 0.9 / max(max_extent, 1))
+
+    defects = wafer_map_to_defects(wafer_map, die_pitch)
     pattern_name = FAILURE_LABELS.get(label, 'Unknown')
 
     # Assign class based on pattern label
@@ -121,8 +128,6 @@ def generate_klarf(wafer_map: np.ndarray, lot_id: str, wafer_id: str,
 
     now = datetime.now()
     ts = now.strftime('%m-%d-%Y %H:%M:%S')
-
-    wafer_radius = WAFER_DIAMETER_UM // 2
 
     lines = []
     lines.append(f'FileVersion 1 2;')
@@ -139,7 +144,7 @@ def generate_klarf(wafer_map: np.ndarray, lot_id: str, wafer_id: str,
     lines.append(f'Slot 1;')
     lines.append(f'SampleOrientationMarkType NOTCH;')
     lines.append(f'OrientationMarkLocation DOWN;')
-    lines.append(f'DiePitch {DIE_PITCH_UM} {DIE_PITCH_UM};')
+    lines.append(f'DiePitch {die_pitch} {die_pitch};')
     lines.append(f'DieOrigin {wafer_radius} {wafer_radius};')
     lines.append(f'SampleCenterLocation {wafer_radius} {wafer_radius};')
     lines.append(f'AreaPerTest 64.0;')
