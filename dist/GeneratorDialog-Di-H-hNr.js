@@ -1,13 +1,202 @@
+import { r as getStandaloneNavigateHook, t as getIsPortalMode } from "./mode-flag-DcZ3AbRu.js";
 import { t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { n as useLancelotNavigate, t as useFileOpen } from "./useFileOpen-Dk4IEkdM.js";
-import { t as useTranslation } from "./useTranslation-CI4wEIPY.js";
-import { Suspense, lazy, useCallback, useState } from "react";
-import { FileWarning, Loader2, Upload, Wand2 } from "lucide-react";
+import { i as saveInspection } from "./inspection-db-Kp142-VM.js";
+import { useCallback, useContext, useRef, useState } from "react";
+import { Loader2, Wand2 } from "lucide-react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
-import * as SliderPrimitive from "@radix-ui/react-slider";
+import { ToolContext } from "@portneuf/portal-framework";
 import * as Dialog from "@radix-ui/react-dialog";
+import * as SliderPrimitive from "@radix-ui/react-slider";
+//#region src/hooks/useLancelotNavigate.ts
+/**
+* Dual-mode navigation hook.
+*
+* In standalone mode: delegates to a registered React Router hook
+*   (injected by standalone-entry.tsx to avoid pulling react-router
+*   into the library build).
+* In portal mode: uses the framework's navigateToView() from ToolContext.
+*
+* The mode is determined by getIsPortalMode(), set once before React renders.
+*/ function usePortalNavigate() {
+	const toolCtx = useContext(ToolContext);
+	return useCallback((viewKey) => {
+		toolCtx?.navigateToView(viewKey);
+	}, [toolCtx]);
+}
+function useLancelotNavigate() {
+	if (getIsPortalMode()) return usePortalNavigate();
+	const hook = getStandaloneNavigateHook();
+	if (!hook) throw new Error("Navigation not initialized. In standalone mode, registerStandaloneNavigateHook() must be called before React renders.");
+	return hook();
+}
+//#endregion
+//#region src/features/file-manager/hooks/useFileOpen.ts
+/**
+* Hook for opening and parsing inspection files.
+*
+* Uses a Web Worker for parsing to keep the UI responsive.
+* Falls back to main-thread parsing if Worker is unavailable.
+*/
+/** Persist parsed inspection metadata to IndexedDB (fire-and-forget). */ function persistToHistory(fileId, file, data) {
+	saveInspection({
+		id: fileId,
+		fileName: file.name,
+		lotId: data.identity.lotId ?? "",
+		waferId: data.identity.waferId ?? "",
+		deviceId: data.identity.deviceId ?? "",
+		defectCount: data.defects.length,
+		openedAt: (/* @__PURE__ */ new Date()).toISOString(),
+		fileSize: file.size,
+		format: data.source.formatId
+	}).catch((err) => {
+		console.warn("Failed to save inspection to history", err);
+	});
+}
+function useFileOpen() {
+	const setActiveFile = useFileStore((s) => s.setActiveFile);
+	const setLoadingState = useFileStore((s) => s.setLoadingState);
+	const setLoadingProgress = useFileStore((s) => s.setLoadingProgress);
+	const setParseErrors = useFileStore((s) => s.setParseErrors);
+	const setParseWarnings = useFileStore((s) => s.setParseWarnings);
+	const addRecentFile = useFileStore((s) => s.addRecentFile);
+	const lancelotNavigate = useLancelotNavigate();
+	const workerRef = useRef(null);
+	const openFile = useCallback(async (file) => {
+		setLoadingState("reading");
+		setLoadingProgress(0);
+		try {
+			const text = await file.text();
+			setLoadingState("parsing");
+			if (typeof Worker !== "undefined") try {
+				await parseInWorker(file, text);
+				return;
+			} catch {}
+			parseOnMainThread(file, text);
+		} catch (err) {
+			setParseErrors([{
+				code: "FILE_READ_ERROR",
+				message: `Failed to read file: ${err instanceof Error ? err.message : String(err)}`,
+				severity: "error"
+			}]);
+		}
+	}, [
+		setActiveFile,
+		setLoadingState,
+		setLoadingProgress,
+		setParseErrors,
+		setParseWarnings,
+		addRecentFile
+	]);
+	const parseInWorker = useCallback((file, text) => {
+		return new Promise((resolve, reject) => {
+			workerRef.current?.terminate();
+			const worker = new Worker(new URL(
+				/* @vite-ignore */
+				"/assets/parse-worker-B6CriD__.js",
+				"" + import.meta.url
+			), { type: "module" });
+			workerRef.current = worker;
+			worker.onmessage = (event) => {
+				const msg = event.data;
+				switch (msg.type) {
+					case "progress":
+						setLoadingProgress(msg.progress.fraction);
+						break;
+					case "complete":
+						worker.terminate();
+						workerRef.current = null;
+						if (msg.result.success) {
+							const fileId = `${file.name}-${Date.now()}`;
+							setActiveFile(fileId, msg.result.data);
+							setParseWarnings(msg.result.warnings);
+							addRecentFile({
+								name: file.name,
+								format: msg.result.data.source.formatId,
+								openedAt: (/* @__PURE__ */ new Date()).toISOString()
+							});
+							persistToHistory(fileId, file, msg.result.data);
+							lancelotNavigate("wafer-map");
+						} else setParseErrors(msg.result.errors);
+						resolve();
+						break;
+					case "error":
+						worker.terminate();
+						workerRef.current = null;
+						reject(new Error(msg.message));
+						break;
+				}
+			};
+			worker.onerror = (err) => {
+				worker.terminate();
+				workerRef.current = null;
+				reject(err);
+			};
+			const request = {
+				type: "parse",
+				text,
+				fileName: file.name,
+				fileSize: file.size
+			};
+			worker.postMessage(request);
+		});
+	}, [
+		setActiveFile,
+		setLoadingProgress,
+		setParseErrors,
+		setParseWarnings,
+		addRecentFile,
+		lancelotNavigate
+	]);
+	const parseOnMainThread = useCallback((file, text) => {
+		const adapter = initializeRegistry().detect(file.name, text);
+		if (!adapter) {
+			setParseErrors([{
+				code: "NO_PARSER",
+				message: `No parser found for file: ${file.name}`,
+				severity: "error"
+			}]);
+			return;
+		}
+		const result = adapter.parse(text, (progress) => {
+			setLoadingProgress(progress.fraction);
+		});
+		if (result.success) {
+			const fileId = `${file.name}-${Date.now()}`;
+			setActiveFile(fileId, result.data);
+			setParseWarnings(result.warnings);
+			addRecentFile({
+				name: file.name,
+				format: result.data.source.formatId,
+				openedAt: (/* @__PURE__ */ new Date()).toISOString()
+			});
+			persistToHistory(fileId, file, result.data);
+			lancelotNavigate("wafer-map");
+		} else setParseErrors(result.errors);
+	}, [
+		setActiveFile,
+		setLoadingProgress,
+		setParseErrors,
+		setParseWarnings,
+		addRecentFile,
+		lancelotNavigate
+	]);
+	return {
+		openFile,
+		openFilePicker: useCallback(() => {
+			const input = document.createElement("input");
+			input.type = "file";
+			input.accept = ".klarf,.kla,.000,.001,.002,.003,.sinf,.inf";
+			input.onchange = () => {
+				const file = input.files?.[0];
+				if (file) openFile(file);
+			};
+			input.click();
+		}, [openFile])
+	};
+}
+//#endregion
 //#region src/core/services/klarf-generator.ts
 /**
 * Browser-friendly KLARF generator.
@@ -469,105 +658,6 @@ function GeneratorDialog({ onGenerated }) {
 	});
 }
 //#endregion
-//#region src/features/file-manager/index.tsx
-var InspectionHistory = /* @__PURE__ */ lazy(() => import("./InspectionHistory-DbQHyL21.js"));
-function FileManagerPage() {
-	const { openFile, openFilePicker } = useFileOpen();
-	const lancelotNavigate = useLancelotNavigate();
-	const { t } = useTranslation();
-	const loadingState = useFileStore((s) => s.loadingState);
-	const loadingProgress = useFileStore((s) => s.loadingProgress);
-	const parseErrors = useFileStore((s) => s.parseErrors);
-	const [isDragOver, setIsDragOver] = useState(false);
-	const handleDragOver = useCallback((e) => {
-		e.preventDefault();
-		e.stopPropagation();
-		setIsDragOver(true);
-	}, []);
-	const handleDragLeave = useCallback((e) => {
-		e.preventDefault();
-		e.stopPropagation();
-		setIsDragOver(false);
-	}, []);
-	const handleDrop = useCallback((e) => {
-		e.preventDefault();
-		e.stopPropagation();
-		setIsDragOver(false);
-		const file = e.dataTransfer.files[0];
-		if (file) openFile(file);
-	}, [openFile]);
-	const isLoading = loadingState === "reading" || loadingState === "parsing";
-	return /* @__PURE__ */ jsxs("div", {
-		className: "flex h-full flex-col items-center justify-center gap-6 p-8",
-		children: [
-			/* @__PURE__ */ jsx("div", {
-				onDragOver: handleDragOver,
-				onDragLeave: handleDragLeave,
-				onDrop: handleDrop,
-				onClick: isLoading ? void 0 : openFilePicker,
-				className: cn("flex max-w-lg cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed p-12 text-center transition-colors", isDragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/50", isLoading && "pointer-events-none opacity-60"),
-				children: isLoading ? /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(Loader2, { className: "h-12 w-12 animate-spin text-primary" }), /* @__PURE__ */ jsxs("div", {
-					className: "flex flex-col gap-1",
-					children: [/* @__PURE__ */ jsx("h3", {
-						className: "text-lg font-semibold",
-						children: loadingState === "reading" ? t("statusBar.readingFile") : t("statusBar.parsing")
-					}), loadingState === "parsing" && /* @__PURE__ */ jsx("div", {
-						className: "mx-auto mt-2 h-2 w-48 overflow-hidden rounded-full bg-muted",
-						children: /* @__PURE__ */ jsx("div", {
-							className: "h-full rounded-full bg-primary transition-all duration-300",
-							style: { width: `${Math.round(loadingProgress * 100)}%` }
-						})
-					})]
-				})] }) : parseErrors.length > 0 ? /* @__PURE__ */ jsxs(Fragment, { children: [/* @__PURE__ */ jsx(FileWarning, { className: "h-12 w-12 text-destructive" }), /* @__PURE__ */ jsxs("div", {
-					className: "flex flex-col gap-1",
-					children: [
-						/* @__PURE__ */ jsx("h3", {
-							className: "text-lg font-semibold text-destructive",
-							children: t("file.parseError")
-						}),
-						parseErrors.map((err, i) => /* @__PURE__ */ jsx("p", {
-							className: "text-sm text-muted-foreground",
-							children: err.message
-						}, i)),
-						/* @__PURE__ */ jsx("p", {
-							className: "mt-2 text-sm text-muted-foreground",
-							children: "Click to try another file"
-						})
-					]
-				})] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
-					/* @__PURE__ */ jsx(Upload, { className: "h-12 w-12 text-muted-foreground/50" }),
-					/* @__PURE__ */ jsxs("div", {
-						className: "flex flex-col gap-1",
-						children: [/* @__PURE__ */ jsx("h3", {
-							className: "text-lg font-semibold",
-							children: t("file.openInspection")
-						}), /* @__PURE__ */ jsx("p", {
-							className: "text-sm text-muted-foreground",
-							children: t("file.dropOrBrowse")
-						})]
-					}),
-					/* @__PURE__ */ jsx("span", {
-						className: "mt-2 rounded-md bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90",
-						children: t("file.browseFiles")
-					}),
-					/* @__PURE__ */ jsx("p", {
-						className: "text-xs text-muted-foreground",
-						children: "Supported: .klarf, .kla, .000, .001"
-					})
-				] })
-			}),
-			/* @__PURE__ */ jsxs("div", {
-				className: "flex items-center gap-3 text-sm text-muted-foreground",
-				children: [/* @__PURE__ */ jsx("span", { children: t("common.or") }), /* @__PURE__ */ jsx(GeneratorDialog, { onGenerated: () => lancelotNavigate("wafer-map") })]
-			}),
-			/* @__PURE__ */ jsx(Suspense, {
-				fallback: null,
-				children: /* @__PURE__ */ jsx(InspectionHistory, {})
-			})
-		]
-	});
-}
-//#endregion
-export { FileManagerPage as default };
+export { useFileOpen as n, useLancelotNavigate as r, GeneratorDialog as t };
 
-//# sourceMappingURL=file-manager-BJDUFT5m.js.map
+//# sourceMappingURL=GeneratorDialog-Di-H-hNr.js.map

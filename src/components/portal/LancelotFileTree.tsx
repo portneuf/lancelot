@@ -10,6 +10,8 @@ import { useCallback, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { useFileStore } from '@/stores';
 import { useFileOpen } from '@/features/file-manager/hooks/useFileOpen';
+import { useLancelotNavigate } from '@/hooks/useLancelotNavigate';
+import { GeneratorDialog } from '@/features/file-manager/components/GeneratorDialog';
 import { File, ChevronRight, FolderOpen, Hexagon, Upload } from 'lucide-react';
 import type { TreePanelProps } from '@portneuf/portal-framework';
 
@@ -19,6 +21,7 @@ export default function LancelotFileTree({ width, collapsed, onItemSelect }: Tre
   const switchToFile = useFileStore((s) => s.switchToFile);
   const loadingState = useFileStore((s) => s.loadingState);
   const { openFile, openFilePicker } = useFileOpen();
+  const lancelotNavigate = useLancelotNavigate();
   const [dragOver, setDragOver] = useState(false);
 
   const handleDrop = useCallback(
@@ -139,9 +142,10 @@ export default function LancelotFileTree({ width, collapsed, onItemSelect }: Tre
         </div>
       ) : (
         !isLoading && (
-          <div className="flex flex-1 flex-col items-center justify-center gap-2 p-4 text-center text-xs text-muted-foreground">
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 p-4 text-center text-xs text-muted-foreground">
             <Upload className="h-6 w-6 opacity-40" />
             <span>Drop a KLARF/SINF file here or click the open button</span>
+            <GeneratorDialog onGenerated={() => lancelotNavigate('wafer-map')} />
           </div>
         )
       )}

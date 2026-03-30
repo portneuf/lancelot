@@ -1,6 +1,6 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { t as useFileOpen } from "./useFileOpen-Dk4IEkdM.js";
+import { n as useFileOpen, r as useLancelotNavigate, t as GeneratorDialog } from "./GeneratorDialog-Di-H-hNr.js";
 import { useCallback, useState } from "react";
 import { ChevronRight, File, FolderOpen, Hexagon, Upload } from "lucide-react";
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -17,6 +17,7 @@ import { jsx, jsxs } from "react/jsx-runtime";
 	const switchToFile = useFileStore((s) => s.switchToFile);
 	const loadingState = useFileStore((s) => s.loadingState);
 	const { openFile, openFilePicker } = useFileOpen();
+	const lancelotNavigate = useLancelotNavigate();
 	const [dragOver, setDragOver] = useState(false);
 	const handleDrop = useCallback((e) => {
 		e.preventDefault();
@@ -108,8 +109,12 @@ import { jsx, jsxs } from "react/jsx-runtime";
 					}, id);
 				})
 			}) : !isLoading && /* @__PURE__ */ jsxs("div", {
-				className: "flex flex-1 flex-col items-center justify-center gap-2 p-4 text-center text-xs text-muted-foreground",
-				children: [/* @__PURE__ */ jsx(Upload, { className: "h-6 w-6 opacity-40" }), /* @__PURE__ */ jsx("span", { children: "Drop a KLARF/SINF file here or click the open button" })]
+				className: "flex flex-1 flex-col items-center justify-center gap-3 p-4 text-center text-xs text-muted-foreground",
+				children: [
+					/* @__PURE__ */ jsx(Upload, { className: "h-6 w-6 opacity-40" }),
+					/* @__PURE__ */ jsx("span", { children: "Drop a KLARF/SINF file here or click the open button" }),
+					/* @__PURE__ */ jsx(GeneratorDialog, { onGenerated: () => lancelotNavigate("wafer-map") })
+				]
 			})
 		]
 	});
@@ -117,4 +122,4 @@ import { jsx, jsxs } from "react/jsx-runtime";
 //#endregion
 export { LancelotFileTree as default };
 
-//# sourceMappingURL=LancelotFileTree-iuM1Yode.js.map
+//# sourceMappingURL=LancelotFileTree-hn14Cgu_.js.map
