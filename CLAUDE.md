@@ -17,8 +17,9 @@ npm install @portneuf/platform          # Web/Tauri/PWA Detection
 npm install @portneuf/plugin-system     # FormatAdapter<T> + FormatRegistry
 ```
 
-**Portal-Repo:** https://github.com/RogerWilloughby/portneuf
-**Portal live:** https://avalon-production-9d4a.up.railway.app/
+**Framework-Repo:** https://github.com/portneuf/portneuf
+**Avalon-Repo:** https://github.com/portneuf/avalon
+**Portal live:** https://avalon-production-74c6.up.railway.app/
 **npm Packages:** https://www.npmjs.com/org/portneuf
 
 ### Was Lancelot werden soll
@@ -98,6 +99,31 @@ interface ToolRegistration {
 export { lancelotRegistration } from './portal-registration.js';
 export { lancelotTranslations } from './i18n/portneuf-catalog.js';
 export { lancelotFormatAdapters } from './core/parsers/portneuf-adapters.js';
+```
+
+## Status: Phase B abgeschlossen, Integration getestet
+
+Phase B ist umgesetzt. Lancelot laeuft als Tool im Avalon-Portal (https://avalon-production-74c6.up.railway.app/). NavRail zeigt 14 Views korrekt uebersetzt.
+
+### Offene Punkte (in dieser Session umsetzen!)
+
+1. **useLancelotTranslation Bridge fixen** — Im Portal-Modus zeigen Lancelot-interne Views ihre i18n-Keys als rohen Text (z.B. `lancelot.waferMap.openFileToView` statt uebersetzter Text). Der `useLancelotTranslation()` Hook muss im Portal-Modus den `@portneuf/i18n` `useTranslation()` Hook nutzen statt LinguiJS. Die NavRail-Labels funktionieren bereits (die laufen ueber das Framework), aber alle `t()`-Aufrufe innerhalb der Lancelot-Views muessen ebenfalls aufgeloest werden.
+
+2. **Visuelles Feintuning** — Lancelot-Views im Portal-Kontext visuell pruefen. CSS Custom Properties (`var(--color-*)`) muessen korrekt angewendet werden. Die Domain-Tokens (`lancelot-domain-tokens.css`) muessen geladen sein.
+
+3. **File-Upload testen** — Drag & Drop / File Open fuer KLARF/SINF Dateien muss im Portal-Modus funktionieren. Der FileTree (Zone A) und die Filter-Sidebar (Zone C) muessen sich korrekt fuellen.
+
+### Workflow nach Aenderungen
+
+Nach jeder Aenderung in diesem Repo:
+```bash
+npm run build:lib          # dist/ neu bauen
+git add dist/ && git commit && git push   # dist/ committen
+```
+Dann im Avalon-Repo (separate Session):
+```bash
+npm install                # holt neuesten main von GitHub
+npm run build && git push  # Railway deployed automatisch
 ```
 
 ### Wichtige Dateien im Portneuf-Framework
