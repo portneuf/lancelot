@@ -45,7 +45,7 @@
     "@portneuf/i18n": "^0.1.0",
     "@portneuf/platform": "^0.1.0",
     "@portneuf/plugin-system": "^0.1.0",
-    "@portneuf/portal-framework": "^0.1.0",
+    "@portneuf/portal-framework": ">=0.1.0",
     "@portneuf/theme": "^0.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -103,7 +103,7 @@
     "@portneuf/i18n": "^0.1.0",
     "@portneuf/platform": "^0.1.0",
     "@portneuf/plugin-system": "^0.1.0",
-    "@portneuf/portal-framework": "^0.1.0",
+    "@portneuf/portal-framework": ">=0.1.0",
     "@portneuf/theme": "^0.1.0",
     "@tailwindcss/vite": "^4.2.2",
     "@testing-library/jest-dom": "^6.9.1",

@@ -9,7 +9,17 @@
       "Bash(npm run:*)",
       "Bash(BUILD_MODE=lib npx vite build 2>&1)",
       "Bash(npx tsc:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(grep -r \"extraTranslations\\\\|tool.*translat\\\\|namespace\" C:UsersRogerDocumentsCodyClaudelancelotnode_modules@portneufportal-frameworkdist --include=*.d.ts)",
+      "Bash(find /c/Users/Roger/Documents/Cody/Claude/lancelot/node_modules/@portneuf/portal-framework -type f -name *.ts -o -name *.tsx)",
+      "Bash(grep -r \"I18nProvider\\\\|useTranslation\\\\|extraTranslations\" C:UsersRogerDocumentsCodyClaudelancelotnode_modules@portneufportal-frameworkdist --include=*.js)",
+      "Bash(find C:UsersRogerDocumentsCodyClaudelancelotsrc -type f \\\\\\(-name *.tsx -o -name *.ts \\\\\\))",
+      "Bash(xargs grep:*)",
+      "Bash(done)",
+      "Bash(grep -r \"class.*ToolLoader\\\\|implements.*ToolLoader\\\\|export.*ToolLoader\" /c/Users/Roger/Documents/Cody/Claude/Avalon --include=*.ts --include=*.tsx)",
+      "Bash(grep -r I18nProvider /c/Users/Roger/Documents/Cody/Claude/Avalon --include=*.ts --include=*.tsx)",
+      "Bash(find C:UsersRogerDocumentsCodyClaudeAvalon -type f -name *.html)",
+      "Bash(grep -r lancelot C:UsersRogerDocumentsCodyClaudeAvalon --include=*.json --include=*.ts --include=*.tsx)"
     ]
   }
 }
