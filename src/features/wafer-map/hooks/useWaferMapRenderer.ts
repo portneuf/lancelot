@@ -538,15 +538,16 @@ export function hitTestDie(
   geometry: WaferGeometry,
   dies: readonly DieMapEntry[],
 ): DieMapEntry | null {
+  // canvasToWafer already accounts for sampleCenterLocation (via viewport.centerX/Y),
+  // so die positions must NOT add it again — matching the renderer's coordinate space.
   const [wx, wy] = canvasToWafer(canvasX, canvasY, viewport);
   const [pitchX, pitchY] = geometry.diePitch;
   const [originX, originY] = geometry.dieOrigin;
-  const [sampleCx, sampleCy] = geometry.sampleCenterLocation;
 
   for (let i = 0; i < dies.length; i++) {
     const die = dies[i];
-    const dieLeft = sampleCx + originX + die.xIndex * pitchX;
-    const dieTop = sampleCy + originY + die.yIndex * pitchY;
+    const dieLeft = originX + die.xIndex * pitchX;
+    const dieTop = originY + die.yIndex * pitchY;
 
     if (
       wx >= dieLeft &&

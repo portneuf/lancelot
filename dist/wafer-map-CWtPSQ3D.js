@@ -381,11 +381,10 @@ function renderWaferMap(ctx, viewport, geometry, dies, defects, colorScheme, sel
 	const [wx, wy] = canvasToWafer(canvasX, canvasY, viewport);
 	const [pitchX, pitchY] = geometry.diePitch;
 	const [originX, originY] = geometry.dieOrigin;
-	const [sampleCx, sampleCy] = geometry.sampleCenterLocation;
 	for (let i = 0; i < dies.length; i++) {
 		const die = dies[i];
-		const dieLeft = sampleCx + originX + die.xIndex * pitchX;
-		const dieTop = sampleCy + originY + die.yIndex * pitchY;
+		const dieLeft = originX + die.xIndex * pitchX;
+		const dieTop = originY + die.yIndex * pitchY;
 		if (wx >= dieLeft && wx <= dieLeft + pitchX && wy >= dieTop && wy <= dieTop + pitchY) return die;
 	}
 	return null;
@@ -1105,4 +1104,4 @@ function LegendItem({ color, label, dot = false }) {
 //#endregion
 export { WaferMapPage as default };
 
-//# sourceMappingURL=wafer-map-J8BGH5mR.js.map
+//# sourceMappingURL=wafer-map-CWtPSQ3D.js.map

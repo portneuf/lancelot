@@ -33,7 +33,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "wafer-map",
-		component: lazy(() => import("./wafer-map-J8BGH5mR.js")),
+		component: lazy(() => import("./wafer-map-CWtPSQ3D.js")),
 		navItem: {
 			type: "link",
 			group: "views",
