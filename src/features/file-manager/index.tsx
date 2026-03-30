@@ -4,14 +4,14 @@ import { cn } from '@/lib/cn';
 import { useFileStore } from '@/stores';
 import { useFileOpen } from './hooks/useFileOpen';
 import { GeneratorDialog } from './components/GeneratorDialog';
-import { useNavigate } from 'react-router';
+import { useLancelotNavigate } from '@/hooks/useLancelotNavigate';
 import { useTranslation } from '@/i18n/useTranslation';
 
 const InspectionHistory = lazy(() => import('./components/InspectionHistory'));
 
 export default function FileManagerPage() {
   const { openFile, openFilePicker } = useFileOpen();
-  const navigate = useNavigate();
+  const lancelotNavigate = useLancelotNavigate();
   const { t } = useTranslation();
   const loadingState = useFileStore((s) => s.loadingState);
   const loadingProgress = useFileStore((s) => s.loadingProgress);
@@ -106,7 +106,7 @@ export default function FileManagerPage() {
       {/* Generator */}
       <div className="flex items-center gap-3 text-sm text-muted-foreground">
         <span>{t('common.or')}</span>
-        <GeneratorDialog onGenerated={() => navigate('/wafer/map')} />
+        <GeneratorDialog onGenerated={() => lancelotNavigate('wafer-map')} />
       </div>
 
       {/* Inspection History */}

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
 import { useInspectionStore } from '@/stores';
+import { useLancelotNavigate } from '@/hooks/useLancelotNavigate';
 
 interface KeyboardShortcutConfig {
   onOpenFile: () => void;
@@ -17,7 +17,7 @@ interface KeyboardShortcutConfig {
  */
 export function useKeyboardShortcuts({ onOpenFile }: KeyboardShortcutConfig) {
   const resetSelection = useInspectionStore((s) => s.resetSelection);
-  const navigate = useNavigate();
+  const lancelotNavigate = useLancelotNavigate();
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -51,21 +51,21 @@ export function useKeyboardShortcuts({ onOpenFile }: KeyboardShortcutConfig) {
       // Ctrl+1..5: Navigate to sections
       if (modKey && e.key >= '1' && e.key <= '5') {
         e.preventDefault();
-        const sectionRoutes: Record<string, string> = {
-          '1': '/file/open',
-          '2': '/inspection/defects',
-          '3': '/wafer/map',
-          '4': '/analysis/pareto',
-          '5': '/settings',
+        const sectionViews: Record<string, string> = {
+          '1': 'files',
+          '2': 'defect-table',
+          '3': 'wafer-map',
+          '4': 'pareto',
+          '5': 'settings',
         };
-        const route = sectionRoutes[e.key];
-        if (route) {
-          navigate(route);
+        const viewKey = sectionViews[e.key];
+        if (viewKey) {
+          lancelotNavigate(viewKey);
         }
       }
     }
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onOpenFile, resetSelection, navigate]);
+  }, [onOpenFile, resetSelection, lancelotNavigate]);
 }

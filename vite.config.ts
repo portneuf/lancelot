@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { resolve } from 'path';
 
 const isTauri = !!process.env.TAURI_ENV_PLATFORM;
+const isLibBuild = process.env.BUILD_MODE === 'lib';
 
 export default defineConfig({
   plugins: [
@@ -15,8 +16,9 @@ export default defineConfig({
     tailwindcss(),
     lingui(),
 
-    // PWA only for web builds, not Tauri
+    // PWA only for web builds, not Tauri or library builds
     !isTauri &&
+      !isLibBuild &&
       VitePWA({
         registerType: 'prompt',
         includeAssets: ['favicon.svg'],
@@ -68,10 +70,41 @@ export default defineConfig({
     watch: isTauri ? { ignored: ['**/src-tauri/**'] } : undefined,
   },
 
-  build: {
-    target: isTauri ? 'esnext' : 'es2020',
-    sourcemap: process.env.NODE_ENV === 'development',
-  },
+  build: isLibBuild
+    ? {
+        lib: {
+          entry: resolve(__dirname, 'src/portal-entry.ts'),
+          formats: ['es'],
+          fileName: 'portal-entry',
+        },
+        rollupOptions: {
+          external: [
+            'react',
+            'react-dom',
+            'react/jsx-runtime',
+            'react-router',
+            /^@portneuf\//,
+            /^@radix-ui\//,
+            /^@lingui\//,
+            'lucide-react',
+            'recharts',
+            'zustand',
+            'zustand/middleware',
+            '@tanstack/react-virtual',
+            'react-resizable-panels',
+            'clsx',
+            'tailwind-merge',
+            'react-is',
+          ],
+        },
+        cssCodeSplit: false,
+        sourcemap: true,
+        minify: false,
+      }
+    : {
+        target: isTauri ? 'esnext' : 'es2020',
+        sourcemap: process.env.NODE_ENV === 'development',
+      },
 
   define: {
     __IS_TAURI__: JSON.stringify(isTauri),

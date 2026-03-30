@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { getIsPortalMode } from '@/i18n/mode-flag';
 
 export type Theme = 'light' | 'dark' | 'high-contrast' | 'cleanroom' | 'system';
 export type ResolvedTheme = Exclude<Theme, 'system'>;
@@ -33,7 +34,17 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'lancelot-settings',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => {
+        // In portal mode, use no-op storage (Portal manages theme/locale)
+        if (getIsPortalMode()) {
+          return {
+            getItem: () => null,
+            setItem: () => {},
+            removeItem: () => {},
+          };
+        }
+        return localStorage;
+      }),
       partialize: (state) => ({
         theme: state.theme,
         locale: state.locale,

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v \"/index.tsx$\")",
+      "Bash(wc -l /c/Users/Roger/Documents/Cody/Claude/lancelot/src/**/*.tsx /c/Users/Roger/Documents/Cody/Claude/lancelot/src/**/*.ts)",
+      "Bash(ls /c/Users/Roger/Documents/Cody/Claude/lancelot/src/**/*.test.ts)",
+      "Bash(npm info:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(BUILD_MODE=lib npx vite build 2>&1)",
+      "Bash(npx tsc:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+/**
+ * Lancelot domain-specific CSS tokens.
+ *
+ * These tokens define wafer map, defect type, die status, and sidebar colors
+ * that are specific to the semiconductor inspection domain.
+ * They are NOT provided by @portneuf/theme and must ship with Lancelot.
+ *
+ * In portal mode, import this file to provide domain-specific colors.
+ * Generic UI tokens (bg, fg, primary, etc.) come from the Portal's theme.
+ */
+
+/* Light Theme */
+:root,
+.light {
+  /* Defect types — perceptually distinct via hue separation */
+  --lancelot-defect-particle: oklch(0.60 0.22 30);
+  --lancelot-defect-scratch: oklch(0.55 0.20 300);
+  --lancelot-defect-pit: oklch(0.62 0.18 145);
+  --lancelot-defect-stain: oklch(0.70 0.16 85);
+  --lancelot-defect-pattern: oklch(0.55 0.18 200);
+  --lancelot-defect-unknown: oklch(0.55 0.06 250);
+
+  /* Die status */
+  --lancelot-die-pass: oklch(0.68 0.18 145);
+  --lancelot-die-fail: oklch(0.55 0.22 25);
+  --lancelot-die-untested: oklch(0.82 0.04 250);
+
+  /* Wafer chrome */
+  --lancelot-wafer-bg: oklch(0.96 0.005 250);
+  --lancelot-wafer-edge: oklch(0.70 0.02 250);
+  --lancelot-wafer-notch: oklch(0.45 0.03 250);
+
+  /* Sidebar / NavRail */
+  --lancelot-sidebar: oklch(0.97 0.005 250);
+  --lancelot-sidebar-fg: oklch(0.25 0.015 250);
+  --lancelot-sidebar-accent: oklch(0.93 0.015 260);
+  --lancelot-sidebar-border: oklch(0.88 0.01 250);
+}
+
+/* Dark Theme */
+.dark {
+  --lancelot-defect-particle: oklch(0.72 0.20 30);
+  --lancelot-defect-scratch: oklch(0.70 0.18 300);
+  --lancelot-defect-pit: oklch(0.72 0.18 145);
+  --lancelot-defect-stain: oklch(0.78 0.16 85);
+  --lancelot-defect-pattern: oklch(0.68 0.16 200);
+  --lancelot-defect-unknown: oklch(0.62 0.04 250);
+
+  --lancelot-die-pass: oklch(0.72 0.18 145);
+  --lancelot-die-fail: oklch(0.62 0.22 25);
+  --lancelot-die-untested: oklch(0.40 0.02 260);
+
+  --lancelot-wafer-bg: oklch(0.22 0.01 260);
+  --lancelot-wafer-edge: oklch(0.45 0.02 260);
+  --lancelot-wafer-notch: oklch(0.60 0.02 260);
+
+  --lancelot-sidebar: oklch(0.15 0.015 260);
+  --lancelot-sidebar-fg: oklch(0.88 0.01 250);
+  --lancelot-sidebar-accent: oklch(0.28 0.02 260);
+  --lancelot-sidebar-border: oklch(0.30 0.015 260);
+}
+
+/* High-Contrast Theme */
+.high-contrast {
+  --lancelot-defect-particle: oklch(0.55 0.27 30);
+  --lancelot-defect-scratch: oklch(0.50 0.26 310);
+  --lancelot-defect-pit: oklch(0.55 0.24 145);
+  --lancelot-defect-stain: oklch(0.65 0.22 85);
+  --lancelot-defect-pattern: oklch(0.50 0.22 210);
+  --lancelot-defect-unknown: oklch(0.40 0.0 0);
+
+  --lancelot-die-pass: oklch(0.55 0.24 145);
+  --lancelot-die-fail: oklch(0.50 0.27 25);
+  --lancelot-die-untested: oklch(0.75 0.0 0);
+
+  --lancelot-wafer-bg: oklch(0.97 0 0);
+  --lancelot-wafer-edge: oklch(0.0 0 0);
+  --lancelot-wafer-notch: oklch(0.0 0 0);
+
+  --lancelot-sidebar: oklch(0.95 0 0);
+  --lancelot-sidebar-fg: oklch(0.0 0 0);
+  --lancelot-sidebar-accent: oklch(0.88 0.01 260);
+  --lancelot-sidebar-border: oklch(0.0 0 0);
+}
+
+/* Cleanroom Theme */
+.cleanroom {
+  --lancelot-defect-particle: oklch(0.58 0.24 30);
+  --lancelot-defect-scratch: oklch(0.52 0.22 305);
+  --lancelot-defect-pit: oklch(0.58 0.20 150);
+  --lancelot-defect-stain: oklch(0.68 0.18 80);
+  --lancelot-defect-pattern: oklch(0.52 0.20 205);
+  --lancelot-defect-unknown: oklch(0.52 0.05 260);
+
+  --lancelot-die-pass: oklch(0.62 0.20 150);
+  --lancelot-die-fail: oklch(0.52 0.24 25);
+  --lancelot-die-untested: oklch(0.80 0.03 95);
+
+  --lancelot-wafer-bg: oklch(0.96 0.012 95);
+  --lancelot-wafer-edge: oklch(0.65 0.03 260);
+  --lancelot-wafer-notch: oklch(0.40 0.04 260);
+
+  --lancelot-sidebar: oklch(0.96 0.015 95);
+  --lancelot-sidebar-fg: oklch(0.22 0.04 260);
+  --lancelot-sidebar-accent: oklch(0.92 0.025 95);
+  --lancelot-sidebar-border: oklch(0.85 0.02 95);
+}

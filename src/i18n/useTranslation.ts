@@ -1,31 +1,48 @@
 /**
- * Simple translation hook that reads from the loaded Lingui catalog.
+ * Dual-mode translation hook.
  *
- * Returns a `t(key)` function that looks up the key in the active
- * locale's message catalog, falling back to the key itself.
+ * In standalone mode: delegates to LinguiJS (useLingui).
+ * In portal mode: delegates to @portneuf/i18n, prefixing keys with 'lancelot.'.
+ *
+ * The mode is determined by a module-level flag set once before React renders,
+ * so the same branch always executes — no rules-of-hooks violation.
  */
 
 import { useMemo } from 'react';
 import { i18n } from '@lingui/core';
 import { useLingui } from '@lingui/react';
+import { useTranslation as usePortneufTranslation } from '@portneuf/i18n';
+import { getIsPortalMode } from './mode-flag';
 
-/**
- * Returns a translation function `t(key)` that reads from the active catalog.
- * Re-renders when the locale changes.
- */
-export function useTranslation() {
-  // useLingui triggers re-render on locale change
+function useStandaloneTranslation() {
   const { i18n: _i18n } = useLingui();
 
   const t = useMemo(() => {
     return (key: string): string => {
-      // Look up in the active catalog
       const msg = i18n.messages[key];
       if (typeof msg === 'string') return msg;
-      // Fallback: return key itself
       return key;
     };
   }, [_i18n.locale]);
 
   return { t, locale: _i18n.locale };
+}
+
+function usePortalTranslation() {
+  const { t: portalT, locale } = usePortneufTranslation();
+
+  const t = useMemo(() => {
+    return (key: string): string => portalT(`lancelot.${key}`);
+  }, [portalT]);
+
+  return { t, locale };
+}
+
+export function useTranslation() {
+  if (getIsPortalMode()) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return usePortalTranslation();
+  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return useStandaloneTranslation();
 }

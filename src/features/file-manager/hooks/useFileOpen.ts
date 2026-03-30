@@ -6,8 +6,8 @@
  */
 
 import { useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router';
 import { useFileStore } from '@/stores';
+import { useLancelotNavigate } from '@/hooks/useLancelotNavigate';
 import { initializeRegistry } from '@/core/parsers';
 import { saveInspection } from '@/core/services/inspection-db';
 import type { WorkerRequest, WorkerResponse } from '@/core/parsers/worker/parse-worker-protocol';
@@ -38,7 +38,7 @@ export function useFileOpen() {
   const setParseErrors = useFileStore((s) => s.setParseErrors);
   const setParseWarnings = useFileStore((s) => s.setParseWarnings);
   const addRecentFile = useFileStore((s) => s.addRecentFile);
-  const navigate = useNavigate();
+  const lancelotNavigate = useLancelotNavigate();
   const workerRef = useRef<Worker | null>(null);
 
   const openFile = useCallback(async (file: File) => {
@@ -103,7 +103,7 @@ export function useFileOpen() {
                 openedAt: new Date().toISOString(),
               });
               persistToHistory(fileId, file, msg.result.data);
-              navigate('/wafer/map');
+              lancelotNavigate('wafer-map');
             } else {
               setParseErrors(msg.result.errors);
             }
@@ -132,7 +132,7 @@ export function useFileOpen() {
       };
       worker.postMessage(request);
     });
-  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, navigate]);
+  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, lancelotNavigate]);
 
   const parseOnMainThread = useCallback((file: File, text: string) => {
     const registry = initializeRegistry();
@@ -161,11 +161,11 @@ export function useFileOpen() {
         openedAt: new Date().toISOString(),
       });
       persistToHistory(fileId, file, result.data);
-      navigate('/wafer/map');
+      lancelotNavigate('wafer-map');
     } else {
       setParseErrors(result.errors);
     }
-  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, navigate]);
+  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, lancelotNavigate]);
 
   const openFilePicker = useCallback(() => {
     const input = document.createElement('input');
