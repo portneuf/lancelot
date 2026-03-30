@@ -11,7 +11,7 @@
       "import": "./dist/portal-entry.js",
       "types": "./dist/portal-entry.d.ts"
     },
-    "./domain-tokens.css": "./dist/domain-tokens.css"
+    "./styles.css": "./dist/portal-entry.css"
   },
   "main": "./dist/portal-entry.js",
   "types": "./dist/portal-entry.d.ts",

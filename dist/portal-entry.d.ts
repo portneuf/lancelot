@@ -6,6 +6,9 @@
  *   import { lancelotRegistration, lancelotTranslations, lancelotFormatAdapters }
  *     from '@portneuf/tool-lancelot';
  */
+import './theme/themes.css';
+import './theme/portal-theme-bridge.css';
+import './theme/lancelot-domain-tokens.css';
 export { lancelotRegistration } from './portal-registration';
 export { lancelotTranslations } from './i18n/portneuf-catalog';
 export { lancelotFormatAdapters } from './core/parsers/portneuf-adapters';

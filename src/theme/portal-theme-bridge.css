@@ -2,30 +2,57 @@
  * Portal theme bridge — maps @portneuf/theme CSS custom properties
  * to Lancelot's --lancelot-* variables.
  *
- * In portal mode, @portneuf/theme provides --color-* tokens on :root.
+ * In portal mode, @portneuf/theme provides tokens on [data-theme]:
+ *   --color-bg-primary, --color-fg-primary, --color-accent, etc.
+ *
  * This bridge maps them to the --lancelot-* variables that themes.css
  * references via @theme, so Tailwind classes resolve correctly.
  *
- * Domain-specific tokens (defect, die, wafer, sidebar) are NOT bridged —
+ * Because this file is unlayered and themes.css uses @layer base,
+ * these declarations always win in the cascade — which is what we want:
+ * the Portal's theme controls the look, not Lancelot's built-in theme.
+ *
+ * Domain-specific tokens (defect, die, wafer) are NOT bridged —
  * they come from lancelot-domain-tokens.css.
  */
 
 :root {
-  --lancelot-bg: var(--color-background);
-  --lancelot-fg: var(--color-foreground);
-  --lancelot-primary: var(--color-primary);
-  --lancelot-primary-fg: var(--color-primary-foreground);
-  --lancelot-secondary: var(--color-secondary);
-  --lancelot-secondary-fg: var(--color-secondary-foreground);
-  --lancelot-muted: var(--color-muted);
-  --lancelot-muted-fg: var(--color-muted-foreground);
-  --lancelot-accent: var(--color-accent);
-  --lancelot-accent-fg: var(--color-accent-foreground);
-  --lancelot-destructive: var(--color-destructive);
+  /* Background */
+  --lancelot-bg: var(--color-bg-primary);
+  --lancelot-card: var(--color-bg-elevated);
+  --lancelot-card-fg: var(--color-fg-primary);
+  --lancelot-popover: var(--color-bg-elevated);
+  --lancelot-popover-fg: var(--color-fg-primary);
+
+  /* Foreground */
+  --lancelot-fg: var(--color-fg-primary);
+
+  /* Primary = Portal Accent */
+  --lancelot-primary: var(--color-accent);
+  --lancelot-primary-fg: var(--color-accent-fg);
+
+  /* Secondary */
+  --lancelot-secondary: var(--color-bg-secondary);
+  --lancelot-secondary-fg: var(--color-fg-secondary);
+
+  /* Muted */
+  --lancelot-muted: var(--color-bg-tertiary);
+  --lancelot-muted-fg: var(--color-fg-muted);
+
+  /* Accent (same as primary in Portal) */
+  --lancelot-accent: var(--color-bg-tertiary);
+  --lancelot-accent-fg: var(--color-fg-secondary);
+
+  /* Destructive / Status */
+  --lancelot-destructive: var(--color-error);
+
+  /* Border & Ring */
   --lancelot-border: var(--color-border);
-  --lancelot-ring: var(--color-ring);
-  --lancelot-card: var(--color-card);
-  --lancelot-card-fg: var(--color-card-foreground);
-  --lancelot-popover: var(--color-popover);
-  --lancelot-popover-fg: var(--color-popover-foreground);
+  --lancelot-ring: var(--color-border-focus);
+
+  /* Sidebar — use portal background/foreground */
+  --lancelot-sidebar: var(--color-bg-secondary);
+  --lancelot-sidebar-fg: var(--color-fg-primary);
+  --lancelot-sidebar-accent: var(--color-bg-tertiary);
+  --lancelot-sidebar-border: var(--color-border);
 }
