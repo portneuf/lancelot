@@ -1,6 +1,6 @@
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
 import { t as useInspectionStore } from "./inspection-store-B-pANMzv.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { useMemo } from "react";
 import { BarChart3 } from "lucide-react";
@@ -185,4 +185,4 @@ function ParetoPage() {
 //#endregion
 export { ParetoPage as default };
 
-//# sourceMappingURL=pareto-B1264LmP.js.map
+//# sourceMappingURL=pareto-BlWq8G_s.js.map

@@ -1,6 +1,6 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { AlertTriangle, FileText } from "lucide-react";
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -218,4 +218,4 @@ function formatBytes(bytes) {
 //#endregion
 export { FileInfoPage as default };
 
-//# sourceMappingURL=file-info-FM_GCGE5.js.map
+//# sourceMappingURL=file-info-Cg-lYV7O.js.map

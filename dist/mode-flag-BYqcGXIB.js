@@ -5,13 +5,17 @@
 * Set once before React renders (in entry points).
 * Used by hooks that need to branch without violating rules-of-hooks.
 */ var _portalMode = false;
+var _standaloneHook = null;
 function setPortalMode(value) {
 	_portalMode = value;
 }
 function getIsPortalMode() {
 	return _portalMode;
 }
+function getStandaloneHook() {
+	return _standaloneHook;
+}
 //#endregion
-export { setPortalMode as n, getIsPortalMode as t };
+export { getStandaloneHook as n, setPortalMode as r, getIsPortalMode as t };
 
-//# sourceMappingURL=mode-flag-BCQ2AIxi.js.map
+//# sourceMappingURL=mode-flag-BYqcGXIB.js.map

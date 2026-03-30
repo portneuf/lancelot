@@ -81,10 +81,15 @@ export const messages: Record<string, string> = {
   'fileInfo.diesInMap': 'Dies in der Karte',
   'fileInfo.testPlanDies': 'Testplan-Dies',
   'fileInfo.defectColumns': 'Defektspalten',
+  'fileInfo.noFileLoaded': 'Keine Datei geladen',
+  'fileInfo.openFileToSeeDetails': 'Öffnen Sie eine KLARF-Datei, um Details anzuzeigen',
+  'fileInfo.fileTimestamp': 'Dateizeitstempel',
+  'fileInfo.resultTimestamp': 'Ergebniszeitstempel',
 
   // Defect Table
   'defects.title': 'Defekte',
   'defects.defectTable': 'Defekttabelle',
+  'defects.openFileToView': 'Öffnen Sie eine KLARF-Datei, um Defekte anzuzeigen',
 
   // Classes
   'classes.title': 'Defektklassen',
@@ -94,6 +99,8 @@ export const messages: Record<string, string> = {
   'classes.classCode': 'Klassencode',
   'classes.defectCount': 'Defektanzahl',
   'classes.noClasses': 'Keine Klassen definiert',
+  'classes.openFileToView': 'Öffnen Sie eine KLARF-Datei, um Klassen anzuzeigen',
+  'classes.noClassesDescription': 'Diese Datei enthält keine Defektklassen-Definitionen',
 
   // Wafer Map
   'waferMap.zoomIn': 'Vergrößern',
@@ -106,15 +113,28 @@ export const messages: Record<string, string> = {
   'waferMap.untested': 'Ungetestet',
   'waferMap.defect': 'Defekt',
   'waferMap.selectHint': 'Klicken Sie auf ein Die zur Auswahl',
+  'waferMap.rotateWafer': 'Wafer drehen',
+  'waferMap.openFileToView': 'Öffnen Sie eine KLARF-Datei, um die Wafer-Karte anzuzeigen',
+  'waferMap.selected': 'Ausgewählt',
+  'waferMap.clearSelection': 'Auswahl aufheben',
+  'waferMap.shiftDragHint': 'Shift + Ziehen für Mehrfachauswahl',
+  'waferMap.legendPass': 'Bestanden',
+  'waferMap.legendFail': 'Fehlgeschlagen',
+  'waferMap.legendUntested': 'Ungetestet',
+  'waferMap.legendDefect': 'Defekt',
 
   // Analysis - Pareto
   'pareto.title': 'Pareto-Analyse',
   'pareto.defectCount': 'Defektanzahl',
   'pareto.cumulative': 'Kumulativ %',
+  'pareto.openFileToView': 'Öffnen Sie eine KLARF-Datei für Pareto-Analyse',
+  'pareto.noClassificationData': 'Keine Klassifikationsdaten',
+  'pareto.noClassesFound': 'Keine Defektklassen in dieser Datei',
 
   // Analysis - Spatial
   'spatial.title': 'Räumliche Analyse',
   'spatial.downsampled': 'Für Leistung reduziert',
+  'spatial.openFileToView': 'Öffnen Sie eine KLARF-Datei für räumliche Analyse',
 
   // Analysis - Yield
   'yield.title': 'Ausbeute-Analyse',
@@ -124,6 +144,11 @@ export const messages: Record<string, string> = {
   'yield.classCount': 'Klassenanzahl',
   'yield.sizeDistribution': 'Größenverteilung',
   'yield.defectsPerDie': 'Defekte pro Die',
+  'yield.openFileToView': 'Öffnen Sie eine KLARF-Datei für Ausbeute-Analyse',
+  'yield.clean': 'sauber',
+  'yield.tested': 'getestet',
+  'yield.defectClasses': 'Defektklassen',
+  'yield.defectSizeDistribution': 'Defektgrößenverteilung',
 
   // Analysis - Correlation
   'correlation.title': 'Korrelationsanalyse',
@@ -131,6 +156,7 @@ export const messages: Record<string, string> = {
   'correlation.yAxis': 'Y-Achse',
   'correlation.regressionLine': 'Regressionslinie',
   'correlation.pearsonR': 'Pearson R',
+  'correlation.openFileToView': 'Öffnen Sie eine KLARF-Datei für Korrelationen',
 
   // Analysis - Trend
   'trend.title': 'Trendanalyse',
@@ -138,6 +164,11 @@ export const messages: Record<string, string> = {
   'trend.defectCount': 'Defektanzahl',
   'trend.defectDensity': 'Defektdichte',
   'trend.dieYield': 'Die-Ausbeute',
+  'trend.openFileToView': 'Öffnen Sie eine KLARF-Datei für Trendanalyse',
+  'trend.perDieTrend': 'Pro-Die-Trend',
+  'trend.lotTrend': 'Los-Trend',
+  'trend.noTrendData': 'Keine Trenddaten',
+  'trend.loadMultipleWafers': 'Mehrere Wafer laden für Trends',
 
   // Analysis - Cluster
   'cluster.title': 'Clusteranalyse',
@@ -178,6 +209,9 @@ export const messages: Record<string, string> = {
   'export.csv': 'CSV exportieren',
   'export.png': 'PNG exportieren',
   'export.pdf': 'PDF exportieren',
+  'export.defectsAsCsv': 'Defekte als CSV',
+  'export.waferMapAsPng': 'Wafer-Karte als PNG',
+  'export.reportAsPdf': 'Bericht als PDF',
 
   // Settings
   'settings.title': 'Einstellungen',
@@ -208,4 +242,6 @@ export const messages: Record<string, string> = {
   // Status Bar
   'statusBar.noFileLoaded': 'Keine Datei geladen',
   'statusBar.filters': 'Filter',
+  'statusBar.parsing': 'Wird analysiert...',
+  'statusBar.readingFile': 'Datei wird gelesen...',
 };

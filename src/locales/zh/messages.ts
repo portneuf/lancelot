@@ -79,10 +79,15 @@ export const messages: Record<string, string> = {
   'fileInfo.diesInMap': '图中芯片数',
   'fileInfo.testPlanDies': '测试计划芯片数',
   'fileInfo.defectColumns': '缺陷列',
+  'fileInfo.noFileLoaded': '未加载文件',
+  'fileInfo.openFileToSeeDetails': '打开KLARF文件以查看详情',
+  'fileInfo.fileTimestamp': '文件时间戳',
+  'fileInfo.resultTimestamp': '结果时间戳',
 
   // Defect Table
   'defects.title': '缺陷',
   'defects.defectTable': '缺陷表',
+  'defects.openFileToView': '打开KLARF文件以查看缺陷',
 
   // Classes
   'classes.title': '缺陷分类',
@@ -92,6 +97,8 @@ export const messages: Record<string, string> = {
   'classes.classCode': '分类代码',
   'classes.defectCount': '缺陷数量',
   'classes.noClasses': '未定义分类',
+  'classes.openFileToView': '打开KLARF文件以查看分类',
+  'classes.noClassesDescription': '此文件不包含缺陷分类定义',
 
   // Wafer Map
   'waferMap.zoomIn': '放大',
@@ -104,15 +111,28 @@ export const messages: Record<string, string> = {
   'waferMap.untested': '未测试',
   'waferMap.defect': '缺陷',
   'waferMap.selectHint': '点击芯片进行选择',
+  'waferMap.rotateWafer': '旋转晶圆',
+  'waferMap.openFileToView': '打开KLARF文件以查看晶圆图',
+  'waferMap.selected': '已选择',
+  'waferMap.clearSelection': '清除选择',
+  'waferMap.shiftDragHint': '按住Shift拖动以选择多个芯片',
+  'waferMap.legendPass': '通过',
+  'waferMap.legendFail': '失败',
+  'waferMap.legendUntested': '未测试',
+  'waferMap.legendDefect': '缺陷',
 
   // Analysis - Pareto
   'pareto.title': '帕累托分析',
   'pareto.defectCount': '缺陷数量',
   'pareto.cumulative': '累积 %',
+  'pareto.openFileToView': '打开KLARF文件以查看帕累托分析',
+  'pareto.noClassificationData': '无分类数据',
+  'pareto.noClassesFound': '此文件中未找到缺陷分类',
 
   // Analysis - Spatial
   'spatial.title': '空间分析',
   'spatial.downsampled': '已降采样以提高性能',
+  'spatial.openFileToView': '打开KLARF文件以查看空间分析',
 
   // Analysis - Yield
   'yield.title': '良率分析',
@@ -122,6 +142,11 @@ export const messages: Record<string, string> = {
   'yield.classCount': '分类数量',
   'yield.sizeDistribution': '尺寸分布',
   'yield.defectsPerDie': '每芯片缺陷数',
+  'yield.openFileToView': '打开KLARF文件以查看良率分析',
+  'yield.clean': '良品',
+  'yield.tested': '已测试',
+  'yield.defectClasses': '缺陷分类',
+  'yield.defectSizeDistribution': '缺陷尺寸分布',
 
   // Analysis - Correlation
   'correlation.title': '相关性分析',
@@ -129,6 +154,7 @@ export const messages: Record<string, string> = {
   'correlation.yAxis': 'Y轴',
   'correlation.regressionLine': '回归线',
   'correlation.pearsonR': '皮尔逊R',
+  'correlation.openFileToView': '打开KLARF文件以查看相关性',
 
   // Analysis - Trend
   'trend.title': '趋势分析',
@@ -136,6 +162,11 @@ export const messages: Record<string, string> = {
   'trend.defectCount': '缺陷数量',
   'trend.defectDensity': '缺陷密度',
   'trend.dieYield': '芯片良率',
+  'trend.openFileToView': '打开KLARF文件以查看趋势分析',
+  'trend.perDieTrend': '每芯片趋势',
+  'trend.lotTrend': '批次趋势',
+  'trend.noTrendData': '无趋势数据',
+  'trend.loadMultipleWafers': '加载多个晶圆以查看趋势',
 
   // Analysis - Cluster
   'cluster.title': '聚类分析',
@@ -176,6 +207,9 @@ export const messages: Record<string, string> = {
   'export.csv': '导出CSV',
   'export.png': '导出PNG',
   'export.pdf': '导出PDF',
+  'export.defectsAsCsv': '缺陷导出为CSV',
+  'export.waferMapAsPng': '晶圆图导出为PNG',
+  'export.reportAsPdf': '报告导出为PDF',
 
   // Settings
   'settings.title': '设置',
@@ -206,4 +240,6 @@ export const messages: Record<string, string> = {
   // Status Bar
   'statusBar.noFileLoaded': '未加载文件',
   'statusBar.filters': '筛选',
+  'statusBar.parsing': '正在解析...',
+  'statusBar.readingFile': '正在读取文件...',
 };

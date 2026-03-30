@@ -1,7 +1,7 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
 import { t as useInspectionStore } from "./inspection-store-B-pANMzv.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { useMemo } from "react";
 import { Gauge, Hash, Layers, Target, TrendingUp } from "lucide-react";
@@ -374,4 +374,4 @@ function YieldPage() {
 //#endregion
 export { YieldPage as default };
 
-//# sourceMappingURL=yield-BNhu7KC2.js.map
+//# sourceMappingURL=yield-DYklq_kB.js.map

@@ -20,7 +20,8 @@
     "README.md"
   ],
   "sideEffects": [
-    "*.css"
+    "*.css",
+    "./dist/portal-entry.js"
   ],
   "scripts": {
     "dev": "vite",

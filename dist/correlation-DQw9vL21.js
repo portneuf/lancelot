@@ -1,5 +1,5 @@
 import { n as readField, t as useFilteredDefects } from "./useFilteredDefects-BmOCESYD.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { useMemo, useState } from "react";
 import { ScatterChart } from "lucide-react";
@@ -264,4 +264,4 @@ function CorrelationPage() {
 //#endregion
 export { CorrelationPage as default };
 
-//# sourceMappingURL=correlation-6BR2r0E0.js.map
+//# sourceMappingURL=correlation-DQw9vL21.js.map

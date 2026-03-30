@@ -1,6 +1,6 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { useMemo } from "react";
 import { Tags } from "lucide-react";
@@ -110,4 +110,4 @@ function ClassesPage() {
 //#endregion
 export { ClassesPage as default };
 
-//# sourceMappingURL=classes-X-GMJvc5.js.map
+//# sourceMappingURL=classes-BcIQuaKI.js.map

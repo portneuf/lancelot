@@ -79,10 +79,15 @@ export const messages: Record<string, string> = {
   'fileInfo.diesInMap': 'マップ内のダイ数',
   'fileInfo.testPlanDies': 'テストプランダイ数',
   'fileInfo.defectColumns': '欠陥カラム',
+  'fileInfo.noFileLoaded': 'ファイルが読み込まれていません',
+  'fileInfo.openFileToSeeDetails': '詳細を表示するにはKLARFファイルを開いてください',
+  'fileInfo.fileTimestamp': 'ファイルタイムスタンプ',
+  'fileInfo.resultTimestamp': '結果タイムスタンプ',
 
   // Defect Table
   'defects.title': '欠陥',
   'defects.defectTable': '欠陥テーブル',
+  'defects.openFileToView': '欠陥を表示するにはKLARFファイルを開いてください',
 
   // Classes
   'classes.title': '欠陥クラス',
@@ -92,6 +97,8 @@ export const messages: Record<string, string> = {
   'classes.classCode': 'クラスコード',
   'classes.defectCount': '欠陥数',
   'classes.noClasses': 'クラスが定義されていません',
+  'classes.openFileToView': 'クラスを表示するにはKLARFファイルを開いてください',
+  'classes.noClassesDescription': 'このファイルには欠陥クラス定義が含まれていません',
 
   // Wafer Map
   'waferMap.zoomIn': '拡大',
@@ -104,15 +111,28 @@ export const messages: Record<string, string> = {
   'waferMap.untested': '未検査',
   'waferMap.defect': '欠陥',
   'waferMap.selectHint': 'ダイをクリックして選択',
+  'waferMap.rotateWafer': 'ウェーハ回転',
+  'waferMap.openFileToView': 'ウェーハマップを表示するにはKLARFファイルを開いてください',
+  'waferMap.selected': '選択済み',
+  'waferMap.clearSelection': '選択をクリア',
+  'waferMap.shiftDragHint': 'Shift + ドラッグで複数選択',
+  'waferMap.legendPass': '合格',
+  'waferMap.legendFail': '不合格',
+  'waferMap.legendUntested': '未検査',
+  'waferMap.legendDefect': '欠陥',
 
   // Analysis - Pareto
   'pareto.title': 'パレート分析',
   'pareto.defectCount': '欠陥数',
   'pareto.cumulative': '累積 %',
+  'pareto.openFileToView': 'パレート分析にはKLARFファイルを開いてください',
+  'pareto.noClassificationData': '分類データなし',
+  'pareto.noClassesFound': 'このファイルに欠陥クラスなし',
 
   // Analysis - Spatial
   'spatial.title': '空間分析',
   'spatial.downsampled': 'パフォーマンスのためダウンサンプル済み',
+  'spatial.openFileToView': '空間分析にはKLARFファイルを開いてください',
 
   // Analysis - Yield
   'yield.title': '歩留まり分析',
@@ -122,6 +142,11 @@ export const messages: Record<string, string> = {
   'yield.classCount': 'クラス数',
   'yield.sizeDistribution': 'サイズ分布',
   'yield.defectsPerDie': 'ダイあたりの欠陥数',
+  'yield.openFileToView': '歩留まり分析にはKLARFファイルを開いてください',
+  'yield.clean': 'クリーン',
+  'yield.tested': 'テスト済み',
+  'yield.defectClasses': '欠陥クラス',
+  'yield.defectSizeDistribution': '欠陥サイズ分布',
 
   // Analysis - Correlation
   'correlation.title': '相関分析',
@@ -129,6 +154,7 @@ export const messages: Record<string, string> = {
   'correlation.yAxis': 'Y軸',
   'correlation.regressionLine': '回帰直線',
   'correlation.pearsonR': 'ピアソンR',
+  'correlation.openFileToView': '相関分析にはKLARFファイルを開いてください',
 
   // Analysis - Trend
   'trend.title': 'トレンド分析',
@@ -136,6 +162,11 @@ export const messages: Record<string, string> = {
   'trend.defectCount': '欠陥数',
   'trend.defectDensity': '欠陥密度',
   'trend.dieYield': 'ダイ歩留まり',
+  'trend.openFileToView': 'トレンド分析にはKLARFファイルを開いてください',
+  'trend.perDieTrend': 'ダイ単位トレンド',
+  'trend.lotTrend': 'ロットトレンド',
+  'trend.noTrendData': 'トレンドデータなし',
+  'trend.loadMultipleWafers': 'トレンド表示には複数ウェーハを読み込み',
 
   // Analysis - Cluster
   'cluster.title': 'クラスタ分析',
@@ -176,6 +207,9 @@ export const messages: Record<string, string> = {
   'export.csv': 'CSV出力',
   'export.png': 'PNG出力',
   'export.pdf': 'PDF出力',
+  'export.defectsAsCsv': '欠陥をCSVで出力',
+  'export.waferMapAsPng': 'ウェーハマップをPNGで出力',
+  'export.reportAsPdf': 'レポートをPDFで出力',
 
   // Settings
   'settings.title': '設定',
@@ -206,4 +240,6 @@ export const messages: Record<string, string> = {
   // Status Bar
   'statusBar.noFileLoaded': 'ファイルが読み込まれていません',
   'statusBar.filters': 'フィルタ',
+  'statusBar.parsing': '解析中...',
+  'statusBar.readingFile': 'ファイルを読み込み中...',
 };

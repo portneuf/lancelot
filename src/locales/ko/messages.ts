@@ -79,10 +79,15 @@ export const messages: Record<string, string> = {
   'fileInfo.diesInMap': '맵 내 다이 수',
   'fileInfo.testPlanDies': '테스트 플랜 다이 수',
   'fileInfo.defectColumns': '결함 컬럼',
+  'fileInfo.noFileLoaded': '로드된 파일 없음',
+  'fileInfo.openFileToSeeDetails': '상세 정보를 보려면 KLARF 파일을 여세요',
+  'fileInfo.fileTimestamp': '파일 타임스탬프',
+  'fileInfo.resultTimestamp': '결과 타임스탬프',
 
   // Defect Table
   'defects.title': '결함',
   'defects.defectTable': '결함 테이블',
+  'defects.openFileToView': '결함을 보려면 KLARF 파일을 여세요',
 
   // Classes
   'classes.title': '결함 클래스',
@@ -92,6 +97,8 @@ export const messages: Record<string, string> = {
   'classes.classCode': '클래스 코드',
   'classes.defectCount': '결함 수',
   'classes.noClasses': '정의된 클래스 없음',
+  'classes.openFileToView': '클래스를 보려면 KLARF 파일을 여세요',
+  'classes.noClassesDescription': '이 파일에는 결함 클래스 정의가 없습니다',
 
   // Wafer Map
   'waferMap.zoomIn': '확대',
@@ -104,15 +111,28 @@ export const messages: Record<string, string> = {
   'waferMap.untested': '미검사',
   'waferMap.defect': '결함',
   'waferMap.selectHint': '다이를 클릭하여 선택',
+  'waferMap.rotateWafer': '웨이퍼 회전',
+  'waferMap.openFileToView': '웨이퍼 맵을 보려면 KLARF 파일을 여세요',
+  'waferMap.selected': '선택됨',
+  'waferMap.clearSelection': '선택 해제',
+  'waferMap.shiftDragHint': 'Shift + 드래그로 다중 선택',
+  'waferMap.legendPass': '합격',
+  'waferMap.legendFail': '불합격',
+  'waferMap.legendUntested': '미검사',
+  'waferMap.legendDefect': '결함',
 
   // Analysis - Pareto
   'pareto.title': '파레토 분석',
   'pareto.defectCount': '결함 수',
   'pareto.cumulative': '누적 %',
+  'pareto.openFileToView': '파레토 분석을 보려면 KLARF 파일을 여세요',
+  'pareto.noClassificationData': '분류 데이터 없음',
+  'pareto.noClassesFound': '이 파일에 결함 클래스 없음',
 
   // Analysis - Spatial
   'spatial.title': '공간 분석',
   'spatial.downsampled': '성능을 위해 다운샘플링됨',
+  'spatial.openFileToView': '공간 분석을 보려면 KLARF 파일을 여세요',
 
   // Analysis - Yield
   'yield.title': '수율 분석',
@@ -122,6 +142,11 @@ export const messages: Record<string, string> = {
   'yield.classCount': '클래스 수',
   'yield.sizeDistribution': '크기 분포',
   'yield.defectsPerDie': '다이당 결함 수',
+  'yield.openFileToView': '수율 분석을 보려면 KLARF 파일을 여세요',
+  'yield.clean': '클린',
+  'yield.tested': '테스트됨',
+  'yield.defectClasses': '결함 클래스',
+  'yield.defectSizeDistribution': '결함 크기 분포',
 
   // Analysis - Correlation
   'correlation.title': '상관관계 분석',
@@ -129,6 +154,7 @@ export const messages: Record<string, string> = {
   'correlation.yAxis': 'Y축',
   'correlation.regressionLine': '회귀선',
   'correlation.pearsonR': '피어슨 R',
+  'correlation.openFileToView': '상관관계를 보려면 KLARF 파일을 여세요',
 
   // Analysis - Trend
   'trend.title': '추세 분석',
@@ -136,6 +162,11 @@ export const messages: Record<string, string> = {
   'trend.defectCount': '결함 수',
   'trend.defectDensity': '결함 밀도',
   'trend.dieYield': '다이 수율',
+  'trend.openFileToView': '추세 분석을 보려면 KLARF 파일을 여세요',
+  'trend.perDieTrend': '다이별 추세',
+  'trend.lotTrend': '로트 추세',
+  'trend.noTrendData': '추세 데이터 없음',
+  'trend.loadMultipleWafers': '추세를 보려면 여러 웨이퍼 로드',
 
   // Analysis - Cluster
   'cluster.title': '클러스터 분석',
@@ -176,6 +207,9 @@ export const messages: Record<string, string> = {
   'export.csv': 'CSV 내보내기',
   'export.png': 'PNG 내보내기',
   'export.pdf': 'PDF 내보내기',
+  'export.defectsAsCsv': '결함을 CSV로',
+  'export.waferMapAsPng': '웨이퍼 맵을 PNG로',
+  'export.reportAsPdf': '보고서를 PDF로',
 
   // Settings
   'settings.title': '설정',
@@ -206,4 +240,6 @@ export const messages: Record<string, string> = {
   // Status Bar
   'statusBar.noFileLoaded': '로드된 파일 없음',
   'statusBar.filters': '필터',
+  'statusBar.parsing': '파싱 중...',
+  'statusBar.readingFile': '파일 읽는 중...',
 };

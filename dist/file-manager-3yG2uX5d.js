@@ -1,7 +1,7 @@
 import { t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { i as saveInspection } from "./inspection-db-D9IlUciM.js";
 import { Suspense, createContext, lazy, useCallback, useContext, useRef, useState } from "react";
 import { FileWarning, Loader2, Upload, Wand2 } from "lucide-react";
@@ -785,4 +785,4 @@ function FileManagerPage() {
 //#endregion
 export { FileManagerPage as default };
 
-//# sourceMappingURL=file-manager-4vp4ic26.js.map
+//# sourceMappingURL=file-manager-3yG2uX5d.js.map

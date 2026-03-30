@@ -1,7 +1,7 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useInspectionStore } from "./inspection-store-B-pANMzv.js";
 import { n as readField, t as useFilteredDefects } from "./useFilteredDefects-BmOCESYD.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Bug, ChevronLeft, ChevronRight, X } from "lucide-react";
@@ -408,4 +408,4 @@ function DefectsPage() {
 //#endregion
 export { DefectsPage as default };
 
-//# sourceMappingURL=defects-DYXSsnFN.js.map
+//# sourceMappingURL=defects-DUR0OW8X.js.map

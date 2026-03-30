@@ -1,7 +1,7 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
 import { t as useInspectionStore } from "./inspection-store-B-pANMzv.js";
-import { t as useTranslation } from "./useTranslation-810_9bMT.js";
+import { t as useTranslation } from "./useTranslation-BwMUUKr-.js";
 import { t as EmptyState } from "./EmptyState-ELtzSX51.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CircleDot, Maximize, Palette, RotateCw, X, ZoomIn, ZoomOut } from "lucide-react";
@@ -1105,4 +1105,4 @@ function LegendItem({ color, label, dot = false }) {
 //#endregion
 export { WaferMapPage as default };
 
-//# sourceMappingURL=wafer-map-C13iMoNC.js.map
+//# sourceMappingURL=wafer-map-Buy6yKoZ.js.map
