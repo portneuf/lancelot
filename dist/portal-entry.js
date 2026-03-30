@@ -11,7 +11,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 */ var lancelotViews = [
 	{
 		path: "files",
-		component: lazy(() => import("./file-manager-BQD8HCjI.js")),
+		component: lazy(() => import("./file-manager-BJDUFT5m.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -181,7 +181,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	navItems: lancelotViews.map((v) => v.navItem),
 	views: lancelotViews,
 	defaultViewPath: "wafer-map",
-	treeComponent: lazy(() => import("./LancelotFileTree-sCIf7ezO.js")),
+	treeComponent: lazy(() => import("./LancelotFileTree-iuM1Yode.js")),
 	globalFilters: lazy(() => import("./LancelotFilters-D4l5qLcA.js")),
 	statusBarSlots: [{
 		id: "lancelot-file-info",

@@ -2,7 +2,8 @@ import { r as getStandaloneNavigateHook, t as getIsPortalMode } from "./mode-fla
 import { t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
 import { i as saveInspection } from "./inspection-db-Kp142-VM.js";
-import { useCallback, useRef } from "react";
+import { useCallback, useContext, useRef } from "react";
+import { ToolContext } from "@portneuf/portal-framework";
 //#region src/hooks/useLancelotNavigate.ts
 /**
 * Dual-mode navigation hook.
@@ -10,12 +11,14 @@ import { useCallback, useRef } from "react";
 * In standalone mode: delegates to a registered React Router hook
 *   (injected by standalone-entry.tsx to avoid pulling react-router
 *   into the library build).
-* In portal mode: no-op. The Portal framework controls view rendering;
-*   data flows through Zustand stores and views update reactively.
+* In portal mode: uses the framework's navigateToView() from ToolContext.
 *
 * The mode is determined by getIsPortalMode(), set once before React renders.
 */ function usePortalNavigate() {
-	return useCallback((_viewKey) => {}, []);
+	const toolCtx = useContext(ToolContext);
+	return useCallback((viewKey) => {
+		toolCtx?.navigateToView(viewKey);
+	}, [toolCtx]);
 }
 function useLancelotNavigate() {
 	if (getIsPortalMode()) return usePortalNavigate();
@@ -191,4 +194,4 @@ function useFileOpen() {
 //#endregion
 export { useLancelotNavigate as n, useFileOpen as t };
 
-//# sourceMappingURL=useFileOpen-OsugJbGN.js.map
+//# sourceMappingURL=useFileOpen-Dk4IEkdM.js.map

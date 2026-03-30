@@ -1,6 +1,6 @@
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { t as useFileOpen } from "./useFileOpen-OsugJbGN.js";
+import { t as useFileOpen } from "./useFileOpen-Dk4IEkdM.js";
 import { useCallback, useState } from "react";
 import { ChevronRight, File, FolderOpen, Hexagon, Upload } from "lucide-react";
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -117,4 +117,4 @@ import { jsx, jsxs } from "react/jsx-runtime";
 //#endregion
 export { LancelotFileTree as default };
 
-//# sourceMappingURL=LancelotFileTree-sCIf7ezO.js.map
+//# sourceMappingURL=LancelotFileTree-iuM1Yode.js.map

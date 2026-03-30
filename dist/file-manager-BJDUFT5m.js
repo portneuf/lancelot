@@ -1,7 +1,7 @@
 import { t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
-import { n as useLancelotNavigate, t as useFileOpen } from "./useFileOpen-OsugJbGN.js";
+import { n as useLancelotNavigate, t as useFileOpen } from "./useFileOpen-Dk4IEkdM.js";
 import { t as useTranslation } from "./useTranslation-CI4wEIPY.js";
 import { Suspense, lazy, useCallback, useState } from "react";
 import { FileWarning, Loader2, Upload, Wand2 } from "lucide-react";
@@ -570,4 +570,4 @@ function FileManagerPage() {
 //#endregion
 export { FileManagerPage as default };
 
-//# sourceMappingURL=file-manager-BQD8HCjI.js.map
+//# sourceMappingURL=file-manager-BJDUFT5m.js.map
