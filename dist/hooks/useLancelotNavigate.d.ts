@@ -1,11 +1,12 @@
 /**
- * basePath-aware navigation hook for dual-mode operation.
+ * Dual-mode navigation hook.
  *
- * In standalone mode, maps view keys to nested routes (e.g. 'wafer-map' → '/wafer/map').
- * In portal mode, prepends basePath (e.g. 'wafer-map' → '/lancelot/wafer-map').
+ * In standalone mode: delegates to a registered React Router hook
+ *   (injected by standalone-entry.tsx to avoid pulling react-router
+ *   into the library build).
+ * In portal mode: no-op. The Portal framework controls view rendering;
+ *   data flows through Zustand stores and views update reactively.
+ *
+ * The mode is determined by getIsPortalMode(), set once before React renders.
  */
-/**
- * Returns a navigate function that accepts a flat view key
- * and resolves it to the correct route for the current mode.
- */
-export declare function useLancelotNavigate(): (viewKey: string) => void;
+export declare function useLancelotNavigate(): (_viewKey: string) => void;

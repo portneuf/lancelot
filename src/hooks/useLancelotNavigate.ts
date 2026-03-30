@@ -1,51 +1,38 @@
 /**
- * basePath-aware navigation hook for dual-mode operation.
+ * Dual-mode navigation hook.
  *
- * In standalone mode, maps view keys to nested routes (e.g. 'wafer-map' → '/wafer/map').
- * In portal mode, prepends basePath (e.g. 'wafer-map' → '/lancelot/wafer-map').
+ * In standalone mode: delegates to a registered React Router hook
+ *   (injected by standalone-entry.tsx to avoid pulling react-router
+ *   into the library build).
+ * In portal mode: no-op. The Portal framework controls view rendering;
+ *   data flows through Zustand stores and views update reactively.
+ *
+ * The mode is determined by getIsPortalMode(), set once before React renders.
  */
 
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router';
-import { useLancelotMode } from '@/mode-context';
+import { getIsPortalMode, getStandaloneNavigateHook } from '@/i18n/mode-flag';
 
-/** Maps flat view keys to standalone nested routes. */
-const STANDALONE_ROUTES: Record<string, string> = {
-  'files': '/file/open',
-  'file-info': '/file/info',
-  'wafer-map': '/wafer/map',
-  'defect-table': '/inspection/defects',
-  'classes': '/inspection/classes',
-  'pareto': '/analysis/pareto',
-  'spatial': '/analysis/spatial',
-  'yield': '/analysis/yield',
-  'correlation': '/analysis/correlation',
-  'trend': '/analysis/trend',
-  'cluster': '/analysis/cluster',
-  'scratch': '/analysis/scratch',
-  'spc': '/analysis/spc',
-  'classifier': '/analysis/classifier',
-  'settings': '/settings',
-};
+function usePortalNavigate() {
+  return useCallback((_viewKey: string) => {
+    // Intentionally empty — portal views read from Zustand stores directly.
+    // The Portal framework's ContentArea renders the active view;
+    // file data flows through stores and views update reactively.
+  }, []);
+}
 
-/**
- * Returns a navigate function that accepts a flat view key
- * and resolves it to the correct route for the current mode.
- */
 export function useLancelotNavigate() {
-  const navigate = useNavigate();
-  const { mode, basePath } = useLancelotMode();
-
-  return useCallback(
-    (viewKey: string) => {
-      if (mode === 'standalone') {
-        const route = STANDALONE_ROUTES[viewKey] ?? `/${viewKey}`;
-        navigate(route);
-      } else {
-        const path = basePath.endsWith('/') ? basePath : `${basePath}/`;
-        navigate(`${path}${viewKey}`);
-      }
-    },
-    [navigate, mode, basePath],
-  );
+  if (getIsPortalMode()) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return usePortalNavigate();
+  }
+  const hook = getStandaloneNavigateHook();
+  if (!hook) {
+    throw new Error(
+      'Navigation not initialized. In standalone mode, registerStandaloneNavigateHook() ' +
+        'must be called before React renders.',
+    );
+  }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return hook();
 }

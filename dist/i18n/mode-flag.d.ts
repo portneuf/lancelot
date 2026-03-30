@@ -17,3 +17,10 @@ export declare function getIsPortalMode(): boolean;
  */
 export declare function registerStandaloneHook(hook: TranslationHook): void;
 export declare function getStandaloneHook(): TranslationHook | null;
+/**
+ * Standalone navigation hook registration.
+ * Same DI pattern: avoids pulling react-router into the library build.
+ */
+export type NavigateHook = () => (viewKey: string) => void;
+export declare function registerStandaloneNavigateHook(hook: NavigateHook): void;
+export declare function getStandaloneNavigateHook(): NavigateHook | null;

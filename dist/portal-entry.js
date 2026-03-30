@@ -1,4 +1,4 @@
-import { r as setPortalMode } from "./mode-flag-BYqcGXIB.js";
+import { i as setPortalMode } from "./mode-flag-DcZ3AbRu.js";
 import { n as SinfAdapter, r as KlarfAdapter, t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { lazy } from "react";
 import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare, Hexagon, LineChart, ScatterChart, Slash, Table, Tags, TrendingUp } from "lucide-react";
@@ -11,7 +11,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 */ var lancelotViews = [
 	{
 		path: "files",
-		component: lazy(() => import("./file-manager-3yG2uX5d.js")),
+		component: lazy(() => import("./file-manager-BQD8HCjI.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -22,7 +22,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "file-info",
-		component: lazy(() => import("./file-info-Cg-lYV7O.js")),
+		component: lazy(() => import("./file-info-Dz5IS0KV.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -33,7 +33,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "wafer-map",
-		component: lazy(() => import("./wafer-map-Buy6yKoZ.js")),
+		component: lazy(() => import("./wafer-map-J8BGH5mR.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -44,7 +44,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "defect-table",
-		component: lazy(() => import("./defects-DUR0OW8X.js")),
+		component: lazy(() => import("./defects-CaDyJZag.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -55,7 +55,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "classes",
-		component: lazy(() => import("./classes-BcIQuaKI.js")),
+		component: lazy(() => import("./classes-CA5EByiD.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -66,7 +66,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "pareto",
-		component: lazy(() => import("./pareto-BlWq8G_s.js")),
+		component: lazy(() => import("./pareto-CINSqWgV.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -77,7 +77,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "spatial",
-		component: lazy(() => import("./spatial-_rPYDJKr.js")),
+		component: lazy(() => import("./spatial-jHjKEQTP.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -88,7 +88,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "yield",
-		component: lazy(() => import("./yield-DYklq_kB.js")),
+		component: lazy(() => import("./yield-0qPUANio.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -99,7 +99,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "correlation",
-		component: lazy(() => import("./correlation-DQw9vL21.js")),
+		component: lazy(() => import("./correlation-CL3Y0t3Y.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -110,7 +110,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "trend",
-		component: lazy(() => import("./trend-BqWH5Hy1.js")),
+		component: lazy(() => import("./trend-CS2kYg-Z.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -121,7 +121,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "cluster",
-		component: lazy(() => import("./cluster-D0nZdTv5.js")),
+		component: lazy(() => import("./cluster-B8wVJppM.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -132,7 +132,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "scratch",
-		component: lazy(() => import("./scratch-B8snWQpE.js")),
+		component: lazy(() => import("./scratch-BUw9WhNS.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -143,7 +143,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "spc",
-		component: lazy(() => import("./spc-CEdiscKp.js")),
+		component: lazy(() => import("./spc-BGoqHahR.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -154,7 +154,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "classifier",
-		component: lazy(() => import("./classifier-X3LJRUFm.js")),
+		component: lazy(() => import("./classifier-DjoPoUCI.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -181,19 +181,19 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	navItems: lancelotViews.map((v) => v.navItem),
 	views: lancelotViews,
 	defaultViewPath: "wafer-map",
-	treeComponent: lazy(() => import("./LancelotFileTree-XGngFF8C.js")),
-	globalFilters: lazy(() => import("./LancelotFilters-DjkjIgAY.js")),
+	treeComponent: lazy(() => import("./LancelotFileTree-sCIf7ezO.js")),
+	globalFilters: lazy(() => import("./LancelotFilters-D4l5qLcA.js")),
 	statusBarSlots: [{
 		id: "lancelot-file-info",
 		position: "left",
 		priority: 10,
-		component: lazy(() => import("./StatusBarSlots-CeShQoHq.js").then((m) => ({ default: m.FileInfoSlot }))),
+		component: lazy(() => import("./StatusBarSlots-cLN6H0rc.js").then((m) => ({ default: m.FileInfoSlot }))),
 		source: "tool"
 	}, {
 		id: "lancelot-defect-count",
 		position: "left",
 		priority: 20,
-		component: lazy(() => import("./StatusBarSlots-CeShQoHq.js").then((m) => ({ default: m.DefectCountSlot }))),
+		component: lazy(() => import("./StatusBarSlots-cLN6H0rc.js").then((m) => ({ default: m.DefectCountSlot }))),
 		source: "tool"
 	}],
 	panelConstraints: {
