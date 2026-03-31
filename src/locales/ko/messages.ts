@@ -270,6 +270,19 @@ export const messages: Record<string, string> = {
   'stacking.selectWafers': '사이드바에서 웨이퍼를 선택하세요',
   'stacking.activeCells': '활성 셀',
 
+
+  // Batch Import
+  'batch.title': '일괄 가져오기',
+  'batch.description': '모든 KLARF 및 SINF 파일을 가져올 디렉터리를 선택하세요.',
+  'batch.importDirectory': '일괄 가져오기',
+  'batch.selectDirectory': '디렉터리 선택',
+  'batch.scanning': '디렉터리 스캔 중...',
+  'batch.reading': '읽는 중',
+  'batch.parsing': '파싱 중',
+  'batch.succeeded': '성공',
+  'batch.failed': '실패',
+  'batch.total': '합계',
+
   // Status Bar
   'statusBar.noFileLoaded': '로드된 파일 없음',
   'statusBar.filters': '필터',

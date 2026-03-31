@@ -270,6 +270,19 @@ export const messages: Record<string, string> = {
   'stacking.selectWafers': '在侧栏中选择晶圆',
   'stacking.activeCells': '活跃单元',
 
+
+  // Batch Import
+  'batch.title': '批量导入',
+  'batch.description': '选择目录以导入所有KLARF和SINF文件。',
+  'batch.importDirectory': '批量导入',
+  'batch.selectDirectory': '选择目录',
+  'batch.scanning': '正在扫描目录...',
+  'batch.reading': '正在读取',
+  'batch.parsing': '正在解析',
+  'batch.succeeded': '成功',
+  'batch.failed': '失败',
+  'batch.total': '总计',
+
   // Status Bar
   'statusBar.noFileLoaded': '未加载文件',
   'statusBar.filters': '筛选',

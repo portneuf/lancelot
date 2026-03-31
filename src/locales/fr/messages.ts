@@ -272,6 +272,19 @@ export const messages: Record<string, string> = {
   'stacking.selectWafers': 'Sélectionnez des wafers dans la barre latérale',
   'stacking.activeCells': 'cellules actives',
 
+
+  // Batch Import
+  'batch.title': 'Import par lot',
+  'batch.description': 'Sélectionnez un répertoire pour importer tous les fichiers KLARF et SINF.',
+  'batch.importDirectory': 'Import par lot',
+  'batch.selectDirectory': 'Sélectionner le répertoire',
+  'batch.scanning': 'Analyse du répertoire...',
+  'batch.reading': 'Lecture',
+  'batch.parsing': 'Analyse',
+  'batch.succeeded': 'réussis',
+  'batch.failed': 'échoués',
+  'batch.total': 'total',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Aucun fichier chargé',
   'statusBar.filters': 'Filtres',

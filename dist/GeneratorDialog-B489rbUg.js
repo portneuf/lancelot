@@ -1099,6 +1099,6 @@ function GeneratorDialog({ onGenerated }) {
 	});
 }
 //#endregion
-export { useFileOpen as n, GeneratorDialog as t };
+export { useFileOpen as n, useStorage as r, GeneratorDialog as t };
 
-//# sourceMappingURL=GeneratorDialog-fgIc2bbn.js.map
+//# sourceMappingURL=GeneratorDialog-B489rbUg.js.map

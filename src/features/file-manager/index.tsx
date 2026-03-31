@@ -4,6 +4,7 @@ import { cn } from '@/lib/cn';
 import { useFileStore } from '@/stores';
 import { useFileOpen } from './hooks/useFileOpen';
 import { GeneratorDialog } from './components/GeneratorDialog';
+import { ImportProgressDialog } from './batch-import/ImportProgressDialog';
 import { useLancelotNavigate } from '@/hooks/useLancelotNavigate';
 import { useTranslation } from '@/i18n/useTranslation';
 
@@ -103,10 +104,11 @@ export default function FileManagerPage() {
         )}
       </div>
 
-      {/* Generator */}
-      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+      {/* Generator + Batch Import */}
+      <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
         <span>{t('common.or')}</span>
         <GeneratorDialog onGenerated={() => lancelotNavigate('wafer-map')} />
+        <ImportProgressDialog />
       </div>
 
       {/* Inspection History */}

@@ -272,6 +272,19 @@ export const messages: Record<string, string> = {
   'stacking.selectWafers': 'Wählen Sie Wafer in der Seitenleiste',
   'stacking.activeCells': 'aktive Zellen',
 
+
+  // Batch Import
+  'batch.title': 'Stapelimport',
+  'batch.description': 'Wählen Sie ein Verzeichnis, um alle KLARF- und SINF-Dateien zu importieren.',
+  'batch.importDirectory': 'Stapelimport',
+  'batch.selectDirectory': 'Verzeichnis wählen',
+  'batch.scanning': 'Verzeichnis wird durchsucht...',
+  'batch.reading': 'Lese',
+  'batch.parsing': 'Analysiere',
+  'batch.succeeded': 'erfolgreich',
+  'batch.failed': 'fehlgeschlagen',
+  'batch.total': 'gesamt',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Keine Datei geladen',
   'statusBar.filters': 'Filter',

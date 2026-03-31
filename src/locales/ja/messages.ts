@@ -270,6 +270,19 @@ export const messages: Record<string, string> = {
   'stacking.selectWafers': 'サイドバーでウェーハを選択してください',
   'stacking.activeCells': 'アクティブセル',
 
+
+  // Batch Import
+  'batch.title': 'バッチインポート',
+  'batch.description': 'ディレクトリを選択してすべてのKLARF/SINFファイルをインポートします。',
+  'batch.importDirectory': 'バッチインポート',
+  'batch.selectDirectory': 'ディレクトリ選択',
+  'batch.scanning': 'ディレクトリをスキャン中...',
+  'batch.reading': '読み込み中',
+  'batch.parsing': '解析中',
+  'batch.succeeded': '成功',
+  'batch.failed': '失敗',
+  'batch.total': '合計',
+
   // Status Bar
   'statusBar.noFileLoaded': 'ファイルが読み込まれていません',
   'statusBar.filters': 'フィルタ',
