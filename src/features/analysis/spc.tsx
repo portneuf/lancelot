@@ -28,6 +28,7 @@ import {
 import { cn } from '@/lib/cn';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { useFilteredDefects } from '@/hooks/useFilteredDefects';
 import type { DefectRecord } from '@/core/models/defect';
 import type { InspectionFile } from '@/core/models/inspection-file';
@@ -290,7 +291,7 @@ function MetricSelector({
 const numberFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 });
 
 export default function SpcPage() {
-  const activeFileId = useFileStore((s) => s.activeFileId);
+  const { fileId: activeFileId } = useActiveFile();
   const files = useFileStore((s) => s.files);
   const { file, filteredDefects } = useFilteredDefects();
 

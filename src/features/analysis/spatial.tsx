@@ -14,7 +14,8 @@ import {
 import type { DefectRecord } from '@/core/models/defect';
 import type { ClassLookupEntry } from '@/core/models/inspection-file';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { useFileStore, useInspectionStore } from '@/stores';
+import { useInspectionStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { cn } from '@/lib/cn';
 import { useTranslation } from '@/i18n/useTranslation';
 
@@ -195,9 +196,7 @@ function CustomTooltip({ active, payload, isDownsampled }: CustomTooltipProps) {
 }
 
 export default function SpatialPage() {
-  const activeFileId = useFileStore((s) => s.activeFileId);
-  const files = useFileStore((s) => s.files);
-  const file = activeFileId ? files.get(activeFileId) : undefined;
+  const { file } = useActiveFile();
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
   const { t } = useTranslation();
 
@@ -242,7 +241,7 @@ export default function SpatialPage() {
   const defectCount = activeDefects.length;
   const seriesNames = useMemo(() => Array.from(seriesData.keys()), [seriesData]);
 
-  if (!activeFileId || !file) {
+  if (!file) {
     return (
       <div className="flex h-full items-center justify-center">
         <EmptyState

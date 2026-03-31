@@ -12,6 +12,7 @@ import {
 import { TrendingUp } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { useFileStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { InspectionFile } from '@/core/models/inspection-file';
 
@@ -64,7 +65,7 @@ function computeTrendData(files: InspectionFile[], metric: Metric): TrendPoint[]
 
 export default function TrendPage() {
   const files = useFileStore((s) => s.files);
-  const activeFileId = useFileStore((s) => s.activeFileId);
+  const { fileId: activeFileId } = useActiveFile();
   const [metric, setMetric] = useState<Metric>('defects');
   const { t } = useTranslation();
 

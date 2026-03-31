@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { BarChart3 } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { useFileStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { DefectRecord } from '@/core/models/defect';
 import type { ClassLookupEntry } from '@/core/models/inspection-file';
@@ -69,9 +69,7 @@ function buildParetoData(defects: DefectRecord[], classLookup: ClassLookupEntry[
 const numberFormatter = new Intl.NumberFormat();
 
 export default function ParetoPage() {
-  const activeFileId = useFileStore((s) => s.activeFileId);
-  const files = useFileStore((s) => s.files);
-  const file = activeFileId ? files.get(activeFileId) : undefined;
+  const { file } = useActiveFile();
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
   const { t } = useTranslation();
 

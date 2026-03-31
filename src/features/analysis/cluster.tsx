@@ -15,7 +15,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { useFileStore, useInspectionStore } from '@/stores';
+import { useInspectionStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { dbscan } from '@/core/services/cluster-detection.service';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { cn } from '@/lib/cn';
@@ -71,9 +72,7 @@ export default function ClusterPage() {
   const [epsilon, setEpsilon] = useState(5000);
   const [minPoints, setMinPoints] = useState(3);
 
-  const activeFileId = useFileStore((s) => s.activeFileId);
-  const files = useFileStore((s) => s.files);
-  const file = activeFileId ? files.get(activeFileId) : undefined;
+  const { file } = useActiveFile();
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
 
   const activeDefects = useMemo(() => {

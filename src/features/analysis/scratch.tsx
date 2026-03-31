@@ -5,7 +5,8 @@
 
 import { useMemo, useState } from 'react';
 import { Slash } from 'lucide-react';
-import { useFileStore, useInspectionStore } from '@/stores';
+import { useInspectionStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { detectScratches } from '@/core/services/scratch-detection.service';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { cn } from '@/lib/cn';
@@ -16,9 +17,7 @@ export default function ScratchPage() {
   const [minInliers, setMinInliers] = useState(5);
   const [iterations, setIterations] = useState(200);
 
-  const activeFileId = useFileStore((s) => s.activeFileId);
-  const files = useFileStore((s) => s.files);
-  const file = activeFileId ? files.get(activeFileId) : undefined;
+  const { file } = useActiveFile();
   const filteredDefectIds = useInspectionStore((s) => s.filteredDefectIds);
 
   const activeDefects = useMemo(() => {

@@ -11,7 +11,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 */ var lancelotViews = [
 	{
 		path: "files",
-		component: lazy(() => import("./file-manager-C13O97_B.js")),
+		component: lazy(() => import("./file-manager-DhF6gDa7.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -22,7 +22,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "file-info",
-		component: lazy(() => import("./file-info-DSL7otqg.js")),
+		component: lazy(() => import("./file-info-DievkkLO.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -33,7 +33,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "wafer-map",
-		component: lazy(() => import("./wafer-map-BpNR8nuA.js")),
+		component: lazy(() => import("./wafer-map-BvLaWFCN.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -44,7 +44,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "defect-table",
-		component: lazy(() => import("./defects-DmVUF8Dz.js")),
+		component: lazy(() => import("./defects-CmURlFx2.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -55,7 +55,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "classes",
-		component: lazy(() => import("./classes-HusnA3w6.js")),
+		component: lazy(() => import("./classes-DjoqI3dT.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -66,7 +66,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "pareto",
-		component: lazy(() => import("./pareto-ic2fFdVR.js")),
+		component: lazy(() => import("./pareto-CDhCy4Kz.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -77,7 +77,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "spatial",
-		component: lazy(() => import("./spatial-DG9eKIFt.js")),
+		component: lazy(() => import("./spatial-Ber6iFoo.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -88,7 +88,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "yield",
-		component: lazy(() => import("./yield-B4WniY5F.js")),
+		component: lazy(() => import("./yield-CH8Hi-6H.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -99,7 +99,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "correlation",
-		component: lazy(() => import("./correlation-ecxrmLmZ.js")),
+		component: lazy(() => import("./correlation-c5nJdolw.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -110,7 +110,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "trend",
-		component: lazy(() => import("./trend-D6aBE3aG.js")),
+		component: lazy(() => import("./trend-D9R35z0x.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -121,7 +121,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "cluster",
-		component: lazy(() => import("./cluster-CzaLP4S7.js")),
+		component: lazy(() => import("./cluster-BIEfVvre.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -132,7 +132,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "scratch",
-		component: lazy(() => import("./scratch-BzuQaUJu.js")),
+		component: lazy(() => import("./scratch-voHT2dIe.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -143,7 +143,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "spc",
-		component: lazy(() => import("./spc-cP6P6SpS.js")),
+		component: lazy(() => import("./spc-CdrRgqi1.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -165,7 +165,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "gallery",
-		component: lazy(() => import("./gallery-CrgWRaZx.js")),
+		component: lazy(() => import("./gallery-Dg1WfK2N.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -176,7 +176,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "stacking",
-		component: lazy(() => import("./stacking-CYwwdFww.js")),
+		component: lazy(() => import("./stacking-DXhF_EBa.js")),
 		navItem: {
 			type: "link",
 			group: "views",

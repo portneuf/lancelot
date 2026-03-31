@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Tags } from 'lucide-react';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { useFileStore } from '@/stores';
+import { useActiveFile } from '@/hooks/useActiveFile';
 import { cn } from '@/lib/cn';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { ClassLookupEntry, DefectRecord } from '@/core/models';
@@ -27,11 +27,8 @@ interface ClassRowData {
 }
 
 export default function ClassesPage() {
-  const activeFileId = useFileStore((s) => s.activeFileId);
-  const files = useFileStore((s) => s.files);
+  const { file } = useActiveFile();
   const { t } = useTranslation();
-
-  const file = activeFileId ? files.get(activeFileId) : undefined;
 
   const rows = useMemo<ClassRowData[]>(() => {
     if (!file) return [];
