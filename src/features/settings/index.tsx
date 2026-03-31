@@ -2,6 +2,7 @@ import { useTheme } from '@/theme/theme-provider';
 import { useSettingsStore } from '@/stores';
 import { dynamicActivate, supportedLocales } from '@/i18n/i18n';
 import { useTranslation } from '@/i18n/useTranslation';
+import { DatabaseSettings } from './DatabaseSettings';
 import type { Theme } from '@/theme/theme-provider';
 import type { SupportedLocale } from '@/i18n/i18n';
 
@@ -77,6 +78,9 @@ export default function SettingsPage() {
             ))}
           </div>
         </section>
+
+        {/* Database */}
+        <DatabaseSettings />
 
         {/* About */}
         <section>

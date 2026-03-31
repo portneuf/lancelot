@@ -283,6 +283,22 @@ export const messages: Record<string, string> = {
   'batch.failed': '失败',
   'batch.total': '总计',
 
+
+  // Database
+  'db.title': '数据库',
+  'db.modeMemory': '内存模式（默认）',
+  'db.modeMemoryDesc': '文件仅存储在内存中。会话间无持久性。',
+  'db.modeRemote': 'PostgreSQL服务器',
+  'db.modeRemoteDesc': '连接PostgreSQL数据库以进行持久存储和跨批次分析。',
+  'db.host': '主机',
+  'db.port': '端口',
+  'db.database': '数据库',
+  'db.user': '用户',
+  'db.password': '密码',
+  'db.testConnection': '测试连接',
+  'db.connected': '已连接',
+  'db.activeConnection': '数据库连接已激活',
+
   // Status Bar
   'statusBar.noFileLoaded': '未加载文件',
   'statusBar.filters': '筛选',

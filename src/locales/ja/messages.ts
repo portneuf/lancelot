@@ -283,6 +283,22 @@ export const messages: Record<string, string> = {
   'batch.failed': '失敗',
   'batch.total': '合計',
 
+
+  // Database
+  'db.title': 'データベース',
+  'db.modeMemory': 'メモリ内（デフォルト）',
+  'db.modeMemoryDesc': 'ファイルはメモリ内にのみ保存されます。セッション間の永続性はありません。',
+  'db.modeRemote': 'PostgreSQLサーバー',
+  'db.modeRemoteDesc': 'PostgreSQLデータベースに接続して永続ストレージとロット横断分析を行います。',
+  'db.host': 'ホスト',
+  'db.port': 'ポート',
+  'db.database': 'データベース',
+  'db.user': 'ユーザー',
+  'db.password': 'パスワード',
+  'db.testConnection': '接続テスト',
+  'db.connected': '接続済み',
+  'db.activeConnection': 'データベース接続がアクティブです',
+
   // Status Bar
   'statusBar.noFileLoaded': 'ファイルが読み込まれていません',
   'statusBar.filters': 'フィルタ',

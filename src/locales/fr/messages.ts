@@ -285,6 +285,22 @@ export const messages: Record<string, string> = {
   'batch.failed': 'échoués',
   'batch.total': 'total',
 
+
+  // Database
+  'db.title': 'Base de données',
+  'db.modeMemory': 'En mémoire (défaut)',
+  'db.modeMemoryDesc': 'Fichiers stockés en mémoire uniquement. Pas de persistance entre sessions.',
+  'db.modeRemote': 'Serveur PostgreSQL',
+  'db.modeRemoteDesc': 'Se connecter à une base PostgreSQL pour le stockage persistant.',
+  'db.host': 'Hôte',
+  'db.port': 'Port',
+  'db.database': 'Base de données',
+  'db.user': 'Utilisateur',
+  'db.password': 'Mot de passe',
+  'db.testConnection': 'Tester la connexion',
+  'db.connected': 'Connecté',
+  'db.activeConnection': 'Connexion active',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Aucun fichier chargé',
   'statusBar.filters': 'Filtres',

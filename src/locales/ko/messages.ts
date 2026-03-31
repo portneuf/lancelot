@@ -283,6 +283,22 @@ export const messages: Record<string, string> = {
   'batch.failed': '실패',
   'batch.total': '합계',
 
+
+  // Database
+  'db.title': '데이터베이스',
+  'db.modeMemory': '메모리 (기본)',
+  'db.modeMemoryDesc': '파일은 메모리에만 저장됩니다. 세션 간 지속성이 없습니다.',
+  'db.modeRemote': 'PostgreSQL 서버',
+  'db.modeRemoteDesc': 'PostgreSQL 데이터베이스에 연결하여 영구 저장 및 로트 간 분석을 수행합니다.',
+  'db.host': '호스트',
+  'db.port': '포트',
+  'db.database': '데이터베이스',
+  'db.user': '사용자',
+  'db.password': '비밀번호',
+  'db.testConnection': '연결 테스트',
+  'db.connected': '연결됨',
+  'db.activeConnection': '데이터베이스 연결이 활성화됨',
+
   // Status Bar
   'statusBar.noFileLoaded': '로드된 파일 없음',
   'statusBar.filters': '필터',
