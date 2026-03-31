@@ -256,6 +256,22 @@ export const messages: Record<string, string> = {
   'gallery.gridSize': 'Raster',
   'gallery.selected': 'ausgewählt',
 
+
+  // Stacking
+  'nav.stacking': 'Stacking',
+  'stacking.title': 'Wafer-Stacking',
+  'stacking.openFilesToView': 'Laden Sie KLARF-Dateien für Stacking-Analyse',
+  'stacking.aggregation': 'Aggregation',
+  'stacking.density': 'Defektdichte',
+  'stacking.hitCount': 'Wafer-Trefferanzahl',
+  'stacking.classDominance': 'Klassendominanz',
+  'stacking.gridSize': 'Rastergröße',
+  'stacking.wafers': 'Wafer',
+  'stacking.selectAll': 'Alle auswählen',
+  'stacking.deselectAll': 'Alle abwählen',
+  'stacking.selectWafers': 'Wählen Sie Wafer in der Seitenleiste',
+  'stacking.activeCells': 'aktive Zellen',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Keine Datei geladen',
   'statusBar.filters': 'Filter',

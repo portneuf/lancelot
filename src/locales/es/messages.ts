@@ -256,6 +256,22 @@ export const messages: Record<string, string> = {
   'gallery.gridSize': 'Cuadrícula',
   'gallery.selected': 'seleccionados',
 
+
+  // Stacking
+  'nav.stacking': 'Apilamiento',
+  'stacking.title': 'Apilamiento de obleas',
+  'stacking.openFilesToView': 'Cargue archivos KLARF para apilamiento',
+  'stacking.aggregation': 'Agregación',
+  'stacking.density': 'Densidad de defectos',
+  'stacking.hitCount': 'Conteo de obleas',
+  'stacking.classDominance': 'Dominio de clase',
+  'stacking.gridSize': 'Tamaño de cuadrícula',
+  'stacking.wafers': 'Obleas',
+  'stacking.selectAll': 'Seleccionar todo',
+  'stacking.deselectAll': 'Deseleccionar todo',
+  'stacking.selectWafers': 'Seleccione obleas en la barra lateral',
+  'stacking.activeCells': 'celdas activas',
+
   // Status Bar
   'statusBar.noFileLoaded': 'No hay archivo cargado',
   'statusBar.filters': 'Filtros',

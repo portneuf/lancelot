@@ -254,6 +254,22 @@ export const messages: Record<string, string> = {
   'gallery.gridSize': '网格',
   'gallery.selected': '已选择',
 
+
+  // Stacking
+  'nav.stacking': '堆叠',
+  'stacking.title': '晶圆堆叠',
+  'stacking.openFilesToView': '加载KLARF文件以查看堆叠分析',
+  'stacking.aggregation': '聚合',
+  'stacking.density': '缺陷密度',
+  'stacking.hitCount': '晶圆命中数',
+  'stacking.classDominance': '分类主导',
+  'stacking.gridSize': '网格大小',
+  'stacking.wafers': '晶圆',
+  'stacking.selectAll': '全选',
+  'stacking.deselectAll': '全部取消',
+  'stacking.selectWafers': '在侧栏中选择晶圆',
+  'stacking.activeCells': '活跃单元',
+
   // Status Bar
   'statusBar.noFileLoaded': '未加载文件',
   'statusBar.filters': '筛选',

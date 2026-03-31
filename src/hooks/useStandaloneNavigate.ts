@@ -26,6 +26,7 @@ const STANDALONE_ROUTES: Record<string, string> = {
   'spc': '/analysis/spc',
   'classifier': '/analysis/classifier',
   'gallery': '/analysis/gallery',
+  'stacking': '/analysis/stacking',
   'settings': '/settings',
 };
 

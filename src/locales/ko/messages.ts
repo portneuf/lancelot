@@ -254,6 +254,22 @@ export const messages: Record<string, string> = {
   'gallery.gridSize': '그리드',
   'gallery.selected': '선택됨',
 
+
+  // Stacking
+  'nav.stacking': '스태킹',
+  'stacking.title': '웨이퍼 스태킹',
+  'stacking.openFilesToView': '스태킹 분석을 위해 KLARF 파일을 로드하세요',
+  'stacking.aggregation': '집계',
+  'stacking.density': '결함 밀도',
+  'stacking.hitCount': '웨이퍼 히트 수',
+  'stacking.classDominance': '클래스 지배',
+  'stacking.gridSize': '그리드 크기',
+  'stacking.wafers': '웨이퍼',
+  'stacking.selectAll': '모두 선택',
+  'stacking.deselectAll': '모두 해제',
+  'stacking.selectWafers': '사이드바에서 웨이퍼를 선택하세요',
+  'stacking.activeCells': '활성 셀',
+
   // Status Bar
   'statusBar.noFileLoaded': '로드된 파일 없음',
   'statusBar.filters': '필터',

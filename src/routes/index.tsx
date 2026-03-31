@@ -80,6 +80,7 @@ export const router = createBrowserRouter([
               { path: 'spc', lazy: lazyPage(() => import('@/features/analysis/spc')) },
               { path: 'classifier', lazy: lazyPage(() => import('@/features/analysis/classifier')) },
               { path: 'gallery', lazy: lazyPage(() => import('@/features/gallery')) },
+              { path: 'stacking', lazy: lazyPage(() => import('@/features/stacking')) },
             ],
           },
         ],

@@ -254,6 +254,22 @@ export const messages: Record<string, string> = {
   'gallery.gridSize': 'グリッド',
   'gallery.selected': '選択済み',
 
+
+  // Stacking
+  'nav.stacking': 'スタッキング',
+  'stacking.title': 'ウェーハスタッキング',
+  'stacking.openFilesToView': 'スタッキング分析にはKLARFファイルを読み込んでください',
+  'stacking.aggregation': '集約',
+  'stacking.density': '欠陥密度',
+  'stacking.hitCount': 'ウェーハヒット数',
+  'stacking.classDominance': 'クラス優位性',
+  'stacking.gridSize': 'グリッドサイズ',
+  'stacking.wafers': 'ウェーハ',
+  'stacking.selectAll': 'すべて選択',
+  'stacking.deselectAll': 'すべて解除',
+  'stacking.selectWafers': 'サイドバーでウェーハを選択してください',
+  'stacking.activeCells': 'アクティブセル',
+
   // Status Bar
   'statusBar.noFileLoaded': 'ファイルが読み込まれていません',
   'statusBar.filters': 'フィルタ',

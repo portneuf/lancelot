@@ -22,6 +22,7 @@ import {
   Activity,
   Brain,
   LayoutGrid,
+  Layers,
 } from 'lucide-react';
 import type { ViewDefinition } from '@portneuf/portal-framework';
 
@@ -192,6 +193,17 @@ export const lancelotViews: ViewDefinition[] = [
       icon: LayoutGrid,
       label: 'lancelot.nav.gallery',
       path: 'gallery',
+    },
+  },
+  {
+    path: 'stacking',
+    component: lazy(() => import('./features/stacking')),
+    navItem: {
+      type: 'link',
+      group: 'views',
+      icon: Layers,
+      label: 'lancelot.nav.stacking',
+      path: 'stacking',
     },
   },
 ];

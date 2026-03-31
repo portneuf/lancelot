@@ -256,6 +256,22 @@ export const messages: Record<string, string> = {
   'gallery.gridSize': 'Grille',
   'gallery.selected': 'sélectionnés',
 
+
+  // Stacking
+  'nav.stacking': 'Empilement',
+  'stacking.title': 'Empilement de wafers',
+  'stacking.openFilesToView': 'Chargez des fichiers KLARF pour l\'empilement',
+  'stacking.aggregation': 'Agrégation',
+  'stacking.density': 'Densité de défauts',
+  'stacking.hitCount': 'Nombre de wafers touchés',
+  'stacking.classDominance': 'Dominance de classe',
+  'stacking.gridSize': 'Taille de grille',
+  'stacking.wafers': 'Wafers',
+  'stacking.selectAll': 'Tout sélectionner',
+  'stacking.deselectAll': 'Tout désélectionner',
+  'stacking.selectWafers': 'Sélectionnez des wafers dans la barre latérale',
+  'stacking.activeCells': 'cellules actives',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Aucun fichier chargé',
   'statusBar.filters': 'Filtres',

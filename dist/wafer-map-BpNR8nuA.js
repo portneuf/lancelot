@@ -685,4 +685,4 @@ function LegendItem({ color, label, dot = false }) {
 //#endregion
 export { WaferMapPage as default };
 
-//# sourceMappingURL=wafer-map-DN05JMQJ.js.map
+//# sourceMappingURL=wafer-map-BpNR8nuA.js.map
