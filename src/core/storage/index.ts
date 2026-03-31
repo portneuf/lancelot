@@ -1,5 +1,6 @@
 export type { DefectStorageAdapter } from './storage-adapter.interface';
 export { InMemoryStorageAdapter } from './in-memory-storage-adapter';
+export { PostgresStorageAdapter } from './postgres-storage-adapter';
 export { StorageContext, useStorage, getStorageSingleton } from './storage-context';
 export { StorageProvider } from './StorageProvider';
 export type {
