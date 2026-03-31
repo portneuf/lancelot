@@ -239,6 +239,23 @@ export const messages: Record<string, string> = {
   'generator.clustered': 'Regroupé',
   'generator.mixed': 'Mixte',
 
+
+  // Gallery
+  'nav.gallery': 'Galerie',
+  'gallery.openFilesToView': 'Chargez des fichiers KLARF pour voir la galerie',
+  'gallery.sortBy': 'Trier par',
+  'gallery.sortWaferId': 'ID wafer',
+  'gallery.sortLotId': 'ID de lot',
+  'gallery.sortDefects': 'Nombre de défauts',
+  'gallery.sortFileName': 'Nom du fichier',
+  'gallery.sortSlot': 'Emplacement',
+  'gallery.colorMode': 'Couleur',
+  'gallery.colorUniform': 'Uniforme',
+  'gallery.colorByClass': 'Par classe',
+  'gallery.colorBySize': 'Par taille',
+  'gallery.gridSize': 'Grille',
+  'gallery.selected': 'sélectionnés',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Aucun fichier chargé',
   'statusBar.filters': 'Filtres',

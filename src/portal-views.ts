@@ -21,6 +21,7 @@ import {
   Slash,
   Activity,
   Brain,
+  LayoutGrid,
 } from 'lucide-react';
 import type { ViewDefinition } from '@portneuf/portal-framework';
 
@@ -180,6 +181,17 @@ export const lancelotViews: ViewDefinition[] = [
       icon: Brain,
       label: 'lancelot.nav.classifier',
       path: 'classifier',
+    },
+  },
+  {
+    path: 'gallery',
+    component: lazy(() => import('./features/gallery')),
+    navItem: {
+      type: 'link',
+      group: 'views',
+      icon: LayoutGrid,
+      label: 'lancelot.nav.gallery',
+      path: 'gallery',
     },
   },
 ];

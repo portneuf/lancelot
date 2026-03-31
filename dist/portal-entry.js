@@ -1,7 +1,7 @@
 import { i as setPortalMode } from "./mode-flag-DcZ3AbRu.js";
 import { n as SinfAdapter, r as KlarfAdapter, t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { lazy } from "react";
-import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare, Hexagon, LineChart, ScatterChart, Slash, Table, Tags, TrendingUp } from "lucide-react";
+import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare, Hexagon, LayoutGrid, LineChart, ScatterChart, Slash, Table, Tags, TrendingUp } from "lucide-react";
 //#region src/portal-views.ts
 /**
 * Maps Lancelot's 14 views to the Portal's ViewDefinition[] format.
@@ -11,7 +11,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 */ var lancelotViews = [
 	{
 		path: "files",
-		component: lazy(() => import("./file-manager-FJ5fy3ib.js")),
+		component: lazy(() => import("./file-manager-fscVtIsH.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -22,7 +22,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "file-info",
-		component: lazy(() => import("./file-info-Dz5IS0KV.js")),
+		component: lazy(() => import("./file-info-DSL7otqg.js")),
 		navItem: {
 			type: "link",
 			group: "files",
@@ -33,7 +33,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "wafer-map",
-		component: lazy(() => import("./wafer-map-CWtPSQ3D.js")),
+		component: lazy(() => import("./wafer-map-DN05JMQJ.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -44,7 +44,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "defect-table",
-		component: lazy(() => import("./defects-CaDyJZag.js")),
+		component: lazy(() => import("./defects-DmVUF8Dz.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -55,7 +55,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "classes",
-		component: lazy(() => import("./classes-CA5EByiD.js")),
+		component: lazy(() => import("./classes-HusnA3w6.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -66,7 +66,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "pareto",
-		component: lazy(() => import("./pareto-CINSqWgV.js")),
+		component: lazy(() => import("./pareto-ic2fFdVR.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -77,7 +77,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "spatial",
-		component: lazy(() => import("./spatial-jHjKEQTP.js")),
+		component: lazy(() => import("./spatial-DG9eKIFt.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -88,7 +88,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "yield",
-		component: lazy(() => import("./yield-0qPUANio.js")),
+		component: lazy(() => import("./yield-B4WniY5F.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -99,7 +99,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "correlation",
-		component: lazy(() => import("./correlation-CL3Y0t3Y.js")),
+		component: lazy(() => import("./correlation-ecxrmLmZ.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -110,7 +110,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "trend",
-		component: lazy(() => import("./trend-CS2kYg-Z.js")),
+		component: lazy(() => import("./trend-D6aBE3aG.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -121,7 +121,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "cluster",
-		component: lazy(() => import("./cluster-B8wVJppM.js")),
+		component: lazy(() => import("./cluster-CzaLP4S7.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -132,7 +132,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "scratch",
-		component: lazy(() => import("./scratch-BUw9WhNS.js")),
+		component: lazy(() => import("./scratch-BzuQaUJu.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -143,7 +143,7 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "spc",
-		component: lazy(() => import("./spc-BGoqHahR.js")),
+		component: lazy(() => import("./spc-cP6P6SpS.js")),
 		navItem: {
 			type: "link",
 			group: "views",
@@ -154,13 +154,24 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	},
 	{
 		path: "classifier",
-		component: lazy(() => import("./classifier-DjoPoUCI.js")),
+		component: lazy(() => import("./classifier-D-upmVY8.js")),
 		navItem: {
 			type: "link",
 			group: "views",
 			icon: Brain,
 			label: "lancelot.nav.classifier",
 			path: "classifier"
+		}
+	},
+	{
+		path: "gallery",
+		component: lazy(() => import("./gallery-CrgWRaZx.js")),
+		navItem: {
+			type: "link",
+			group: "views",
+			icon: LayoutGrid,
+			label: "lancelot.nav.gallery",
+			path: "gallery"
 		}
 	}
 ];
@@ -181,19 +192,19 @@ import { Activity, BarChart3, Brain, CircleDot, FileText, FolderOpen, GitCompare
 	navItems: lancelotViews.map((v) => v.navItem),
 	views: lancelotViews,
 	defaultViewPath: "wafer-map",
-	treeComponent: lazy(() => import("./LancelotFileTree-C3R6ni7J.js")),
-	globalFilters: lazy(() => import("./LancelotFilters-D4l5qLcA.js")),
+	treeComponent: lazy(() => import("./LancelotFileTree-BdkQCZ9G.js")),
+	globalFilters: lazy(() => import("./LancelotFilters-C4-pJmvx.js")),
 	statusBarSlots: [{
 		id: "lancelot-file-info",
 		position: "left",
 		priority: 10,
-		component: lazy(() => import("./StatusBarSlots-cLN6H0rc.js").then((m) => ({ default: m.FileInfoSlot }))),
+		component: lazy(() => import("./StatusBarSlots-D13RePb3.js").then((m) => ({ default: m.FileInfoSlot }))),
 		source: "tool"
 	}, {
 		id: "lancelot-defect-count",
 		position: "left",
 		priority: 20,
-		component: lazy(() => import("./StatusBarSlots-cLN6H0rc.js").then((m) => ({ default: m.DefectCountSlot }))),
+		component: lazy(() => import("./StatusBarSlots-D13RePb3.js").then((m) => ({ default: m.DefectCountSlot }))),
 		source: "tool"
 	}],
 	panelConstraints: {
@@ -421,6 +432,20 @@ var messages$6 = {
 	"generator.edgeHeavy": "Edge Heavy",
 	"generator.clustered": "Clustered",
 	"generator.mixed": "Mixed",
+	"nav.gallery": "Gallery",
+	"gallery.openFilesToView": "Load KLARF files to view the gallery",
+	"gallery.sortBy": "Sort by",
+	"gallery.sortWaferId": "Wafer ID",
+	"gallery.sortLotId": "Lot ID",
+	"gallery.sortDefects": "Defect Count",
+	"gallery.sortFileName": "File Name",
+	"gallery.sortSlot": "Slot",
+	"gallery.colorMode": "Color",
+	"gallery.colorUniform": "Uniform",
+	"gallery.colorByClass": "By Class",
+	"gallery.colorBySize": "By Size",
+	"gallery.gridSize": "Grid",
+	"gallery.selected": "selected",
 	"statusBar.noFileLoaded": "No file loaded",
 	"statusBar.filters": "Filters",
 	"statusBar.parsing": "Parsing...",
@@ -629,6 +654,20 @@ var messages$5 = {
 	"generator.edgeHeavy": "Randlastig",
 	"generator.clustered": "Geclustert",
 	"generator.mixed": "Gemischt",
+	"nav.gallery": "Galerie",
+	"gallery.openFilesToView": "Laden Sie KLARF-Dateien, um die Galerie anzuzeigen",
+	"gallery.sortBy": "Sortieren nach",
+	"gallery.sortWaferId": "Wafer-ID",
+	"gallery.sortLotId": "Los-ID",
+	"gallery.sortDefects": "Defektanzahl",
+	"gallery.sortFileName": "Dateiname",
+	"gallery.sortSlot": "Slot",
+	"gallery.colorMode": "Farbe",
+	"gallery.colorUniform": "Einheitlich",
+	"gallery.colorByClass": "Nach Klasse",
+	"gallery.colorBySize": "Nach Größe",
+	"gallery.gridSize": "Raster",
+	"gallery.selected": "ausgewählt",
 	"statusBar.noFileLoaded": "Keine Datei geladen",
 	"statusBar.filters": "Filter",
 	"statusBar.parsing": "Wird analysiert...",
@@ -837,6 +876,20 @@ var messages$4 = {
 	"generator.edgeHeavy": "Concentrado en bordes",
 	"generator.clustered": "Agrupado",
 	"generator.mixed": "Mixto",
+	"nav.gallery": "Galería",
+	"gallery.openFilesToView": "Cargue archivos KLARF para ver la galería",
+	"gallery.sortBy": "Ordenar por",
+	"gallery.sortWaferId": "ID de oblea",
+	"gallery.sortLotId": "ID de lote",
+	"gallery.sortDefects": "Cantidad de defectos",
+	"gallery.sortFileName": "Nombre del archivo",
+	"gallery.sortSlot": "Ranura",
+	"gallery.colorMode": "Color",
+	"gallery.colorUniform": "Uniforme",
+	"gallery.colorByClass": "Por clase",
+	"gallery.colorBySize": "Por tamaño",
+	"gallery.gridSize": "Cuadrícula",
+	"gallery.selected": "seleccionados",
 	"statusBar.noFileLoaded": "No hay archivo cargado",
 	"statusBar.filters": "Filtros",
 	"statusBar.parsing": "Analizando...",
@@ -1045,6 +1098,20 @@ var messages$3 = {
 	"generator.edgeHeavy": "Concentré en bordure",
 	"generator.clustered": "Regroupé",
 	"generator.mixed": "Mixte",
+	"nav.gallery": "Galerie",
+	"gallery.openFilesToView": "Chargez des fichiers KLARF pour voir la galerie",
+	"gallery.sortBy": "Trier par",
+	"gallery.sortWaferId": "ID wafer",
+	"gallery.sortLotId": "ID de lot",
+	"gallery.sortDefects": "Nombre de défauts",
+	"gallery.sortFileName": "Nom du fichier",
+	"gallery.sortSlot": "Emplacement",
+	"gallery.colorMode": "Couleur",
+	"gallery.colorUniform": "Uniforme",
+	"gallery.colorByClass": "Par classe",
+	"gallery.colorBySize": "Par taille",
+	"gallery.gridSize": "Grille",
+	"gallery.selected": "sélectionnés",
 	"statusBar.noFileLoaded": "Aucun fichier chargé",
 	"statusBar.filters": "Filtres",
 	"statusBar.parsing": "Analyse en cours...",
@@ -1251,6 +1318,20 @@ var messages$2 = {
 	"generator.edgeHeavy": "エッジ集中",
 	"generator.clustered": "クラスタ状",
 	"generator.mixed": "ミックス",
+	"nav.gallery": "ギャラリー",
+	"gallery.openFilesToView": "ギャラリーを表示するにはKLARFファイルを読み込んでください",
+	"gallery.sortBy": "並べ替え",
+	"gallery.sortWaferId": "ウェーハID",
+	"gallery.sortLotId": "ロットID",
+	"gallery.sortDefects": "欠陥数",
+	"gallery.sortFileName": "ファイル名",
+	"gallery.sortSlot": "スロット",
+	"gallery.colorMode": "カラー",
+	"gallery.colorUniform": "均一",
+	"gallery.colorByClass": "クラス別",
+	"gallery.colorBySize": "サイズ別",
+	"gallery.gridSize": "グリッド",
+	"gallery.selected": "選択済み",
 	"statusBar.noFileLoaded": "ファイルが読み込まれていません",
 	"statusBar.filters": "フィルタ",
 	"statusBar.parsing": "解析中...",
@@ -1457,6 +1538,20 @@ var messages$1 = {
 	"generator.edgeHeavy": "엣지 집중",
 	"generator.clustered": "클러스터형",
 	"generator.mixed": "혼합",
+	"nav.gallery": "갤러리",
+	"gallery.openFilesToView": "갤러리를 보려면 KLARF 파일을 로드하세요",
+	"gallery.sortBy": "정렬 기준",
+	"gallery.sortWaferId": "웨이퍼 ID",
+	"gallery.sortLotId": "로트 ID",
+	"gallery.sortDefects": "결함 수",
+	"gallery.sortFileName": "파일 이름",
+	"gallery.sortSlot": "슬롯",
+	"gallery.colorMode": "색상",
+	"gallery.colorUniform": "균일",
+	"gallery.colorByClass": "클래스별",
+	"gallery.colorBySize": "크기별",
+	"gallery.gridSize": "그리드",
+	"gallery.selected": "선택됨",
 	"statusBar.noFileLoaded": "로드된 파일 없음",
 	"statusBar.filters": "필터",
 	"statusBar.parsing": "파싱 중...",
@@ -1663,6 +1758,20 @@ var messages = {
 	"generator.edgeHeavy": "边缘集中",
 	"generator.clustered": "聚集型",
 	"generator.mixed": "混合",
+	"nav.gallery": "画廊",
+	"gallery.openFilesToView": "加载KLARF文件以查看画廊",
+	"gallery.sortBy": "排序方式",
+	"gallery.sortWaferId": "晶圆ID",
+	"gallery.sortLotId": "批次ID",
+	"gallery.sortDefects": "缺陷数量",
+	"gallery.sortFileName": "文件名",
+	"gallery.sortSlot": "槽位",
+	"gallery.colorMode": "颜色",
+	"gallery.colorUniform": "均匀",
+	"gallery.colorByClass": "按分类",
+	"gallery.colorBySize": "按大小",
+	"gallery.gridSize": "网格",
+	"gallery.selected": "已选择",
 	"statusBar.noFileLoaded": "未加载文件",
 	"statusBar.filters": "筛选",
 	"statusBar.parsing": "正在解析...",

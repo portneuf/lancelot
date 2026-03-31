@@ -237,6 +237,23 @@ export const messages: Record<string, string> = {
   'generator.clustered': '聚集型',
   'generator.mixed': '混合',
 
+
+  // Gallery
+  'nav.gallery': '画廊',
+  'gallery.openFilesToView': '加载KLARF文件以查看画廊',
+  'gallery.sortBy': '排序方式',
+  'gallery.sortWaferId': '晶圆ID',
+  'gallery.sortLotId': '批次ID',
+  'gallery.sortDefects': '缺陷数量',
+  'gallery.sortFileName': '文件名',
+  'gallery.sortSlot': '槽位',
+  'gallery.colorMode': '颜色',
+  'gallery.colorUniform': '均匀',
+  'gallery.colorByClass': '按分类',
+  'gallery.colorBySize': '按大小',
+  'gallery.gridSize': '网格',
+  'gallery.selected': '已选择',
+
   // Status Bar
   'statusBar.noFileLoaded': '未加载文件',
   'statusBar.filters': '筛选',

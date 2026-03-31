@@ -237,6 +237,23 @@ export const messages: Record<string, string> = {
   'generator.clustered': '클러스터형',
   'generator.mixed': '혼합',
 
+
+  // Gallery
+  'nav.gallery': '갤러리',
+  'gallery.openFilesToView': '갤러리를 보려면 KLARF 파일을 로드하세요',
+  'gallery.sortBy': '정렬 기준',
+  'gallery.sortWaferId': '웨이퍼 ID',
+  'gallery.sortLotId': '로트 ID',
+  'gallery.sortDefects': '결함 수',
+  'gallery.sortFileName': '파일 이름',
+  'gallery.sortSlot': '슬롯',
+  'gallery.colorMode': '색상',
+  'gallery.colorUniform': '균일',
+  'gallery.colorByClass': '클래스별',
+  'gallery.colorBySize': '크기별',
+  'gallery.gridSize': '그리드',
+  'gallery.selected': '선택됨',
+
   // Status Bar
   'statusBar.noFileLoaded': '로드된 파일 없음',
   'statusBar.filters': '필터',

@@ -25,6 +25,7 @@ const STANDALONE_ROUTES: Record<string, string> = {
   'scratch': '/analysis/scratch',
   'spc': '/analysis/spc',
   'classifier': '/analysis/classifier',
+  'gallery': '/analysis/gallery',
   'settings': '/settings',
 };
 

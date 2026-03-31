@@ -237,6 +237,23 @@ export const messages: Record<string, string> = {
   'generator.clustered': 'クラスタ状',
   'generator.mixed': 'ミックス',
 
+
+  // Gallery
+  'nav.gallery': 'ギャラリー',
+  'gallery.openFilesToView': 'ギャラリーを表示するにはKLARFファイルを読み込んでください',
+  'gallery.sortBy': '並べ替え',
+  'gallery.sortWaferId': 'ウェーハID',
+  'gallery.sortLotId': 'ロットID',
+  'gallery.sortDefects': '欠陥数',
+  'gallery.sortFileName': 'ファイル名',
+  'gallery.sortSlot': 'スロット',
+  'gallery.colorMode': 'カラー',
+  'gallery.colorUniform': '均一',
+  'gallery.colorByClass': 'クラス別',
+  'gallery.colorBySize': 'サイズ別',
+  'gallery.gridSize': 'グリッド',
+  'gallery.selected': '選択済み',
+
   // Status Bar
   'statusBar.noFileLoaded': 'ファイルが読み込まれていません',
   'statusBar.filters': 'フィルタ',

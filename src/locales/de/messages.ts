@@ -239,6 +239,23 @@ export const messages: Record<string, string> = {
   'generator.clustered': 'Geclustert',
   'generator.mixed': 'Gemischt',
 
+
+  // Gallery
+  'nav.gallery': 'Galerie',
+  'gallery.openFilesToView': 'Laden Sie KLARF-Dateien, um die Galerie anzuzeigen',
+  'gallery.sortBy': 'Sortieren nach',
+  'gallery.sortWaferId': 'Wafer-ID',
+  'gallery.sortLotId': 'Los-ID',
+  'gallery.sortDefects': 'Defektanzahl',
+  'gallery.sortFileName': 'Dateiname',
+  'gallery.sortSlot': 'Slot',
+  'gallery.colorMode': 'Farbe',
+  'gallery.colorUniform': 'Einheitlich',
+  'gallery.colorByClass': 'Nach Klasse',
+  'gallery.colorBySize': 'Nach Größe',
+  'gallery.gridSize': 'Raster',
+  'gallery.selected': 'ausgewählt',
+
   // Status Bar
   'statusBar.noFileLoaded': 'Keine Datei geladen',
   'statusBar.filters': 'Filter',
