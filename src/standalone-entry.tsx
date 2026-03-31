@@ -9,6 +9,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { LancelotModeProvider } from './mode-context';
+import { StorageProvider } from './core/storage';
 import { registerStandaloneHook, registerStandaloneNavigateHook } from './i18n/mode-flag';
 import { useStandaloneTranslation } from './i18n/useStandaloneTranslation';
 import { useStandaloneNavigate } from './hooks/useStandaloneNavigate';
@@ -21,8 +22,10 @@ registerStandaloneNavigateHook(useStandaloneNavigate);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LancelotModeProvider mode="standalone" basePath="/">
-      <App />
-    </LancelotModeProvider>
+    <StorageProvider>
+      <LancelotModeProvider mode="standalone" basePath="/">
+        <App />
+      </LancelotModeProvider>
+    </StorageProvider>
   </StrictMode>,
 );

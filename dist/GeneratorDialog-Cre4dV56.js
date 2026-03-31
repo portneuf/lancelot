@@ -3,12 +3,480 @@ import { t as initializeRegistry } from "./parsers-B1gH2h1h.js";
 import { t as cn } from "./cn-Dhwb6-BZ.js";
 import { t as useFileStore } from "./file-store-i2y1zWrt.js";
 import { i as saveInspection } from "./inspection-db-Kp142-VM.js";
-import { useCallback, useContext, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useRef, useState } from "react";
 import { Loader2, Wand2 } from "lucide-react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { ToolContext } from "@portneuf/portal-framework";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as SliderPrimitive from "@radix-ui/react-slider";
+//#region src/core/storage/in-memory-storage-adapter.ts
+/**
+* In-memory implementation of DefectStorageAdapter.
+*
+* Operates on InspectionFile[] arrays — no database required.
+* This is the default adapter for web-only mode and the bridge
+* that lets new views (Gallery, Stacking) work immediately
+* while the PostgreSQL adapter is developed.
+*
+* All query methods iterate in-memory data. Pagination is
+* simulated with Array.slice(). Stacking computes on the fly.
+*/ function simpleHash(s) {
+	let h = 0;
+	for (let i = 0; i < Math.min(s.length, 4096); i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+	return h.toString(36);
+}
+function matchesLotFilter(file, filter) {
+	if (filter.lotIds?.length && !filter.lotIds.includes(file.identity.lotId)) return false;
+	if (filter.stepIds?.length && file.identity.stepId && !filter.stepIds.includes(file.identity.stepId)) return false;
+	if (filter.setupIds?.length && file.inspectionSetup.setupId && !filter.setupIds.includes(file.inspectionSetup.setupId)) return false;
+	if (filter.inspectionStation) {
+		if (!`${file.inspectionSetup.stationId.vendor} ${file.inspectionSetup.stationId.model} ${file.inspectionSetup.stationId.equipmentId}`.includes(filter.inspectionStation)) return false;
+	}
+	return true;
+}
+function matchesDefectFilter(d, filter) {
+	if (filter.classNumbers?.length && d.classNumber != null && !filter.classNumbers.includes(d.classNumber)) return false;
+	if (filter.minSize != null && (d.size ?? 0) < filter.minSize) return false;
+	if (filter.maxSize != null && (d.size ?? 0) > filter.maxSize) return false;
+	if (filter.testIds?.length && d.test != null && !filter.testIds.includes(d.test)) return false;
+	if (filter.spatialRegion) {
+		const r = filter.spatialRegion;
+		if (d.xAbs < r.xMin || d.xAbs > r.xMax || d.yAbs < r.yMin || d.yAbs > r.yMax) return false;
+	}
+	return true;
+}
+function defectToStored(waferId, d) {
+	return {
+		id: `${waferId}-${d.defectId}`,
+		waferId,
+		defectId: d.defectId,
+		xRel: d.xRel,
+		yRel: d.yRel,
+		xIndex: d.xIndex,
+		yIndex: d.yIndex,
+		xSize: d.extra["XSIZE"],
+		ySize: d.extra["YSIZE"],
+		defectArea: d.extra["DEFECTAREA"],
+		dSize: d.size,
+		classNumber: d.classNumber ?? 0,
+		testId: d.test,
+		clusterNumber: d.clusterNumber,
+		imageCount: d.imageCount ?? 0
+	};
+}
+function paginate(items, pagination) {
+	return {
+		items: items.slice(pagination.offset, pagination.offset + pagination.limit),
+		total: items.length,
+		offset: pagination.offset,
+		limit: pagination.limit
+	};
+}
+function className(classLookup, classNumber) {
+	return classLookup.find((c) => c.classNumber === classNumber)?.className ?? `Class ${classNumber}`;
+}
+var InMemoryStorageAdapter = class {
+	files = /* @__PURE__ */ new Map();
+	classifications = /* @__PURE__ */ new Map();
+	signatures = /* @__PURE__ */ new Map();
+	connected = false;
+	async connect(_config) {
+		this.connected = true;
+	}
+	async disconnect() {
+		this.connected = false;
+	}
+	isConnected() {
+		return this.connected;
+	}
+	async migrate() {
+		return {
+			applied: 0,
+			skipped: 0,
+			errors: []
+		};
+	}
+	async importFile(file) {
+		const start = performance.now();
+		const hash = simpleHash(file.source.fileName + file.identity.lotId + file.identity.waferId);
+		const importId = `mem-${hash}-${Date.now()}`;
+		this.files.set(importId, {
+			importId,
+			file,
+			importedAt: /* @__PURE__ */ new Date(),
+			fileHash: hash
+		});
+		return {
+			success: true,
+			importId,
+			lotId: file.identity.lotId,
+			waferCount: 1,
+			defectCount: file.defects.length,
+			warnings: file.source.warnings.map((w) => w.message),
+			errors: [],
+			durationMs: performance.now() - start
+		};
+	}
+	async importBatch(files) {
+		const start = performance.now();
+		const results = [];
+		for (const f of files) results.push(await this.importFile(f));
+		return {
+			total: files.length,
+			succeeded: results.filter((r) => r.success).length,
+			failed: results.filter((r) => !r.success).length,
+			results,
+			totalDurationMs: performance.now() - start
+		};
+	}
+	async deleteImport(importId) {
+		this.files.delete(importId);
+	}
+	allFiles() {
+		return [...this.files.values()];
+	}
+	filesMatchingLot(filter) {
+		return this.allFiles().filter((sf) => matchesLotFilter(sf.file, filter));
+	}
+	async queryLots(filter, pagination) {
+		const grouped = /* @__PURE__ */ new Map();
+		for (const sf of this.filesMatchingLot(filter)) {
+			const key = sf.file.identity.lotId;
+			if (!grouped.has(key)) grouped.set(key, []);
+			grouped.get(key).push(sf);
+		}
+		return paginate([...grouped.entries()].map(([lotId, sfs]) => {
+			const first = sfs[0].file;
+			const totalDefects = sfs.reduce((s, sf) => s + sf.file.defects.length, 0);
+			return {
+				id: lotId,
+				lotId,
+				stepId: first.identity.stepId ?? "",
+				setupId: first.inspectionSetup.setupId ?? "",
+				inspectionStation: `${first.inspectionSetup.stationId.vendor} ${first.inspectionSetup.stationId.model}`,
+				waferCount: sfs.length,
+				totalDefects,
+				averageYield: 0,
+				importedAt: sfs[0].importedAt,
+				sourceFile: first.source.fileName
+			};
+		}), pagination);
+	}
+	async queryWafers(lotId) {
+		return this.allFiles().filter((sf) => sf.file.identity.lotId === lotId).map((sf) => {
+			const classDist = {};
+			for (const d of sf.file.defects) {
+				const cn = d.classNumber ?? 0;
+				classDist[cn] = (classDist[cn] ?? 0) + 1;
+			}
+			return {
+				id: sf.importId,
+				waferId: sf.file.identity.waferId,
+				slot: sf.file.identity.slot ?? 0,
+				defectCount: sf.file.defects.length,
+				yield: 0,
+				classDistribution: classDist
+			};
+		});
+	}
+	async getImportHistory(pagination) {
+		const records = this.allFiles().map((sf) => ({
+			id: sf.importId,
+			sourceFile: sf.file.source.fileName,
+			fileHash: sf.fileHash,
+			importedAt: sf.importedAt,
+			lotId: sf.file.identity.lotId,
+			waferCount: 1,
+			defectCount: sf.file.defects.length
+		}));
+		records.sort((a, b) => b.importedAt.getTime() - a.importedAt.getTime());
+		return paginate(records, pagination);
+	}
+	collectDefects(filter) {
+		const results = [];
+		for (const sf of this.filesMatchingLot(filter)) {
+			if (filter.waferIds?.length && !filter.waferIds.includes(sf.file.identity.waferId)) continue;
+			for (const d of sf.file.defects) if (matchesDefectFilter(d, filter)) results.push({
+				sf,
+				d
+			});
+		}
+		return results;
+	}
+	async queryDefects(filter, pagination) {
+		return paginate(this.collectDefects(filter).map(({ sf, d }) => defectToStored(sf.file.identity.waferId, d)), pagination);
+	}
+	async getWaferDefects(waferId, filter) {
+		const sf = this.allFiles().find((s) => s.file.identity.waferId === waferId);
+		if (!sf) return [];
+		let defects = sf.file.defects;
+		if (filter) defects = defects.filter((d) => matchesDefectFilter(d, filter));
+		return defects.map((d) => defectToStored(waferId, d));
+	}
+	async getDefectCount(filter) {
+		return this.collectDefects(filter).length;
+	}
+	async getWaferMapData(waferId) {
+		const sf = this.allFiles().find((s) => s.file.identity.waferId === waferId);
+		if (!sf) return null;
+		const f = sf.file;
+		return {
+			waferId,
+			sampleSize: f.waferGeometry.sampleSizeRaw,
+			diePitch: f.waferGeometry.diePitch,
+			center: f.waferGeometry.sampleCenterLocation,
+			orientation: f.waferGeometry.orientationMarkLocation ?? "DOWN",
+			defects: f.defects.map((d) => ({
+				x: d.xAbs,
+				y: d.yAbs,
+				xIndex: d.xIndex,
+				yIndex: d.yIndex,
+				size: d.size ?? 0,
+				classNumber: d.classNumber ?? 0,
+				className: className(f.classLookup, d.classNumber ?? 0)
+			})),
+			sampleTestPlan: f.testPlan.map((tp) => [tp.xIndex, tp.yIndex])
+		};
+	}
+	async getStackedWaferMapData(waferIds, aggregation, gridSize) {
+		const cells = [];
+		const grid = new Array(gridSize * gridSize).fill(null).map(() => ({
+			defects: 0,
+			waferHits: /* @__PURE__ */ new Set(),
+			classCounts: /* @__PURE__ */ new Map()
+		}));
+		let waferCount = 0;
+		let waferDiameter = 3e5;
+		for (const waferId of waferIds) {
+			const sf = this.allFiles().find((s) => s.file.identity.waferId === waferId);
+			if (!sf) continue;
+			waferCount++;
+			waferDiameter = sf.file.waferGeometry.waferDiameter;
+			const [cx, cy] = sf.file.waferGeometry.sampleCenterLocation;
+			for (const d of sf.file.defects) {
+				const gx = Math.floor((d.xAbs - cx + waferDiameter / 2) / waferDiameter * gridSize);
+				const gy = Math.floor((d.yAbs - cy + waferDiameter / 2) / waferDiameter * gridSize);
+				if (gx < 0 || gx >= gridSize || gy < 0 || gy >= gridSize) continue;
+				const idx = gy * gridSize + gx;
+				grid[idx].defects++;
+				grid[idx].waferHits.add(waferId);
+				const cn = d.classNumber ?? 0;
+				grid[idx].classCounts.set(cn, (grid[idx].classCounts.get(cn) ?? 0) + 1);
+			}
+		}
+		const cellArea = (waferDiameter / gridSize) ** 2;
+		for (let gy = 0; gy < gridSize; gy++) for (let gx = 0; gx < gridSize; gx++) {
+			const g = grid[gy * gridSize + gx];
+			if (g.defects === 0) continue;
+			let value;
+			const metadata = {};
+			switch (aggregation) {
+				case "density":
+					value = g.defects / (cellArea / 1e6);
+					break;
+				case "hit-count":
+					value = g.waferHits.size;
+					break;
+				case "class-dominance": {
+					let maxClass = 0;
+					let maxCount = 0;
+					for (const [cn, count] of g.classCounts) if (count > maxCount) {
+						maxCount = count;
+						maxClass = cn;
+					}
+					value = maxClass;
+					metadata.count = maxCount;
+					break;
+				}
+			}
+			cells.push({
+				gridX: gx,
+				gridY: gy,
+				value,
+				metadata
+			});
+		}
+		return {
+			gridSize,
+			waferCount,
+			cells,
+			aggregation
+		};
+	}
+	async getPareto(filter, topN) {
+		const counts = /* @__PURE__ */ new Map();
+		const matching = this.collectDefects(filter);
+		for (const { d } of matching) {
+			const cn = d.classNumber ?? 0;
+			counts.set(cn, (counts.get(cn) ?? 0) + 1);
+		}
+		const lookup = (this.filesMatchingLot(filter)[0]?.file)?.classLookup ?? [];
+		const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, topN);
+		const total = matching.length;
+		let cumulative = 0;
+		return sorted.map(([classNumber, count]) => {
+			cumulative += count;
+			return {
+				classNumber,
+				className: className(lookup, classNumber),
+				count,
+				percentage: total > 0 ? count / total * 100 : 0,
+				cumulativePercentage: total > 0 ? cumulative / total * 100 : 0
+			};
+		});
+	}
+	async getYieldSummary(filter) {
+		const files = this.filesMatchingLot(filter);
+		const totalWafers = files.length;
+		const totalDefects = files.reduce((s, sf) => s + sf.file.defects.length, 0);
+		const yieldByWafer = files.map((sf) => ({
+			waferId: sf.file.identity.waferId,
+			yield: 0,
+			defectCount: sf.file.defects.length
+		}));
+		return {
+			totalWafers,
+			totalDefects,
+			averageDefectsPerWafer: totalWafers > 0 ? totalDefects / totalWafers : 0,
+			averageYield: 0,
+			minYield: 0,
+			maxYield: 0,
+			yieldByWafer
+		};
+	}
+	async getTrend(metric, filter, groupBy) {
+		const files = this.filesMatchingLot(filter);
+		const points = [];
+		if (groupBy === "wafer") for (const sf of files) {
+			let value;
+			switch (metric) {
+				case "defect-count":
+					value = sf.file.defects.length;
+					break;
+				case "defect-density":
+					value = sf.file.defects.length;
+					break;
+				case "yield":
+					value = 0;
+					break;
+				case "cluster-count":
+					value = new Set(sf.file.defects.map((d) => d.clusterNumber).filter((c) => c != null)).size;
+					break;
+			}
+			points.push({
+				label: sf.file.identity.waferId,
+				value
+			});
+		}
+		else {
+			const grouped = /* @__PURE__ */ new Map();
+			for (const sf of files) {
+				const key = groupBy === "lot" ? sf.file.identity.lotId : sf.importedAt.toISOString().slice(0, 10);
+				if (!grouped.has(key)) grouped.set(key, []);
+				grouped.get(key).push(sf);
+			}
+			for (const [label, sfs] of grouped) {
+				const totalDefects = sfs.reduce((s, sf) => s + sf.file.defects.length, 0);
+				points.push({
+					label,
+					value: totalDefects
+				});
+			}
+		}
+		return points;
+	}
+	async getCorrelation(_xMetric, _yMetric, filter) {
+		return this.filesMatchingLot(filter).map((sf) => ({
+			x: sf.file.defects.length,
+			y: sf.file.defects.length,
+			label: sf.file.identity.waferId
+		}));
+	}
+	async getSpatialDensity(waferId, gridSize) {
+		return (await this.getStackedWaferMapData([waferId], "density", gridSize)).cells;
+	}
+	async getClassDistribution(filter) {
+		return (await this.getPareto(filter, 100)).map((p) => ({
+			classNumber: p.classNumber,
+			className: p.className,
+			count: p.count,
+			percentage: p.percentage
+		}));
+	}
+	async getSPCData(_metric, filter) {
+		const files = this.filesMatchingLot(filter);
+		const values = files.map((sf) => sf.file.defects.length);
+		const n = values.length;
+		const mean = n > 0 ? values.reduce((s, v) => s + v, 0) / n : 0;
+		const variance = n > 1 ? values.reduce((s, v) => s + (v - mean) ** 2, 0) / (n - 1) : 0;
+		const stdDev = Math.sqrt(variance);
+		const ucl = mean + 3 * stdDev;
+		const lcl = Math.max(0, mean - 3 * stdDev);
+		const ooc = [];
+		return {
+			points: files.map((sf, i) => {
+				const v = sf.file.defects.length;
+				if (v > ucl || v < lcl) ooc.push(i);
+				return {
+					label: sf.file.identity.waferId,
+					value: v
+				};
+			}),
+			mean,
+			stdDev,
+			ucl,
+			lcl,
+			outOfControl: ooc
+		};
+	}
+	async searchLots(query) {
+		const q = query.toLowerCase();
+		return (await this.queryLots({}, {
+			offset: 0,
+			limit: 1e3
+		})).items.filter((lot) => lot.lotId.toLowerCase().includes(q) || lot.stepId.toLowerCase().includes(q) || lot.sourceFile.toLowerCase().includes(q));
+	}
+	async saveClassification(result) {
+		const existing = this.classifications.get(result.waferId) ?? [];
+		existing.push(result);
+		this.classifications.set(result.waferId, existing);
+	}
+	async getClassifications(waferId) {
+		return this.classifications.get(waferId) ?? [];
+	}
+	async saveSignatures(sigs) {
+		for (const sig of sigs) {
+			const existing = this.signatures.get(sig.waferId) ?? [];
+			existing.push(sig);
+			this.signatures.set(sig.waferId, existing);
+		}
+	}
+	async getSignatures(waferId) {
+		return this.signatures.get(waferId) ?? [];
+	}
+};
+//#endregion
+//#region src/core/storage/storage-context.ts
+/**
+* Storage adapter access for both standalone and portal mode.
+*
+* In standalone mode: StorageProvider wraps the app with React Context + QueryClientProvider.
+* In portal mode: a module-level singleton is used since portal components are
+* lazy-loaded independently (no shared React tree wrapper).
+*
+* The useStorage() hook works in both modes transparently.
+*/ var StorageContext = createContext(null);
+var _singleton = null;
+function getStorageSingleton() {
+	if (!_singleton) _singleton = new InMemoryStorageAdapter();
+	return _singleton;
+}
+function useStorage() {
+	const fromContext = useContext(StorageContext);
+	if (fromContext) return fromContext;
+	return getStorageSingleton();
+}
+//#endregion
 //#region src/hooks/useLancelotNavigate.ts
 /**
 * Dual-mode navigation hook.
@@ -38,6 +506,10 @@ function useLancelotNavigate() {
 *
 * Uses a Web Worker for parsing to keep the UI responsive.
 * Falls back to main-thread parsing if Worker is unavailable.
+*
+* After parsing, data is written to both:
+* - file-store (Zustand, for existing views)
+* - DefectStorageAdapter (for new adapter-based views like Gallery/Stacking)
 */
 /** Persist parsed inspection metadata to IndexedDB (fire-and-forget). */ function persistToHistory(fileId, file, data) {
 	saveInspection({
@@ -62,7 +534,29 @@ function useFileOpen() {
 	const setParseWarnings = useFileStore((s) => s.setParseWarnings);
 	const addRecentFile = useFileStore((s) => s.addRecentFile);
 	const lancelotNavigate = useLancelotNavigate();
+	const storage = useStorage();
 	const workerRef = useRef(null);
+	/** Common success handler for both worker and main-thread paths. */ const handleParseSuccess = useCallback((file, data, warnings) => {
+		const fileId = `${file.name}-${Date.now()}`;
+		setActiveFile(fileId, data);
+		setParseWarnings(warnings);
+		addRecentFile({
+			name: file.name,
+			format: data.source.formatId,
+			openedAt: (/* @__PURE__ */ new Date()).toISOString()
+		});
+		storage.importFile(data).catch((err) => {
+			console.warn("Failed to import file into storage adapter", err);
+		});
+		persistToHistory(fileId, file, data);
+		lancelotNavigate("wafer-map");
+	}, [
+		setActiveFile,
+		setParseWarnings,
+		addRecentFile,
+		storage,
+		lancelotNavigate
+	]);
 	const openFile = useCallback(async (file) => {
 		setLoadingState("reading");
 		setLoadingProgress(0);
@@ -82,12 +576,9 @@ function useFileOpen() {
 			}]);
 		}
 	}, [
-		setActiveFile,
 		setLoadingState,
 		setLoadingProgress,
-		setParseErrors,
-		setParseWarnings,
-		addRecentFile
+		setParseErrors
 	]);
 	const parseInWorker = useCallback((file, text) => {
 		return new Promise((resolve, reject) => {
@@ -107,18 +598,8 @@ function useFileOpen() {
 					case "complete":
 						worker.terminate();
 						workerRef.current = null;
-						if (msg.result.success) {
-							const fileId = `${file.name}-${Date.now()}`;
-							setActiveFile(fileId, msg.result.data);
-							setParseWarnings(msg.result.warnings);
-							addRecentFile({
-								name: file.name,
-								format: msg.result.data.source.formatId,
-								openedAt: (/* @__PURE__ */ new Date()).toISOString()
-							});
-							persistToHistory(fileId, file, msg.result.data);
-							lancelotNavigate("wafer-map");
-						} else setParseErrors(msg.result.errors);
+						if (msg.result.success) handleParseSuccess(file, msg.result.data, msg.result.warnings);
+						else setParseErrors(msg.result.errors);
 						resolve();
 						break;
 					case "error":
@@ -142,12 +623,9 @@ function useFileOpen() {
 			worker.postMessage(request);
 		});
 	}, [
-		setActiveFile,
 		setLoadingProgress,
 		setParseErrors,
-		setParseWarnings,
-		addRecentFile,
-		lancelotNavigate
+		handleParseSuccess
 	]);
 	const parseOnMainThread = useCallback((file, text) => {
 		const adapter = initializeRegistry().detect(file.name, text);
@@ -162,25 +640,12 @@ function useFileOpen() {
 		const result = adapter.parse(text, (progress) => {
 			setLoadingProgress(progress.fraction);
 		});
-		if (result.success) {
-			const fileId = `${file.name}-${Date.now()}`;
-			setActiveFile(fileId, result.data);
-			setParseWarnings(result.warnings);
-			addRecentFile({
-				name: file.name,
-				format: result.data.source.formatId,
-				openedAt: (/* @__PURE__ */ new Date()).toISOString()
-			});
-			persistToHistory(fileId, file, result.data);
-			lancelotNavigate("wafer-map");
-		} else setParseErrors(result.errors);
+		if (result.success) handleParseSuccess(file, result.data, result.warnings);
+		else setParseErrors(result.errors);
 	}, [
-		setActiveFile,
 		setLoadingProgress,
 		setParseErrors,
-		setParseWarnings,
-		addRecentFile,
-		lancelotNavigate
+		handleParseSuccess
 	]);
 	return {
 		openFile,
@@ -660,4 +1125,4 @@ function GeneratorDialog({ onGenerated }) {
 //#endregion
 export { useFileOpen as n, useLancelotNavigate as r, GeneratorDialog as t };
 
-//# sourceMappingURL=GeneratorDialog-Di-H-hNr.js.map
+//# sourceMappingURL=GeneratorDialog-Cre4dV56.js.map

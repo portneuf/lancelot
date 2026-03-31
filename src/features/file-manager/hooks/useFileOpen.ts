@@ -3,10 +3,15 @@
  *
  * Uses a Web Worker for parsing to keep the UI responsive.
  * Falls back to main-thread parsing if Worker is unavailable.
+ *
+ * After parsing, data is written to both:
+ * - file-store (Zustand, for existing views)
+ * - DefectStorageAdapter (for new adapter-based views like Gallery/Stacking)
  */
 
 import { useCallback, useRef } from 'react';
 import { useFileStore } from '@/stores';
+import { useStorage } from '@/core/storage';
 import { useLancelotNavigate } from '@/hooks/useLancelotNavigate';
 import { initializeRegistry } from '@/core/parsers';
 import { saveInspection } from '@/core/services/inspection-db';
@@ -39,7 +44,36 @@ export function useFileOpen() {
   const setParseWarnings = useFileStore((s) => s.setParseWarnings);
   const addRecentFile = useFileStore((s) => s.addRecentFile);
   const lancelotNavigate = useLancelotNavigate();
+  const storage = useStorage();
   const workerRef = useRef<Worker | null>(null);
+
+  /** Common success handler for both worker and main-thread paths. */
+  const handleParseSuccess = useCallback(
+    (file: File, data: InspectionFile, warnings: import('@/core/models/inspection-file').ParseWarning[]) => {
+      const fileId = `${file.name}-${Date.now()}`;
+
+      // 1. Zustand store (existing views)
+      setActiveFile(fileId, data);
+      setParseWarnings(warnings);
+      addRecentFile({
+        name: file.name,
+        format: data.source.formatId,
+        openedAt: new Date().toISOString(),
+      });
+
+      // 2. Storage adapter (new adapter-based views)
+      storage.importFile(data).catch((err) => {
+        console.warn('Failed to import file into storage adapter', err);
+      });
+
+      // 3. IndexedDB history (fire-and-forget)
+      persistToHistory(fileId, file, data);
+
+      // 4. Navigate to wafer map
+      lancelotNavigate('wafer-map');
+    },
+    [setActiveFile, setParseWarnings, addRecentFile, storage, lancelotNavigate],
+  );
 
   const openFile = useCallback(async (file: File) => {
     setLoadingState('reading');
@@ -68,7 +102,7 @@ export function useFileOpen() {
         severity: 'error',
       }]);
     }
-  }, [setActiveFile, setLoadingState, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile]);
+  }, [setLoadingState, setLoadingProgress, setParseErrors]);
 
   const parseInWorker = useCallback((file: File, text: string): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -94,16 +128,7 @@ export function useFileOpen() {
             workerRef.current = null;
 
             if (msg.result.success) {
-              const fileId = `${file.name}-${Date.now()}`;
-              setActiveFile(fileId, msg.result.data);
-              setParseWarnings(msg.result.warnings);
-              addRecentFile({
-                name: file.name,
-                format: msg.result.data.source.formatId,
-                openedAt: new Date().toISOString(),
-              });
-              persistToHistory(fileId, file, msg.result.data);
-              lancelotNavigate('wafer-map');
+              handleParseSuccess(file, msg.result.data, msg.result.warnings);
             } else {
               setParseErrors(msg.result.errors);
             }
@@ -132,7 +157,7 @@ export function useFileOpen() {
       };
       worker.postMessage(request);
     });
-  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, lancelotNavigate]);
+  }, [setLoadingProgress, setParseErrors, handleParseSuccess]);
 
   const parseOnMainThread = useCallback((file: File, text: string) => {
     const registry = initializeRegistry();
@@ -152,20 +177,11 @@ export function useFileOpen() {
     });
 
     if (result.success) {
-      const fileId = `${file.name}-${Date.now()}`;
-      setActiveFile(fileId, result.data);
-      setParseWarnings(result.warnings);
-      addRecentFile({
-        name: file.name,
-        format: result.data.source.formatId,
-        openedAt: new Date().toISOString(),
-      });
-      persistToHistory(fileId, file, result.data);
-      lancelotNavigate('wafer-map');
+      handleParseSuccess(file, result.data, result.warnings);
     } else {
       setParseErrors(result.errors);
     }
-  }, [setActiveFile, setLoadingProgress, setParseErrors, setParseWarnings, addRecentFile, lancelotNavigate]);
+  }, [setLoadingProgress, setParseErrors, handleParseSuccess]);
 
   const openFilePicker = useCallback(() => {
     const input = document.createElement('input');
