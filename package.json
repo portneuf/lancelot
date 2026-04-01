@@ -85,6 +85,7 @@
     "@tanstack/react-virtual": "^3.13.23",
     "clsx": "^2.1.1",
     "lucide-react": "^1.7.0",
+    "onnxruntime-web": "^1.24.3",
     "postgres": "^3.4.8",
     "react-is": "^19.2.4",
     "react-resizable-panels": "^4.7.6",
